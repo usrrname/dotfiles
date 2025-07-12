@@ -1,0 +1,16 @@
+{
+	"latest_signin": "my",
+	"device": "vjp35zja3bsmrurdxmt2a3mqh4",
+	"accounts": [
+		{
+			"shorthand": "my",
+			"accountUUID": "op://Private/op-config/Section_2qnawlzyot3gxlqpxuwjxnmcou/accountuuid",
+			"url": "https://my.1password.ca",
+			"email": "op://Private/21 Lawlor/Identification/email",
+			"accountKey": "op://Private/op-config/Section_2qnawlzyot3gxlqpxuwjxnmcou/accountkey",
+			"userUUID": "op://Private/op-config/Section_2qnawlzyot3gxlqpxuwjxnmcou/useruuid",
+			"dsecret": "op://Private/op-config/Section_2qnawlzyot3gxlqpxuwjxnmcou/dsecret"
+		}
+	],
+	"system_auth_latest_signin": "2CB2QOTSLZFGVIKE3D3B4JRMPI"
+}

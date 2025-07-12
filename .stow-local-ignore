@@ -1,0 +1,14 @@
+Makefile
+\.DS_Store
+.DS_Store
+.git
+.vscode
+.gitignore
+.env.d.ts 
+.env.schema
+\.git
+\.gitignore
+README.*
+LICENSE
+\.DS_Store
+.env

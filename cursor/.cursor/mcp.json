@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "Linear": {
+      "command": "npx -y mcp-remote https://mcp.linear.app/sse",
+      "env": {}
+    },
+    "Playwright": {
+      "command": "npx @playwright/mcp@latest",
+      "env": {}
+    }
+  }
+}

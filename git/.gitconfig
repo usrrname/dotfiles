@@ -1,0 +1,24 @@
+[user]
+	username=usrrname
+	name = Jen Chan
+	email = 6406037+usrrname@users.noreply.github.com
+  signingkey = ~/.ssh/id_rsa.pub
+[color]
+	ui = auto
+
+[core]
+  editor = vi
+
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+  program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
+
+[push]
+  autoSetupRemote = true
+[init]
+	defaultBranch = main
