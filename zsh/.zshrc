@@ -48,7 +48,7 @@ HIST_STAMPS="yyyy-mm-dd"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh)
+plugins=(git zsh-autocomplete 1password gh direnv)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -128,3 +128,5 @@ alias pint='./vendor/bin/pint'
 
 # nektos/act
 alias act='act --container-architecture linux/amd64'
+
+eval "$(direnv hook zsh)"

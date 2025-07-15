@@ -8,6 +8,7 @@
 
 [core]
   editor = vi
+	excludesFile = ~/.gitignore_global
 
 [gpg]
   format = ssh
@@ -20,5 +21,6 @@
 
 [push]
   autoSetupRemote = true
+
 [init]
 	defaultBranch = main
