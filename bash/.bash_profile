@@ -1,11 +1,9 @@
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES;
 killall Finder /System/Library/CoreServices/Finder.app'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias ngf='kill -9  $(lsof -t -i:4200);ng serve'
-export NVM_DIR="$HOME/.nvm"
+# node version manager
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-export PATH="$HOME/.npm/bin:$PATH"
 
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
