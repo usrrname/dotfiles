@@ -1,5 +1,3 @@
-# ---- paths ----
-export ZSH="$HOME/.oh-my-zsh"
 
 # ---- theme ----
 ZSH_THEME="robbyrussell"
@@ -61,7 +59,8 @@ source $ZSH/oh-my-zsh.sh
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+  echo "SSH connection detected"
+  echo "EDITOR: ${EDITOR}"
  else
    export EDITOR='mvim'
  fi
@@ -89,26 +88,16 @@ alias gcs='gh copilot suggest'
 alias gce='gh copilot explain'
 alias composer="php /usr/local/bin/composer.phar"
 alias cc='claude code'
-
-# ---- environment variables ----
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export GEMINI_API_KEY=op://Private/gemini-api-key/Section_ii4mbjcvu4c3rvzmu2c2gkfqxa/api-key
-eval "$(pyenv init -)"
 alias mysql=/usr/local/mysql/bin/mysql
 alias mysqladmin=/usr/local/mysql/bin/mysqladmin
 alias thingymachine='ssh@68.183.204.78'
 alias pn=pnpm
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # loads nvm bash_completion
+# nvm
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# loads bash completion
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-export PROMPT='~🧻 '
-export PATH="/usr/local/sbin:$PATH"
-
-# fnm
-export PATH="/Users/jenc/Library/Application Support/fnm:$PATH"
-eval "`fnm env`"
 
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
@@ -130,3 +119,5 @@ alias pint='./vendor/bin/pint'
 alias act='act --container-architecture linux/amd64'
 
 eval "$(direnv hook zsh)"
+eval "$(fnm env)"
+eval "$(pyenv init -)"
