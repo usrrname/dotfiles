@@ -11,3 +11,4 @@ LICENSE
 .env
 test/*
 setup.sh
+devbox.*
