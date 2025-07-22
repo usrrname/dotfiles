@@ -1,3 +1,6 @@
+direnv grant ~/.dotfiles/.envrc
+direnv allow ~/.dotfiles/.envrc
+
 # Show filename extensions
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
 

@@ -41,14 +41,17 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # see 'man strftime' for details.
 HIST_STAMPS="yyyy-mm-dd"
 
+# Set ZSH path before sourcing oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
+
+source $ZSH/oh-my-zsh.sh
+
 # ---- Plugins ----
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-autocomplete 1password gh direnv)
-
-source $ZSH/oh-my-zsh.sh
+plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
 
 # ---- User configuration --------
 
@@ -92,7 +95,6 @@ alias mysql=/usr/local/mysql/bin/mysql
 alias mysqladmin=/usr/local/mysql/bin/mysqladmin
 alias thingymachine='ssh@68.183.204.78'
 alias pn=pnpm
-
 # nvm
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 # loads bash completion
