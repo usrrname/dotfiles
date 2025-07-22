@@ -24,3 +24,14 @@
 
 [init]
 	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[alias]
+	g = "git"
+	# create worktree branch within a repo and checkout
+	# git wa <branch-name> | g wa <branch-name>
+	wa = "!f() { git worktree add -b \"$1\" \"../$1\"; cp ./.env \"../$1/.env\"; cd \"../$1\"; }; f"
+	wr = "!f() { git worktree remove \"../$1\"; }; f"
+	wl = "!f() { git worktree list; }; f"
