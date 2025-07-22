@@ -29,3 +29,5 @@ htpasswd
 oauth_creds.json
 *.vscode
 .env
+.devbox
+devbox.*
