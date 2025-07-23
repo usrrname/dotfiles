@@ -106,10 +106,15 @@ export NVM_DIR="$HOME/.nvm"
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
 
+# git worktrees
 source ~/.dotfiles/scripts/create-worktree-from-pr.sh
 alias cwp='create-worktree-from-pr'
 source ~/.dotfiles/scripts/create-local-worktrees.sh
 alias clw='create-local-worktrees'
+source ~/.dotfiles/scripts/cleanup-merged-worktrees.sh
+alias clean_merged_trees='cleanup-merged-worktrees'
+source ~/.dotfiles/scripts/clean-worktree.sh
+alias cwt='clean-worktree'
 
 export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"

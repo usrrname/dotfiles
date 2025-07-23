@@ -64,16 +64,26 @@ create-local-worktrees() {
     # Setup environment
     cd "$WORKTREE_PATH" && echo "switched to $PWD"
 
-  # get existing containers
-    EXISTING_CONTAINERS=$(docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}")
+    # Store names in variable
+    ACTIVE_CONTAINERS=$(docker ps --format "{{.Names}}")
 
-    # get new ports
+    # Loop through active container names
+    docker ps --format "{{.Names}}" | while read container_name; do
+        echo "Processing: $container_name"
+    done
+
+  # get existing Docker containers if they are running
+    EXISTING_CONTAINERS=$(docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}" | grep -v "$BRANCH_NAME")
+    echo $EXISTING_CONTAINERS
+
+    # create new ports mapped to existing ports
     NEW_PORTS=$(echo $EXISTING_CONTAINERS | sed 's/-p \([0-9]*\):/-p \1+1000:/g')
+
+    # print new ports
     echo $NEW_PORTS
 
 
-    # start project
-    COMPOSE_PROJECT_NAME=$BRANCH_NAME $NEW_PORTS ./vendor/bin/sail up -d && sail artisan migrate:fresh --seed
+    # start project (ie. npm ci)
 
     # Create task file
     echo "# Task: $BRANCH_NAME
