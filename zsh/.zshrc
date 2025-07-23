@@ -1,4 +1,5 @@
 
+
 # ---- theme ----
 ZSH_THEME="robbyrussell"
 
@@ -86,6 +87,7 @@ alias vi='nvim'
 alias expose=../script/expose.sh
 alias pip='pip3'
 alias python='python3'
+alias g='git'
 alias copilot='gh copilot'
 alias gcs='gh copilot suggest'
 alias gce='gh copilot explain'
@@ -95,14 +97,19 @@ alias mysql=/usr/local/mysql/bin/mysql
 alias mysqladmin=/usr/local/mysql/bin/mysqladmin
 alias thingymachine='ssh@68.183.204.78'
 alias pn=pnpm
-# nvm
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-# loads bash completion
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
 
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
+
+source ~/.dotfiles/scripts/create-worktree-from-pr.sh
+alias cwp='create-worktree-from-pr'
+source ~/.dotfiles/scripts/create-local-worktrees.sh
+alias clw='create-local-worktrees'
 
 export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
