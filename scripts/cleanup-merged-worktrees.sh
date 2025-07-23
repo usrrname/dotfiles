@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cleanup-merged-worktrees() {
 echo "Cleaning up merged worktrees..."
 
 git worktree list | grep -v "$(git rev-parse --show-toplevel)" | while read worktree branch commit; do
@@ -13,4 +13,5 @@ git worktree list | grep -v "$(git rev-parse --show-toplevel)" | while read work
     fi
 done
 
-echo "Cleanup complete!"
+    echo "Cleanup complete!"
+}
