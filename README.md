@@ -32,3 +32,11 @@ devbox info # show info about the devbox environment
 devbox update # update packages in devbox
 devbox shell # initialize the devbox shell
 ```
+
+## zsh
+
+```bash
+## When each is loaded:
+
+.zshenv → .zprofile → .zshrc → .zlogin
+```

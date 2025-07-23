@@ -10,5 +10,7 @@ defaults write com.apple.finder AppleShowAllFiles -bool true
 # Set screenshot location
 defaults write com.apple.screencapture "location" -string "~/pictures/screenshots"
 
-eval "$(/opt/homebrew/bin/brew shellenv)"alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
-alias pint='./vendor/bin/pint'
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(direnv hook zsh)"
+eval "$(fnm env)"
+eval "$(pyenv init -)"

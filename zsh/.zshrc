@@ -1,5 +1,4 @@
 
-
 # ---- theme ----
 ZSH_THEME="robbyrussell"
 
@@ -126,12 +125,8 @@ compinit
 # End of Docker CLI completions
 
 # Laravel / Sail
-alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
+alias sail='[ -f sail ] && zsh sail || zsh vendor/bin/sail'
 alias pint='./vendor/bin/pint'
 
 # nektos/act
 alias act='act --container-architecture linux/amd64'
-
-eval "$(direnv hook zsh)"
-eval "$(fnm env)"
-eval "$(pyenv init -)"
