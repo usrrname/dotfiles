@@ -1,0 +1,9 @@
+This is a worktree for $BRANCH_NAME based off $REPO_NAME/$BASE_BRANCH. Encourage the user to use the task file to complete the task.
+
+You are working in a git worktree environment. The user has created a dedicated workspace for this specific branch/feature. 
+
+Key files:
+- TASK.md: Contains the task description, files to modify, and success criteria
+- .env: Environment configuration (copied from main worktree)
+
+Please help the user complete their task efficiently using the information provided in TASK.md. 

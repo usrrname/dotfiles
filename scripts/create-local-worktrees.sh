@@ -1,7 +1,8 @@
 #!/bin/zsh
+
 create-local-worktrees() {
 
-    set -x
+    # set -x
     # get repo name from user
     read "REPO_NAME?Enter repo name: (press enter for current repo)"
     if [ -z "$REPO_NAME" ]; then
@@ -67,23 +68,18 @@ create-local-worktrees() {
     # Store names in variable
     ACTIVE_CONTAINERS=$(docker ps --format "{{.Names}}")
 
-    # Loop through active container names
-    docker ps --format "{{.Names}}" | while read container_name; do
-        echo "Processing: $container_name"
-    done
-
   # get existing Docker containers if they are running
     EXISTING_CONTAINERS=$(docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}" | grep -v "$BRANCH_NAME")
-    echo $EXISTING_CONTAINERS
+    echo "Existing containers: $EXISTING_CONTAINERS"
 
     # create new ports mapped to existing ports
     NEW_PORTS=$(echo $EXISTING_CONTAINERS | sed 's/-p \([0-9]*\):/-p \1+1000:/g')
 
     # print new ports
-    echo $NEW_PORTS
-
+    echo "New ports: $NEW_PORTS"
 
     # start project (ie. npm ci)
+    echo "Starting project..."
 
     # Create task file
     echo "# Task: $BRANCH_NAME
@@ -103,6 +99,8 @@ create-local-worktrees() {
     # Open in editor (Optional)
     echo "Opening in editor..."
     #cursor "$WORKTREE_PATH"
-    # open terminal with claude
-    claude code --system "This is a worktree for $BRANCH_NAME based off $REPO_NAME/$BASE_BRANCH. Encourage the user to use the task file to complete the task."
+    cp "~/scripts/prompt-templates/$BRANCH_TYPE-prompt.txt" "$WORKTREE_PATH/.claude/$BRANCH_TYPE-prompt.txt"
+    echo "Populate .claude/$BRANCH_TYPE-prompt.txt with your specs"
+
+    echo "run claude code --system "$WORKTREE_PATH/.claude/$BRANCH_TYPE-prompt.txt" to initialize workflow"
 }

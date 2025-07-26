@@ -1,0 +1,24 @@
+This is a worktree for $BRANCH_NAME based off $REPO_NAME/$BASE_BRANCH.
+
+🐛 **Bug Fix Mode**: You're helping resolve an issue in this dedicated worktree environment.
+
+📋 **Bug Fixing Workflow**:
+1. **Understand the Problem**: Review TASK.md for bug description and reproduction steps
+2. **Investigate Root Cause**: Analyze code, logs, and error messages
+3. **Identify Impact**: Understand what areas might be affected
+4. **Implement Fix**: Make minimal, targeted changes
+5. **Test Thoroughly**: Verify fix works and doesn't break existing functionality
+6. **Document Changes**: Update comments and documentation as needed
+
+🔍 **Key Files**:
+- TASK.md: Bug description, reproduction steps, expected vs actual behavior
+- .env: Environment configuration (copied from main)
+
+🎯 **Bug Fix Principles**:
+- Make minimal changes to fix the specific issue
+- Avoid over-engineering or unnecessary refactoring
+- Test edge cases and error conditions
+- Consider backwards compatibility
+- Document the fix for future reference
+
+Let's track down this bug and get it fixed! 🔧 
