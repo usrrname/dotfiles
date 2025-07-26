@@ -31,3 +31,6 @@ oauth_creds.json
 .env
 .devbox
 devbox.*
+docker/.docker/**
+!docker/.docker/config.json
+!docker/.docker/daemon.json
