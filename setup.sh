@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-declare -a PKGS=("direnv" "git" "1password-cli" "cursor" "docker" "google-chrome" "iterm2" "slack" "spotify" "zoom" "nvm" "pnpm" "act" "yarn" "orbstack" "fnm" "pyenv" "gh" "claude-code" "gpg-suite")
+declare -a PKGS=("direnv" "git" "1password-cli" "cursor" "docker" "google-chrome" "iterm2" "slack" "spotify" "zoom" "nvm" "pnpm" "act" "yarn" "orbstack" "fnm" "pyenv" "gh" "claude-code" "gpg-suite" "mysql-client" "mysql")
 
 # Check for dry-run mode
 DRY_RUN=${DRY_RUN:-false}
