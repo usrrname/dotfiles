@@ -12,3 +12,5 @@ LICENSE
 test/*
 setup.sh
 devbox.*
+package.*
+README.md
