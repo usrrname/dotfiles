@@ -1,0 +1,37 @@
+echo "🚀 Loading global direnvrc"
+
+# Suppress direnv export output
+# export DIRENV_LOG_FORMAT=""
+
+# ---- NodeJS nvm ----
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# check for existence of .nvmrc
+if [[ -f ".nvmrc" ]]; then
+    # grab the contents  of the file
+    NODE_VERSION=$(cat .nvmrc)
+    echo "current node version: $(nvm current)"
+    # check if nvm node version exists
+    nvm ls $NODE_VERSION > /dev/null 2>&1
+
+    if [[ $? -ne 0 ]]; then
+        echo "installing node version: $NODE_VERSION ..."
+        nvm install $NODE_VERSION
+    fi
+    echo "using node version: $NODE_VERSION"
+    nvm use $NODE_VERSION
+fi
+
+# Auto-source dotfiles .envrc in every directory if not inside dotfiles directory
+if [[ -f "$HOME/.dotfiles/.envrc" && $PWD != "$HOME/.dotfiles" ]]; then
+    source_env_if_exists "$HOME/.dotfiles/.envrc"
+fi
+
+# Suppress direnv export output
+# export DIRENV_LOG_FORMAT=""
+
+# php composer
+if [[ -f composer.json ]]; then
+    PATH_add vendor/bin
+fi
