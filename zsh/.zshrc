@@ -1,7 +1,7 @@
 
 # ---- theme ----
+export PROMPT='~🧻 '
 ZSH_THEME="robbyrussell"
-
 # ---- case-sensitive completion ----
 # CASE_SENSITIVE="true"
 
@@ -41,17 +41,16 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # see 'man strftime' for details.
 HIST_STAMPS="yyyy-mm-dd"
 
-# Set ZSH path before sourcing oh-my-zsh
-export ZSH="$HOME/.oh-my-zsh"
-
-source $ZSH/oh-my-zsh.sh
-
 # ---- Plugins ----
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
+
+# Set ZSH path before sourcing oh-my-zsh
+export ZSH="$HOME/.oh-my-zsh"
+source $ZSH/oh-my-zsh.sh
 
 # ---- User configuration --------
 
@@ -63,9 +62,8 @@ plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
   echo "SSH connection detected"
-  echo "EDITOR: ${EDITOR}"
  else
-   export EDITOR='mvim'
+   export EDITOR='nvim'
  fi
 
 # Compilation flags

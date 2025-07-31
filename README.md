@@ -40,3 +40,10 @@ devbox shell # initialize the devbox shell
 
 .zshenv → .zprofile → .zshrc → .zlogin
 ```
+
+### Orb Stack
+
+Set the default docker context to orbstack
+```bash
+docker context use orbstack
+```
