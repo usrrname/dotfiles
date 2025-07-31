@@ -11,4 +11,9 @@ alias expose=../script/expose.sh
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
 
+eval "$(direnv hook bash)"
+eval "$(/opt/homebrew/bin/brew shellenv)"
+eval "$(fnm env)"
+eval "$(pyenv init -)"
+# cargo
 . "$HOME/.cargo/env"
