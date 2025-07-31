@@ -18,5 +18,6 @@ eval "$(pyenv init -)"
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-alias sail='[ -f sail ] && bash sail || bash vendor/bin/sail'
-alias pint='./vendor/bin/pint'
+
+# Load secrets to use anywhere in the filesystem
+source $HOME/.dotfiles/.env.secret

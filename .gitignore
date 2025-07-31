@@ -28,9 +28,12 @@ known_hosts*
 htpasswd
 oauth_creds.json
 *.vscode
-.env
 .devbox
 devbox.*
 docker/.docker/**
 !docker/.docker/config.json
 !docker/.docker/daemon.json
+.env*
+.env.d.ts
+.env.secret
+.cursor/*

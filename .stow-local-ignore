@@ -14,3 +14,5 @@ setup.sh
 devbox.*
 package.*
 README.md
+.env*
+.cursor/*

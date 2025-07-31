@@ -1,8 +1,5 @@
 echo "🚀 Loading global direnvrc"
 
-# Suppress direnv export output
-# export DIRENV_LOG_FORMAT=""
-
 # ---- NodeJS nvm ----
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
@@ -24,12 +21,14 @@ if [[ -f ".nvmrc" ]]; then
 fi
 
 # Auto-source dotfiles .envrc in every directory if not inside dotfiles directory
+# or it will load twice
 if [[ -f "$HOME/.dotfiles/.envrc" && $PWD != "$HOME/.dotfiles" ]]; then
     source_env_if_exists "$HOME/.dotfiles/.envrc"
+    source_env_if_exists "$HOME/.dotfiles/.env.secret"
 fi
 
 # Suppress direnv export output
-# export DIRENV_LOG_FORMAT=""
+export DIRENV_LOG_FORMAT=""
 
 # php composer
 if [[ -f composer.json ]]; then

@@ -1,9 +1,6 @@
-
 # ---- theme ----
 export PROMPT='~🧻 '
 ZSH_THEME="robbyrussell"
-# ---- case-sensitive completion ----
-# CASE_SENSITIVE="true"
 
 # ---- hyphen-insensitive completion ----
 # Uncomment the following line to use hyphen-insensitive completion.
@@ -18,16 +15,9 @@ zstyle ':omz:update' frequency 13
 # Uncomment the following line if pasting URLs and other text is messed up.
 # DISABLE_MAGIC_FUNCTIONS="true"
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
 # Uncomment the following line to enable command auto-correction.
 # ENABLE_CORRECTION="true"
 
-# Display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
 COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
@@ -44,8 +34,6 @@ HIST_STAMPS="yyyy-mm-dd"
 # ---- Plugins ----
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
 plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
 
 # Set ZSH path before sourcing oh-my-zsh
@@ -53,11 +41,6 @@ export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 
 # ---- User configuration --------
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
@@ -74,35 +57,29 @@ source $ZSH/oh-my-zsh.sh
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
-#
-alias zshconfig="mate ~/.zshrc"
-alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+
+# shell aliases
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
-alias vi='nvim'
-alias expose=../script/expose.sh
-alias pip='pip3'
-alias python='python3'
-alias g='git'
-alias copilot='gh copilot'
-alias gcs='gh copilot suggest'
-alias gce='gh copilot explain'
-alias composer="php /usr/local/bin/composer.phar"
-alias cc='claude code'
-alias mysql=/usr/local/mysql/bin/mysql
-alias mysqladmin=/usr/local/mysql/bin/mysqladmin
-alias thingymachine='ssh@68.183.204.78'
+alias zshconfig="mate ~/.zshrc"
+
+# brew
+alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+
+# package management
 alias pn=pnpm
-alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# ssh
+alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
+alias thingymachine='ssh@68.183.204.78'
+alias expose=../script/expose.sh
 
-# use iterm2 on zsh init
-source ~/.iterm2_shell_integration.zsh
+# python
+alias python='python3'
+alias pip='pip3'
 
+# git
+alias g='git'
 # git worktrees
 source ~/.dotfiles/scripts/create-worktree-from-pr.sh
 alias cwp='create-worktree-from-pr'
@@ -112,17 +89,40 @@ source ~/.dotfiles/scripts/cleanup-merged-worktrees.sh
 alias clean_merged_trees='cleanup-merged-worktrees'
 source ~/.dotfiles/scripts/clean-worktree.sh
 alias cwt='clean-worktree'
+# gh cli
+alias copilot='gh copilot'
+alias gcs='gh copilot suggest'
+alias gce='gh copilot explain'
 
+# editors/code assistants
+alias cc='claude code'
+alias vi='nvim'
+alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
+
+# databases
+alias mysql=/usr/local/mysql/bin/mysql
+alias mysqladmin=/usr/local/mysql/bin/mysqladmin
+
+# nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# use iterm2 on zsh init
+source ~/.iterm2_shell_integration.zsh
+
+# mysql
 export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 
-# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+# Docker CLI completions.
 fpath=(/Users/jenc/.docker/completions $fpath)
 autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
-# Laravel / Sail
+# php / Laravel
+alias composer="php /usr/local/bin/composer.phar"
 alias sail='[ -f sail ] && zsh sail || zsh vendor/bin/sail'
 alias pint='./vendor/bin/pint'
 
