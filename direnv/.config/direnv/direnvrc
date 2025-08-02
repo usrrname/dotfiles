@@ -20,11 +20,13 @@ if [[ -f ".nvmrc" ]]; then
     nvm use $NODE_VERSION
 fi
 
+
 # Auto-source dotfiles .envrc in every directory if not inside dotfiles directory
 # or it will load twice
-if [[ -f "$HOME/.dotfiles/.envrc" && $PWD != "$HOME/.dotfiles" ]]; then
+if [[ $PWD != "$HOME/.dotfiles" ]]; then
     source_env_if_exists "$HOME/.dotfiles/.envrc"
-    source_env_if_exists "$HOME/.dotfiles/.env.secret"
+    source_env_if_exists "$HOME/.dotfiles/.env.secret" 
+    dotenv_if_exists
 fi
 
 # Suppress direnv export output
