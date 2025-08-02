@@ -7,11 +7,37 @@ Dotfiles setup made with:
 
 - [direnv](https://direnv.net) w/ global config in `~/.config/direnv/direnvrc`
 
-- Mac setup from https://mac.install.guide/
+- Mac setup from [mac.install.guide](https://mac.install.guide/)
 
 - Underlying ideals from [12 Factor App config](https://12factor.net/config)
 
-- Trying out Devbox for isolated consistent dev environments
+`./setup.sh` tested with [Bats](https://github.com/bats-core/bats-core)
+
+### Contents
+- [zsh](#zsh)
+- [Symlinking](#symlinking)
+- [1Password](#1password)
+- [Devbox](#devbox)
+- [OrbStack](#orbstack)
+- [Maintenance](#maintenance)
+
+## zsh
+
+```bash
+## When each is loaded:
+.zshenv
+        → .zprofile
+                → .zshrc 
+                        → .zlogin
+```
+
+## Symlinking
+
+```bash
+cp <directory> <target>
+mkdir -p <directory>
+stow <directory>
+```
 
 List all symlinks
 
@@ -19,10 +45,39 @@ List all symlinks
 ls -la ~ | grep "\->"
 ```
 
-## 1Password Secret References
+## 1Password
 
 ```bash
 op://<vault-name>/<item-name>/[section-name/]<field-name>
+```
+
+```bash
+Usage:  op read <reference> [flags]
+
+Examples:
+
+Print the secret saved in the field 'password', on the item 'db', in the vault 'app-prod':
+
+op read op://app-prod/db/password
+
+Use a secret reference with a query parameter to retrieve a one-time
+password:
+
+op read "op://app-prod/db/one-time password?attribute=otp"
+
+Use a secret reference with a query parameter to get an SSH key's private key in the OpenSSH format:
+
+op read "op://app-prod/ssh key/private key?ssh-format=openssh"
+
+Save the SSH key found on the item 'ssh' in the 'server' vault
+as a new file 'key.pem' on your computer:
+
+op read --out-file ./key.pem op://app-prod/server/ssh/key.pem
+
+Use 'op read' in a command with secret references in place of plaintext secrets:
+
+docker login -u $(op read op://prod/docker/username) -p $(op read op://prod/docker/password)
+        
 ```
 
 ## Devbox
@@ -44,15 +99,8 @@ Clean up packages in nix store
 ```bash
 devbox run -- nix store gc --extra-experimental-features nix-command
 ```
-## zsh
 
-```bash
-## When each is loaded:
-
-.zshenv → .zprofile → .zshrc → .zlogin
-```
-
-### Orb Stack
+## OrbStack
 
 Set the default docker context to orbstack
 
@@ -60,36 +108,10 @@ Set the default docker context to orbstack
 docker context use orbstack
 ```
 
-1Password References
+## Maintenance
+
+Keep submodules updated
 
 ```bash
-Usage:  op read <reference> [flags]
-
-Examples:
-
-Print the secret saved in the field 'password', on the item 'db', in the vault
-'app-prod':
-
-        op read op://app-prod/db/password
-
-Use a secret reference with a query parameter to retrieve a one-time
-password:
-
-        op read "op://app-prod/db/one-time password?attribute=otp"
-
-Use a secret reference with a query parameter to get an SSH key's private
-key in the OpenSSH format:
-
-        op read "op://app-prod/ssh key/private key?ssh-format=openssh"
-
-Save the SSH key found on the item 'ssh' in the 'server' vault
-as a new file 'key.pem' on your computer:
-
-        op read --out-file ./key.pem op://app-prod/server/ssh/key.pem
-
-Use 'op read' in a command with secret references in place of plaintext
-secrets:
-
-        docker login -u $(op read op://prod/docker/username) -p $(op read op://prod/docker/password)
+git submodule update
 ```
-
