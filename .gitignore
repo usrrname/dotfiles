@@ -37,3 +37,4 @@ docker/.docker/**
 .env.d.ts
 .env.secret
 .cursor/*
+orbstack/.orbstack/*
