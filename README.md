@@ -49,3 +49,36 @@ Set the default docker context to orbstack
 ```bash
 docker context use orbstack
 ```
+
+1Password References
+```bash
+Usage:  op read <reference> [flags]
+
+Examples:
+
+Print the secret saved in the field 'password', on the item 'db', in the vault
+'app-prod':
+
+        op read op://app-prod/db/password
+
+Use a secret reference with a query parameter to retrieve a one-time
+password:
+
+        op read "op://app-prod/db/one-time password?attribute=otp"
+
+Use a secret reference with a query parameter to get an SSH key's private
+key in the OpenSSH format:
+
+        op read "op://app-prod/ssh key/private key?ssh-format=openssh"
+
+Save the SSH key found on the item 'ssh' in the 'server' vault
+as a new file 'key.pem' on your computer:
+
+        op read --out-file ./key.pem op://app-prod/server/ssh/key.pem
+
+Use 'op read' in a command with secret references in place of plaintext
+secrets:
+
+        docker login -u $(op read op://prod/docker/username) -p $(op read op://prod/docker/password)
+```
+
