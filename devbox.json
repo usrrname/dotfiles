@@ -16,7 +16,8 @@
     "code-cursor@latest",
     "mysql@latest",
     "oh-my-zsh@latest",
-    "gh@latest"
+    "gh@latest",
+    "bruno@latest"
   ],
   "shell": {
     "init_hook": [

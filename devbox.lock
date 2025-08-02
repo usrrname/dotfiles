@@ -49,6 +49,54 @@
         }
       }
     },
+    "bruno@latest": {
+      "last_modified": "2025-07-25T08:26:56Z",
+      "resolved": "github:NixOS/nixpkgs/6027c30c8e9810896b92429f0092f624f7b1aace#bruno",
+      "source": "devbox-search",
+      "version": "2.8.0",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/0hpwz9drdygy7j7rdsxhv1lnrzjaggaj-bruno-2.8.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/0hpwz9drdygy7j7rdsxhv1lnrzjaggaj-bruno-2.8.0"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/i8f263wya7j8yq8ff2n0hrnhdp79ma71-bruno-2.8.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/i8f263wya7j8yq8ff2n0hrnhdp79ma71-bruno-2.8.0"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/zbarnc3l371j5ibkfr7x9v65s9zcdibd-bruno-2.8.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/zbarnc3l371j5ibkfr7x9v65s9zcdibd-bruno-2.8.0"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lzbhv6rmqii8g6dxrif4sqiraqramlaf-bruno-2.8.0",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lzbhv6rmqii8g6dxrif4sqiraqramlaf-bruno-2.8.0"
+        }
+      }
+    },
     "code-cursor@latest": {
       "last_modified": "2025-07-15T16:15:05Z",
       "resolved": "github:NixOS/nixpkgs/dab3a6e781554f965bde3def0aa2fda4eb8f1708#code-cursor",

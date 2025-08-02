@@ -21,6 +21,7 @@ declare -gax BREW_PACKAGES=(
     "mysql"          # MySQL database server
     "nvim"           # Neovim text editor
     "direnv"         # Environment variable manager
+    "bruno"          # API client
 )
 
 # GUI applications (installed via 'brew install --cask')
