@@ -1,0 +1,32 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.15.0/.schema/devbox.schema.json",
+  "packages": [
+    "git@latest",
+    "direnv@latest",
+    "python@3.10",
+    "nodejs@latest",
+    "pnpm@latest",
+    "yarn@latest",
+    "docker@latest",
+    "go@latest",
+    "iterm2@latest",
+    "_1password-cli@latest",
+    "spotify@latest",
+    "neovim@latest",
+    "code-cursor@latest",
+    "mysql@latest",
+    "oh-my-zsh@latest",
+    "gh@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "export FPATH=\"$(brew --prefix)/share/zsh/site-functions:$FPATH\"",
+      "autoload -Uz compinit && compinit -i"
+    ],
+    "scripts": {
+      "test": [
+        "echo \"Error: no test specified\" && exit 1"
+      ]
+    }
+  }
+}

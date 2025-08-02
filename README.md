@@ -5,7 +5,7 @@
 Dotfiles setup made with:
 - [stow](https://www.gnu.org/software/stow/)
 
-- [direnv](https://direnv.net)
+- [direnv](https://direnv.net) w/ global config in `~/.config/direnv/direnvrc`
 
 - Mac setup from https://mac.install.guide/
 
@@ -27,14 +27,23 @@ op://<vault-name>/<item-name>/[section-name/]<field-name>
 
 ## Devbox
 
+[FAQ](https://www.jetify.com/docs/devbox/faq/)
+
 ```bash
 devbox add <package> # add a package to the devbox environment
 devbox rm <package> # remove a package from the devbox environment
 devbox info # show info about the devbox environment
 devbox update # update packages in devbox
+devbox version update # update devbox to the latest version
 devbox shell # initialize the devbox shell
+devbox generate direnv # generate a direnvrc file
 ```
 
+Clean up packages in nix store
+
+```bash
+devbox run -- nix store gc --extra-experimental-features nix-command
+```
 ## zsh
 
 ```bash
@@ -46,11 +55,13 @@ devbox shell # initialize the devbox shell
 ### Orb Stack
 
 Set the default docker context to orbstack
+
 ```bash
 docker context use orbstack
 ```
 
 1Password References
+
 ```bash
 Usage:  op read <reference> [flags]
 

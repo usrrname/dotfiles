@@ -29,7 +29,7 @@ htpasswd
 oauth_creds.json
 *.vscode
 .devbox
-devbox.*
+devbox.d
 docker/.docker/**
 !docker/.docker/config.json
 !docker/.docker/daemon.json
