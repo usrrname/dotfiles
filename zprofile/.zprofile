@@ -12,7 +12,6 @@ defaults write com.apple.screencapture "location" -string "~/pictures/screenshot
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(direnv hook zsh)"
-eval "$(fnm env)"
 eval "$(pyenv init -)"
 
 # Added by OrbStack: command-line tools and integration
