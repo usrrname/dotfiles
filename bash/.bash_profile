@@ -10,7 +10,7 @@ alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
 alias expose=../script/expose.sh
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
-
+eval "$(devbox global shellenv --init-hook)"
 eval "$(direnv hook bash)"
 eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(pyenv init -)"
