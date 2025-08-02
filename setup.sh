@@ -1,22 +1,47 @@
 #!/bin/zsh
 
-declare -a PACKAGES=("git" "1password-cli" "cursor" "docker" "google-chrome" "iterm2" "slack" "spotify" "zoom" "nvm" "pnpm" "act" "yarn" "orbstack" "fnm" "pyenv" "gh" "claude-code" "gpg-suite" "mysql-client" "mysql" "nvim" "act" "direnv")
+# Source shared package configuration
+source "$(dirname "$0")/config/packages.sh"
 
-# Check for dry-run mode
-DRY_RUN=${DRY_RUN:-false}
+# Handle command line arguments
+case "${1:-}" in
+    "check"|"--check")
+        CHECK_ONLY=true
+        _is_brew_installed
+        exit $?
+        ;;
+    "validate"|"--validate")
+        validate_package_config
+        exit $?
+        ;;
+    "list"|"--list"|"ls")
+        list_packages
+        ;;
+    *)
+        # Default to running the setup script
+        CHECK_ONLY=false
+        DRY_RUN=${DRY_RUN:-false}
+        ;;
+esac
+
+
+# If only checking status, run check and exit
+if [[ "$CHECK_ONLY" == "true" ]]; then
+    _is_brew_installed
+fi
 
 # Check if Homebrew is installed
-if ! command -v brew &> /dev/null; then
+if ! _is_brew_installed; then
     echo "Installing Homebrew..."
     if [[ "$DRY_RUN" == "true" ]]; then
         echo "[DRY RUN] Would install Homebrew"
-    else
-        # install brew
+    else # install brew
         curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh | zsh
     fi
 else
     echo "Homebrew already installed"
 fi
+
 
 if ! command -v devbox &> /dev/null; then
     echo "Installing devbox..."
@@ -30,22 +55,41 @@ else
 fi
 
 echo "Installing packages..."
-for PKG in "${PKGS[@]}"; do
+
+# Install regular brew packages
+for PKG in "${BREW_PACKAGES[@]}"; do
     if [[ "$DRY_RUN" == "true" ]]; then
-        echo "[DRY RUN] Would install $PKG"
-    elif brew list --cask "$PKG" &> /dev/null; then
-        echo "$PKG is already installed"
+        echo "[DRY RUN] Would install brew package $PKG"
+    elif is_brew_package_installed "$PKG"; then
+        echo "✅ $PKG is already installed"
     else
-        echo "Installing $PKG"
+        echo "📦 Installing $PKG"
+        brew install "$PKG"
+    fi
+done
+
+# Install cask packages (GUI applications)
+for PKG in "${CASK_PACKAGES[@]}"; do
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "[DRY RUN] Would install cask $PKG"
+    elif is_cask_installed "$PKG"; then
+        echo "✅ $PKG cask is already installed"
+    else
+        echo "📦 Installing cask $PKG"
         brew install --cask "$PKG"
     fi
 done
 
-### Env setup for yarn and pnpm
-if ! command -v corepack &> /dev/null; then
-    npm i -g corepack
+# configure nvm / node
+if command -v nvm &> /dev/null; then
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "[DRY RUN] Would install nvm"
+    else
+        nvm install stable
+        nvm alias default stable
+    fi
+else
+    echo "nvm not installed"
 fi
-
-nvm alias default stable
 
 echo "Setup complete!"
