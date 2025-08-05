@@ -2,6 +2,9 @@
 .direnv
 .envrc
 
+# macOS specific files and folders
+.DS_Store
+
 # Editor specific files and folders
 .idea
 .vscode
