@@ -132,4 +132,5 @@ alias act='act --container-architecture linux/amd64'
 # Auto-refresh devbox global environment on shell start
 if command -v devbox >/dev/null 2>&1; then
     eval "$(devbox global shellenv --preserve-path-stack -r)"
-fi
+fi# Rust environment
+source "$HOME/.cargo/env"
