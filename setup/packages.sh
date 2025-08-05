@@ -23,6 +23,7 @@ declare -gax BREW_PACKAGES=(
     "direnv"         # Environment variable manager
     "bruno"          # API client
     "ripgrep"        # Fast grep alternative
+    "rust"           # Rust programming language
 )
 
 # GUI applications (installed via 'brew install --cask')
