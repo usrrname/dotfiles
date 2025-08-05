@@ -2,12 +2,7 @@
 export PROMPT='~🧻 '
 ZSH_THEME="robbyrussell"
 
-# ---- hyphen-insensitive completion ----
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-zstyle ':omz:update' mode auto      # update automatically without asking
+zstyle ':omz:update' mode auto # update automatically without asking
 
 # Uncomment the following line to change how often to auto-update (in days).
 zstyle ':omz:update' frequency 13
@@ -132,5 +127,7 @@ alias act='act --container-architecture linux/amd64'
 # Auto-refresh devbox global environment on shell start
 if command -v devbox >/dev/null 2>&1; then
     eval "$(devbox global shellenv --preserve-path-stack -r)"
-fi# Rust environment
+fi
+
+# Rust environment
 source "$HOME/.cargo/env"
