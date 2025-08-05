@@ -16,3 +16,5 @@ package.*
 README.md
 .env*
 .cursor/*
+setup/*
+test/*
