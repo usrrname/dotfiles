@@ -17,7 +17,8 @@
     "mysql@latest",
     "oh-my-zsh@latest",
     "gh@latest",
-    "bruno@latest"
+    "bruno@latest",
+    "ripgrep@latest"
   ],
   "shell": {
     "init_hook": [

@@ -758,6 +758,54 @@
         }
       }
     },
+    "ripgrep@latest": {
+      "last_modified": "2025-07-13T22:45:35Z",
+      "resolved": "github:NixOS/nixpkgs/a421ac6595024edcfbb1ef950a3712b89161c359#ripgrep",
+      "source": "devbox-search",
+      "version": "14.1.1",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/lxv4lraggh0g9bjcaxf4qicar3q7i1rz-ripgrep-14.1.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/lxv4lraggh0g9bjcaxf4qicar3q7i1rz-ripgrep-14.1.1"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/i4dsm587azhml1cqf7agwd9dxgx52n5g-ripgrep-14.1.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/i4dsm587azhml1cqf7agwd9dxgx52n5g-ripgrep-14.1.1"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/sn28r34yalqqj7sp1qnjw8ldl30cjsz4-ripgrep-14.1.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/sn28r34yalqqj7sp1qnjw8ldl30cjsz4-ripgrep-14.1.1"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/8m8bfl2xl7vpr8qlibgb0cd3ybkkmn3j-ripgrep-14.1.1",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/8m8bfl2xl7vpr8qlibgb0cd3ybkkmn3j-ripgrep-14.1.1"
+        }
+      }
+    },
     "spotify@latest": {
       "last_modified": "2025-07-22T02:38:50Z",
       "resolved": "github:NixOS/nixpkgs/83e677f31c84212343f4cc553bab85c2efcad60a#spotify",
