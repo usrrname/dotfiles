@@ -1,7 +1,7 @@
 #!/bin/zsh
 
 # Source shared package configuration
-source "$(dirname "$0")/config/packages.sh"
+source "$(dirname "$0")/setup/packages.sh"
 
 # Handle command line arguments
 case "${1:-}" in

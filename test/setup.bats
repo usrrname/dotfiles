@@ -2,7 +2,7 @@
 
 # Source shared package configuration
 setup() {
-    source "config/packages.sh"
+    source "setup/packages.sh"
     load 'test_helper/bats-assert/load'
     load 'test_helper/bats-support/load'
 }
