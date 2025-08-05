@@ -16,6 +16,7 @@ Dotfiles setup made with:
 ### Contents
 - [zsh](#zsh)
 - [Symlinking](#symlinking)
+- [Nvim/LazyVim](#nvimlazyvim)
 - [1Password](#1password)
 - [Devbox](#devbox)
 - [OrbStack](#orbstack)
@@ -45,6 +46,26 @@ List all symlinks
 ls -la ~ | grep "\->"
 ```
 
+## Nvim/LazyVim
+
+Build plugins
+
+```bash
+nvim --headless -c "Lazy sync" -c "qa"
+```
+
+Refresh and sync plugins
+```bash
+# Force clean and reinstall LazyVim plugins
+nvim --headless -c "lua require('lazy').clean()" -c "lua require('lazy').sync()" -c "qa"
+```
+
+Refresh and sync plugins
+
+```bash
+:Lazy clean
+:Lazy sync
+```
 ## 1Password
 
 ```bash
