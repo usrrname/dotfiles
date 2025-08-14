@@ -24,6 +24,9 @@ declare -gax BREW_PACKAGES=(
     "bruno"          # API client
     "ripgrep"        # Fast grep alternative
     "rust"           # Rust programming language
+    "openssl@3"      # OpenSSL
+    "libyaml"        # YAML library
+    "gmp"            # GNU Multiple Precision Arithmetic Library
 )
 
 # GUI applications (installed via 'brew install --cask')

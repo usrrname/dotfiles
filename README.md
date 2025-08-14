@@ -14,6 +14,7 @@ Dotfiles setup made with:
 `./setup.sh` tested with [Bats](https://github.com/bats-core/bats-core)
 
 ### Contents
+- [act](#act)
 - [zsh](#zsh)
 - [Symlinking](#symlinking)
 - [Nvim/LazyVim](#nvimlazyvim)
@@ -21,6 +22,13 @@ Dotfiles setup made with:
 - [Devbox](#devbox)
 - [OrbStack](#orbstack)
 - [Maintenance](#maintenance)
+
+## act
+
+```bash
+# insert 1password token into github action secrets
+act -s GITHUB_TOKEN=$(op read $GITHUB_TOKEN)
+```
 
 ## zsh
 

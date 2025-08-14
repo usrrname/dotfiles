@@ -42,6 +42,17 @@ else
     echo "Homebrew already installed"
 fi
 
+if ! command -v mise &> /dev/null; then
+    echo "Installing mise..."
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "[DRY RUN] Would install mise"
+    else
+        curl https://mise.run | sh
+        gem install rails
+    fi
+else
+    echo "mise already installed"
+fi
 
 if ! command -v devbox &> /dev/null; then
     echo "Installing devbox..."
