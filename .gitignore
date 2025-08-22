@@ -38,3 +38,4 @@ docker/.docker/**
 .env.secret
 .cursor/*
 orbstack/.orbstack/*
+.yarnrc
