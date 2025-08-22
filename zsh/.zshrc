@@ -128,8 +128,15 @@ alias act='act --container-architecture linux/amd64'
 if command -v devbox >/dev/null 2>&1; then
     eval "$(devbox global shellenv --preserve-path-stack -r)"
 fi
-
 # Rust environment
 source "$HOME/.cargo/env"
-
+eval "$(ssh-agent -s)"
 eval "$(~/.local/bin/mise activate)"
+
+# pnpm
+export PNPM_HOME="/Users/jenc/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
