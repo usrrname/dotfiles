@@ -12,9 +12,9 @@ if [[ -f ".nvmrc" ]]; then
     if [[ $? -ne 0 ]]; then
         echo "installing node version: $NODE_VERSION ..."
         nvm install $NODE_VERSION
+        echo "using node version: $NODE_VERSION"
+        nvm use $NODE_VERSION
     fi
-    echo "using node version: $NODE_VERSION"
-    nvm use $NODE_VERSION
 fi
 
 
