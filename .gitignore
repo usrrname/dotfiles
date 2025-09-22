@@ -36,6 +36,8 @@ docker/.docker/**
 .env*
 .env.d.ts
 .env.secret
+cursor/.cursor/*
 .cursor/*
 orbstack/.orbstack/*
 .yarnrc
+npm/.npmrc
