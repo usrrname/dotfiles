@@ -130,9 +130,11 @@ if command -v devbox >/dev/null 2>&1; then
 fi
 # Rust environment
 source "$HOME/.cargo/env"
-eval "$(ssh-agent -s)"
-eval "$(~/.local/bin/mise activate)"
 
+eval "$(ssh-agent -s)"
+# Ruby
+eval "$(~/.local/bin/mise activate)"
+eval "$(mise activate zsh)"
 # pnpm
 export PNPM_HOME="/Users/jenc/Library/pnpm"
 case ":$PATH:" in
