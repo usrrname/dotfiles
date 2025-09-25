@@ -62,7 +62,11 @@ alias zshconfig="mate ~/.zshrc"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 
 # package management
-alias pn=pnpm
+# run npq before npm install
+alias npm='npq-hero'
+alias yarn="NPQ_PKG_MGR=yarn npq-hero"
+# pnpm
+alias pn="NPQ_PKG_MGR=pnpm npq-hero"
 
 # ssh
 alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'

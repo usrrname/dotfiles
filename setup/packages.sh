@@ -27,6 +27,7 @@ declare -gax BREW_PACKAGES=(
     "openssl@3"      # OpenSSL
     "libyaml"        # YAML library
     "gmp"            # GNU Multiple Precision Arithmetic Library
+    "npq"            # audit node packages before install
 )
 
 # GUI applications (installed via 'brew install --cask')
