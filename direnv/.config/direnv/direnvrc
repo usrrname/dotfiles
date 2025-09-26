@@ -7,7 +7,6 @@ echo "🚀 Loading global direnvrc..."
 
 if [[ -f ".nvmrc" ]]; then
     # Source NVM (first time only per direnv session)
-    export NVM_DIR="$HOME/.nvm"
     get-nvm
 
     NODE_VERSION=$(cat .nvmrc)
