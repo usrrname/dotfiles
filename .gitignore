@@ -40,4 +40,5 @@ cursor/.cursor/*
 .cursor/*
 orbstack/.orbstack/*
 .yarnrc
-npm/.npmrc
+./npm/.npmrc
+.npmrc*
