@@ -34,7 +34,7 @@ plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
 # Set ZSH path before sourcing oh-my-zsh
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
-
+export NVM_DIR="$HOME/.nvm"
 # ---- User configuration --------
 
 # Preferred editor for local and remote sessions
@@ -67,6 +67,12 @@ alias npm='npq-hero'
 alias yarn="NPQ_PKG_MGR=yarn npq-hero"
 # pnpm
 alias pn="NPQ_PKG_MGR=pnpm npq-hero"
+
+# nvm / node
+alias get-nvm='(){
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}'
 
 # ssh
 alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
@@ -132,7 +138,7 @@ source "$HOME/.cargo/env"
 
 eval "$(ssh-agent -s)"
 # Mise
-eval "$(mise activate zsh)"
+eval "$(/Users/jenc/.local/bin/mise activate zsh)"
 # pnpm
 export PNPM_HOME="/Users/jenc/Library/pnpm"
 case ":$PATH:" in
