@@ -102,11 +102,6 @@ alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
 alias mysql=/usr/local/mysql/bin/mysql
 alias mysqladmin=/usr/local/mysql/bin/mysqladmin
 
-# nvm
-export NVM_DIR="$HOME/.nvm"
-[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
 
@@ -136,8 +131,7 @@ fi
 source "$HOME/.cargo/env"
 
 eval "$(ssh-agent -s)"
-# Ruby
-eval "$(~/.local/bin/mise activate)"
+# Mise
 eval "$(mise activate zsh)"
 # pnpm
 export PNPM_HOME="/Users/jenc/Library/pnpm"

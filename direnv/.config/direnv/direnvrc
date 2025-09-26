@@ -1,29 +1,43 @@
 echo "🚀 Loading global direnvrc..."
 
 # ---- NodeJS nvm ----
-# check for existence of .nvmrc
+# Load NVM based on project context
+# 1. If a .nvmrc file exists ⇒ ensure that version is installed & used.
+# 2. Else if a package.json exists ⇒ just source NVM so it’s available on-demand.
+
 if [[ -f ".nvmrc" ]]; then
-    # grab the contents  of the file
+    # Source NVM (first time only per direnv session)
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
     NODE_VERSION=$(cat .nvmrc)
     echo "current node version: $(nvm current)"
-    # check if nvm node version exists
-    nvm ls $NODE_VERSION > /dev/null 2>&1
 
-    if [[ $? -ne 0 ]]; then
-        echo "installing node version: $NODE_VERSION ..."
-        nvm install $NODE_VERSION
-        echo "using node version: $NODE_VERSION"
-        nvm use $NODE_VERSION
+    # Install the requested Node version if it isn’t installed yet
+    if ! nvm ls "$NODE_VERSION" > /dev/null 2>&1; then
+        echo "installing node version: $NODE_VERSION …"
+        nvm install "$NODE_VERSION"
     fi
+
+    echo "using node version: $NODE_VERSION"
+    nvm use "$NODE_VERSION"
+
+elif [[ -f "package.json" ]]; then
+    # No .nvmrc, but JavaScript project detected → just source NVM for convenience
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    echo "✨ NVM sourced due to package.json (no .nvmrc found)."
 fi
 
 
 # Auto-source dotfiles .envrc in every directory if not inside dotfiles directory
 # or it will load twice
-if [[ $PWD != "$HOME/.dotfiles" ]]; then
+if [[ $PWD != "$HOME/.dotfiles" && -f .git ]]; then
+    dotenv_if_exists
     source_env_if_exists "$HOME/.dotfiles/.envrc"
     source_env_if_exists "$HOME/.dotfiles/.env.secret" 
-    dotenv_if_exists
 fi
 
 # Suppress direnv export output
