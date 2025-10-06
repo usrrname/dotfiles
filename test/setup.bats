@@ -15,7 +15,7 @@ after_each() {
 }
 
 @test "can run script in dry-run mode" {
-    DRY_RUN=true run ./setup.sh
+    DRY_RUN=true run ./setup-osx.sh
     assert_success
     assert_output --partial 'Homebrew is installed'
     assert_output --partial 'Installing packages...'
@@ -27,7 +27,7 @@ after_each() {
 
 @test "should succeed check if brew is already installed" {
 
-    CHECK_ONLY=true run ./setup.sh check;
+    CHECK_ONLY=true run ./setup-osx.sh check;
     if command -v brew &>/dev/null; then
         assert_success
         assert_output --partial 'Homebrew is installed'
@@ -68,7 +68,7 @@ after_each() {
 }
 
 @test 'packages can be listed' {
-    run ./setup.sh list
+    run ./setup-osx.sh list
     assert_success
     assert_output --partial "📦 Package Configuration:"
 }

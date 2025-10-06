@@ -11,16 +11,18 @@ Dotfiles setup made with:
 
 - Underlying ideals from [12 Factor App config](https://12factor.net/config)
 
-`./setup.sh` tested with [Bats](https://github.com/bats-core/bats-core)
+`./setup-osx.sh` tested with [Bats](https://github.com/bats-core/bats-core)
 
 ### Contents
 - [act](#act)
 - [zsh](#zsh)
 - [Symlinking](#symlinking)
+- [Mise](#mise)
 - [Nvim/LazyVim](#nvimlazyvim)
 - [1Password](#1password)
 - [Devbox](#devbox)
 - [OrbStack](#orbstack)
+- [uv](#uv)
 - [Maintenance](#maintenance)
 
 ## act
@@ -38,6 +40,12 @@ act -s GITHUB_TOKEN=$(op read $GITHUB_TOKEN)
         → .zprofile
                 → .zshrc 
                         → .zlogin
+```
+
+## Mise
+
+```bash
+mise activate zsh
 ```
 
 ## Symlinking
@@ -106,7 +114,7 @@ op read --out-file ./key.pem op://app-prod/server/ssh/key.pem
 Use 'op read' in a command with secret references in place of plaintext secrets:
 
 docker login -u $(op read op://prod/docker/username) -p $(op read op://prod/docker/password)
-        
+      
 ```
 
 ## Devbox
@@ -135,6 +143,14 @@ Set the default docker context to orbstack
 
 ```bash
 docker context use orbstack
+```
+
+## uv
+
+python package manager to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, etc.
+
+```bash
+uv 
 ```
 
 ## Maintenance

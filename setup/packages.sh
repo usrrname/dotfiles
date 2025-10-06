@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Shared package configuration for setup.sh and tests
+# Shared package configuration for setup-osx.sh and tests
 # This file contains the definitive list of packages to install
 
 # =============================================================================

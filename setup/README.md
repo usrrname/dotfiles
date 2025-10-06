@@ -31,26 +31,26 @@ Contains the list of packages to install and functions for package management.
 
 ```bash
 # Normal installation
-./setup.sh
+./setup-osx.sh
 
 # Check package status
-./setup.sh check 
-./setup.sh --check
+./setup-osx.sh check 
+./setup-osx.sh --check
 
 # Validate package configuration
-./setup.sh validate
+./setup-osx.sh validate
 
 # List all packages with status
-./setup.sh list 
-./setup.sh ls
+./setup-osx.sh list 
+./setup-osx.sh ls
 
 # Dry run mode
-DRY_RUN=true ./setup.sh
+DRY_RUN=true ./setup-osx.sh
 ```
 
 ## Usage
 
-### In setup.sh
+### In setup-osx.sh
 ```bash
 source "$(dirname "$0")/config/packages.sh"
 ```
@@ -96,13 +96,13 @@ source "config/packages.sh"
 
 2. The package will automatically be:
    - Added to the combined `PACKAGES` array
-   - Installed by `setup.sh`
+   - Installed by `setup-osx.sh`
    - Tested by the bats test suite
    - Included in status checks and validation
 
 3. Validate your changes:
    ```bash
-   ./setup.sh validate
+   ./setup-osx.sh validate
    ```
 
 ## Error Prevention
@@ -118,7 +118,7 @@ The refactored configuration prevents common issues:
 ## Example Output
 
 ```bash
-$ ./setup.sh list
+$ ./setup-osx.sh list
 📦 Package Configuration:
 
 🍺 Brew Packages (13):

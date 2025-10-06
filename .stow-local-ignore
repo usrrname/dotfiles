@@ -10,7 +10,7 @@ README.*
 LICENSE
 .env
 test/*
-setup.sh
+setup-osx.sh
 devbox.*
 package.*
 README.md
