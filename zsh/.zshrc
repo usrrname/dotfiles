@@ -105,8 +105,8 @@ alias vi='nvim'
 alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
 
 # databases
-alias mysql=/usr/local/mysql/bin/mysql
-alias mysqladmin=/usr/local/mysql/bin/mysqladmin
+alias mysql=/opt/homebrew/bin/mysql
+alias mysqladmin=/opt/homebrew/bin/mysqladmin
 
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
@@ -146,3 +146,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+# uv
+eval "$(uv generate-shell-completion zsh)"
+export PATH="$HOME/.local/bin:$PATH"
