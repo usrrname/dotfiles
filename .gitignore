@@ -42,3 +42,7 @@ orbstack/.orbstack/*
 .yarnrc
 ./npm/.npmrc
 .npmrc*
+tests/**/bats.diff*
+tests/**/bats.log
+argv.json
+
