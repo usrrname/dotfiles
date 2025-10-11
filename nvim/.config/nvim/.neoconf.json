@@ -1,15 +1,15 @@
 {
   "neodev": {
     "library": {
-      "enabled": true,
-      "plugins": true
+      "plugins": [
+        "plenary.nvim"
+      ]
     }
   },
-  "neoconf": {
-    "plugins": {
-      "lua_ls": {
-        "enabled": true
-      }
+  "lspconfig": {
+    "lua_ls": {
+      "Lua.runtime.version": "LuaJIT",
+      "Lua.workspace.checkThirdParty": false
     }
   }
 }
