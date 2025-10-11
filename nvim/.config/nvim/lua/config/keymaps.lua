@@ -8,3 +8,9 @@ vim.keymap.set("i", "<D-S-p>", "<ESC><cmd>Telescope<CR>", { desc = "Telescope co
 
 vim.keymap.set("n", "<D-s>", "<cmd>w<cr>", { desc = "Save" })
 vim.keymap.set("i", "<D-s>", "<Esc><cmd>w<cr>a", { desc = "Save" })
+
+-- Yank into system clipboard
+vim.keymap.set({'n', 'v'}, '<leader>y', '"+y') -- yank motion
+
+-- Paste from system clipboard
+vim.keymap.set('n', '<leader>p', '"+p')  -- paste after cursor
