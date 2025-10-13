@@ -1,7 +1,18 @@
+---@diagnostic disable: undefined-global
+--- evaluates to plugin manager path usually at $HOME/.local/share/lazy/lazy.nvim --
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+-- Install lazy.nvim if not present
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+	local out = vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"--branch=stable",
+		lazyrepo,
+		lazypath,
+	})
+
 	if vim.v.shell_error ~= 0 then
 		vim.api.nvim_echo({
 			{ "Failed to clone lazy.nvim:\n", "ErrorMsg" },
@@ -12,19 +23,40 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
 		os.exit(1)
 	end
 end
+
+-- Add lazy.nvim to runtime path
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
+-- Setup lazy.nvim
+return require("lazy").setup({
 	spec = {
-		-- add LazyVim and import its plugins
+		-- LazyVim core
 		{ "LazyVim/LazyVim", import = "lazyvim.plugins" },
-    		-- for typescript, LazyVim also includes extra specs to properly setup lspconfig,
-		-- treesitter, mason and typescript.nvim. So instead of the above, you can use:
+		-- Language extras
 		{ import = "lazyvim.plugins.extras.lang.typescript" },
-    { import = "lazyvim.plugins.extras.lang.json" },
-
-		-- import/override with your plugins
+		{ import = "lazyvim.plugins.extras.lang.json" },
+		-- import/override with custom plugins
 		{ import = "plugins" },
+		-- NeoTree
+		{
+			"nvim-neo-tree/neo-tree.nvim",
+			opts = {
+				filesystem = {
+					filtered_items = {
+						hide_hidden = false,
+						hide_dotfiles = false,
+						hide_gitignored = true,
+						hide_ignored = false, -- hide files that are ignored by other gitignore-like files
+						-- other gitignore-like files, in descending order of precedence.
+						ignore_files = {
+							".neotreeignore",
+							-- ".rgignore"
+						},
+					},
+				},
+			},
+		},
+		-- Treesitter configuration
 		{
 			"nvim-treesitter/nvim-treesitter",
 			opts = {
@@ -49,29 +81,27 @@ require("lazy").setup({
 				vim.list_extend(opts.ensure_installed, {
 					"tsx",
 					"typescript",
+					"go",
 				})
 			end,
 		},
-
 	},
-
 	defaults = {
-		-- By default, only LazyVim plugins will be lazy-loaded. Your custom plugins will load during startup.
-		-- If you know what you're doing, you can set this to `true` to have all your custom plugins lazy-loaded by default.
 		lazy = false,
-		-- It's recommended to leave version=false for now, since a lot the plugin that support versioning,
-		-- have outdated releases, which may break your Neovim install.
-		version = false, -- always use the latest git commit
-		-- version = "*", -- try installing the latest stable version for plugins that support semver
+		version = "*",
+		rocks = {
+			enabled = true,
+			hererocks = true,
+			lua = "5.1",
+		},
 	},
 	install = { colorscheme = { "catppuccin-macchiato" } },
 	checker = {
-		enabled = true, -- check for plugin updates periodically
-		notify = true, -- notify on update
-	}, -- automatically check for plugin updates
+		enabled = true,
+		notify = true,
+	},
 	performance = {
 		rtp = {
-			-- disable some rtp plugins
 			disabled_plugins = {
 				"gzip",
 				-- "matchit",
