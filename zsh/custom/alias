@@ -1,0 +1,55 @@
+
+# python
+alias python='python3'
+alias pip='pip3'
+
+# git
+alias g='git'
+
+# gh cli
+alias copilot='gh copilot'
+alias gcs='gh copilot suggest'
+alias gce='gh copilot explain'
+
+# editors/code assistants
+alias cc='claude code'
+alias vi='nvim'
+alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
+
+# databases
+alias mysql=/opt/homebrew/bin/mysql
+alias mysqladmin=/opt/homebrew/bin/mysqladmin
+
+# ssh
+alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
+alias thingymachine='ssh@68.183.204.78'
+alias expose=../script/expose.sh
+
+# shell aliases
+alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
+alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+alias zshconfig="mate ~/.zshrc"
+
+# brew
+alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+
+# package management
+# run npq before npm install
+alias npm='npq-hero'
+alias yarn="NPQ_PKG_MGR=yarn npq-hero"
+# pnpm
+alias pn="NPQ_PKG_MGR=pnpm npq-hero"
+
+# nvm / node
+alias get-nvm='(){
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}'
+
+# php / Laravel
+alias composer="php /usr/local/bin/composer.phar"
+alias sail='[ -f sail ] && zsh sail || zsh vendor/bin/sail'
+alias pint='./vendor/bin/pint'
+
+# nektos/act
+alias act='act --container-architecture linux/amd64'

@@ -1,3 +1,6 @@
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
 # ---- theme ----
 export PROMPT='~🧻 '
 ZSH_THEME="robbyrussell"
@@ -35,6 +38,7 @@ plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
 export ZSH="$HOME/.oh-my-zsh"
 source $ZSH/oh-my-zsh.sh
 export NVM_DIR="$HOME/.nvm"
+export ZSH_CUSTOM="$HOME/zsh/custom"
 # ---- User configuration --------
 
 # Preferred editor for local and remote sessions
@@ -53,60 +57,8 @@ export NVM_DIR="$HOME/.nvm"
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-# shell aliases
-alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
-alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias zshconfig="mate ~/.zshrc"
-
-# brew
-alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
-
-# package management
-# run npq before npm install
-alias npm='npq-hero'
-alias yarn="NPQ_PKG_MGR=yarn npq-hero"
-# pnpm
-alias pn="NPQ_PKG_MGR=pnpm npq-hero"
-
-# nvm / node
-alias get-nvm='(){
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-}'
-
-# ssh
-alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
-alias thingymachine='ssh@68.183.204.78'
-alias expose=../script/expose.sh
-
-# python
-alias python='python3'
-alias pip='pip3'
-
-# git
-alias g='git'
-# git worktrees
-source ~/.dotfiles/scripts/create-worktree-from-pr.sh
-alias cwp='create-worktree-from-pr'
-source ~/.dotfiles/scripts/create-local-worktrees.sh
-alias clw='create-local-worktrees'
-source ~/.dotfiles/scripts/cleanup-merged-worktrees.sh
-alias clean_merged_trees='cleanup-merged-worktrees'
-source ~/.dotfiles/scripts/clean-worktree.sh
-alias cwt='clean-worktree'
-# gh cli
-alias copilot='gh copilot'
-alias gcs='gh copilot suggest'
-alias gce='gh copilot explain'
-
-# editors/code assistants
-alias cc='claude code'
-alias vi='nvim'
-alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
-
-# databases
-alias mysql=/opt/homebrew/bin/mysql
-alias mysqladmin=/opt/homebrew/bin/mysqladmin
+# get aliases
+source $ZSH_CUSTOM/alias
 
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
@@ -121,13 +73,6 @@ autoload -Uz compinit
 compinit
 # End of Docker CLI completions
 
-# php / Laravel
-alias composer="php /usr/local/bin/composer.phar"
-alias sail='[ -f sail ] && zsh sail || zsh vendor/bin/sail'
-alias pint='./vendor/bin/pint'
-
-# nektos/act
-alias act='act --container-architecture linux/amd64'
 
 # Auto-refresh devbox global environment on shell start
 if command -v devbox >/dev/null 2>&1; then
@@ -139,6 +84,7 @@ source "$HOME/.cargo/env"
 eval "$(ssh-agent -s)"
 # Mise
 eval "$(/Users/jenc/.local/bin/mise activate zsh)"
+
 # pnpm
 export PNPM_HOME="/Users/jenc/Library/pnpm"
 case ":$PATH:" in

@@ -11,6 +11,9 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(direnv hook zsh)"
 eval "$(pyenv init -)"
 
+# Mise uses shims to load dev tools into the PATH
+# https://mise.jdx.dev/dev-tools/shims.html#mise-activate-shims
+eval "$(mise activate zsh --shims)"
 # Added by OrbStack: command-line tools and integration
 # This won't be added again if you remove it.
 source ~/.orbstack/shell/init.zsh 2>/dev/null || :
