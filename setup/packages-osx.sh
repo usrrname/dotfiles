@@ -39,6 +39,7 @@ declare -gax CASK_PACKAGES=(
     "slack"          # Team communication
     "spotify"        # Music streaming
     "zoom"           # Video conferencing
+    "tailscale"      # VPN mesh networking
     "orbstack"       # Fast, light container & VM manager
     "claude-code"    # AI coding assistant
     "gpg-suite"      # GPG key management GUI
