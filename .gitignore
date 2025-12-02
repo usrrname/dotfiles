@@ -45,4 +45,4 @@ orbstack/.orbstack/*
 tests/**/bats.diff*
 tests/**/bats.log
 argv.json
-
+bats.diff
