@@ -1,4 +1,5 @@
 Makefile
+/node_modules/
 \.DS_Store
 .DS_Store
 .git
@@ -10,11 +11,12 @@ README.*
 LICENSE
 .env
 test/*
-setup-osx.sh
 devbox.*
 package.*
 README.md
 .env*
 .cursor/*
+.claude/*
+scripts/*
 setup/*
 test/*
