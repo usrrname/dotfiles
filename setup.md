@@ -1,17 +1,26 @@
-# Setup Scripts and Package Configuration
-
-This directory contains shared configuration files and setup scripts for macOS and Linux (Debian/Ubuntu) systems.
+# Setup Scripts
 
 ## Overview
 
-The setup system supports multiple platforms:
+The setup scripts support:
 - **macOS**: Uses Homebrew for package management
 - **Linux (Debian/Ubuntu)**: Uses APT for package management
-- **Raspberry Pi**: Specialized setup for Raspberry Pi devices
+- **Raspberry Pi**: Specialized setup for Raspberry Pi 4B
 
 ## Files Structure
 
+```bash
+├── scripts/
+│   ├── setup/
+│   │   ├── packages-osx.sh
+│   │   ├── packages-linux.sh
+│   │   ├── setup-osx.sh
+│   │   └── setup-linux.sh
+```
+
 ### Package Configuration Files
+
+Within `scripts/setup/`:
 - `packages-osx.sh` - macOS package definitions and functions
 - `packages-linux.sh` - Linux/Debian/Ubuntu package definitions and functions
 
@@ -31,21 +40,21 @@ The setup system supports multiple platforms:
 
 ```bash
 # Normal installation
-./setup-osx.sh
+./scripts/setup-osx.sh
 
 # Check package status
-./setup-osx.sh check 
-./setup-osx.sh --check
+./scripts/setup-osx.sh check 
+./scripts/setup-osx.sh --check
 
 # Validate package configuration
-./setup-osx.sh validate
+./scripts/setup-osx.sh validate
 
 # List all packages with status
-./setup-osx.sh list 
-./setup-osx.sh ls
+./scripts/setup-osx.sh list 
+./scripts/setup-osx.sh ls
 
 # Dry run mode
-DRY_RUN=true ./setup-osx.sh
+DRY_RUN=true ./scripts/setup-osx.sh
 ```
 
 ### Core Functions
@@ -85,18 +94,18 @@ The Linux setup automatically detects:
 
 ```bash
 # Normal installation
-./setup-linux.sh
+./scripts/setup-linux.sh
 
 # Check package status
-./setup-linux.sh check 
-./setup-linux.sh --check
+./scripts/setup-linux.sh check 
+./scripts/setup-linux.sh --check
 
 # List all packages with status
-./setup-linux.sh list 
-./setup-linux.sh ls
+./scripts/setup-linux.sh list 
+./scripts/setup-linux.sh ls
 
 # Dry run mode
-DRY_RUN=true ./setup-linux.sh
+DRY_RUN=true ./scripts/setup-linux.sh
 ```
 
 ### Core Functions
@@ -128,7 +137,7 @@ The Raspberry Pi setup (`setup/setup-debian-pi.sh`) includes:
 
 ```bash
 # Run Raspberry Pi setup
-./setup/setup-debian-pi.sh
+./scripts/setup/setup-debian-pi.sh
 ```
 
 ## Adding New Packages
@@ -162,7 +171,7 @@ The Raspberry Pi setup (`setup/setup-debian-pi.sh`) includes:
 
 ### Linux/Debian/Ubuntu
 
-1. Add to the appropriate array in `packages-linux.sh`:
+1. Add to the appropriate array in `scripts/setup/packages-linux.sh`:
    ```bash
    # For standard APT packages
    APT_PACKAGES_BASE=(
@@ -183,8 +192,8 @@ The Raspberry Pi setup (`setup/setup-debian-pi.sh`) includes:
    ```
 
 2. If the package requires custom installation logic, add it to the setup script:
-   - `setup-linux.sh` for general Linux packages
-   - `setup/setup-debian-pi.sh` for Pi-specific packages
+   - `scripts/setup-linux.sh` for general Linux packages
+   - `scripts/setup/setup-debian-pi.sh` for Pi-specific packages
 
 3. The package will automatically be:
    - Added to the combined `PACKAGES` array
