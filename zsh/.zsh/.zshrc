@@ -3,9 +3,9 @@
 
 # ---- theme ----
 export PROMPT='~🧻 '
-ZSH_THEME="robbyrussell"
+export ZSH_THEME="robbyrussell"
 
-zstyle ':omz:update' mode auto # update automatically without asking
+# zstyle ':omz:update' mode auto # update automatically without asking
 
 # Uncomment the following line to change how often to auto-update (in days).
 zstyle ':omz:update' frequency 13
@@ -32,18 +32,20 @@ HIST_STAMPS="yyyy-mm-dd"
 # ---- Plugins ----
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
-plugins=(git zsh-autosuggestions zsh-autocomplete 1password gh direnv)
+plugins=(git 1password gh autosuggestions autocomplete direnv)
 
 # Set ZSH path before sourcing oh-my-zsh
-export ZSH="$HOME/.oh-my-zsh"
+export ZSH="$HOME/.zsh"
+export ZSH_PLUGINS="$HOME/.zsh/plugins"
+export ZSH_CUSTOM="$HOME/.zsh/custom"
 source $ZSH/oh-my-zsh.sh
 export NVM_DIR="$HOME/.nvm"
-export ZSH_CUSTOM="$HOME/zsh/custom"
+
 # ---- User configuration --------
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
-  echo "SSH connection detected"
+  echo "🔒 SSH connection detected"
  else
    export EDITOR='nvim'
  fi
@@ -58,7 +60,11 @@ export ZSH_CUSTOM="$HOME/zsh/custom"
 # For a full list of active aliases, run `alias`.
 
 # get aliases
-source $ZSH_CUSTOM/alias
+if [ -f "$ZSH_CUSTOM/.aliasrc" ]; then
+  source "$ZSH_CUSTOM/.aliasrc"
+else
+  echo "⚠️ Warning: Alias file not found at $ZSH_CUSTOM/.aliasrc"
+fi  
 
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
@@ -69,21 +75,19 @@ export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 
 # Docker CLI completions.
 fpath=(/Users/jenc/.docker/completions $fpath)
-autoload -Uz compinit
-compinit
 # End of Docker CLI completions
 
+# devbox called only when11 1``
+devbox() {
+  unfunction devbox
+  eval "$(command devbox global shellenv --preserve-path-stack -r)"
+  command devbox "$@"
+}
 
-# Auto-refresh devbox global environment on shell start
-if command -v devbox >/dev/null 2>&1; then
-    eval "$(devbox global shellenv --preserve-path-stack -r)"
+# Only start ssh-agent if not already running
+if [ -z "$SSH_AUTH_SOCK" ]; then
+  eval "$(ssh-agent -s)" > /dev/null
 fi
-# Rust environment
-source "$HOME/.cargo/env"
-
-eval "$(ssh-agent -s)"
-# Mise
-eval "$(/Users/jenc/.local/bin/mise activate zsh)"
 
 # pnpm
 export PNPM_HOME="/Users/jenc/Library/pnpm"

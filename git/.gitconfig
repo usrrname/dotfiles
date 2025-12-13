@@ -7,7 +7,7 @@
 	ui = auto
 
 [core]
-  	editor = vi
+  	editor = nvim
 	excludesFile = ~/.gitignore_global
 
 [gpg]
@@ -30,6 +30,8 @@
 
 [alias]
 	g = "git"
+	gco="git checkout"
+	gst="git status"
 	# create worktree branch within a repo and checkout
 	# @example
 	# git wa <branch-name> | g wa <branch-name>
