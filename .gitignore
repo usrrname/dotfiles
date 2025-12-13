@@ -42,7 +42,12 @@ orbstack/.orbstack/*
 .yarnrc
 ./npm/.npmrc
 .npmrc*
-tests/**/bats.diff*
+test/bats.diff*
 tests/**/bats.log
 argv.json
 bats.diff
+tests/bats.diff*
+test/**/bats.diff*
+zsh/custom/plugins/**
+*id_ed25519*
+*id_rsa
