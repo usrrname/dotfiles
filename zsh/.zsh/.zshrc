@@ -36,9 +36,10 @@ plugins=(git 1password gh autosuggestions autocomplete direnv)
 
 # Set ZSH path before sourcing oh-my-zsh
 export ZSH="$HOME/.zsh"
-export ZSH_PLUGINS="$HOME/.zsh/plugins"
+export OMZ="$HOME/.oh-my-zsh"
+export ZSH_PLUGINS="$HOME/.zsh/custom/plugins"
 export ZSH_CUSTOM="$HOME/.zsh/custom"
-source $ZSH/oh-my-zsh.sh
+source "$OMZ/oh-my-zsh.sh"
 export NVM_DIR="$HOME/.nvm"
 
 # ---- User configuration --------
