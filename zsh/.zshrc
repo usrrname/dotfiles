@@ -35,11 +35,12 @@ HIST_STAMPS="yyyy-mm-dd"
 plugins=(git 1password gh autosuggestions autocomplete direnv)
 
 # Set ZSH path before sourcing oh-my-zsh
-export ZSH="$HOME/.zsh"
-export OMZ="$HOME/.oh-my-zsh"
-export ZSH_PLUGINS="$HOME/.zsh/custom/plugins"
-export ZSH_CUSTOM="$HOME/.zsh/custom"
-source "$OMZ/oh-my-zsh.sh"
+# ZSH must point to the oh-my-zsh installation directory
+export ZSH="$HOME/.oh-my-zsh"
+
+# ZSH_CUSTOM points to custom plugins/aliases (managed via stow)
+export ZSH_CUSTOM="$HOME/.dotfiles/zsh/custom"
+source "$ZSH/oh-my-zsh.sh"
 export NVM_DIR="$HOME/.nvm"
 
 # ---- User configuration --------

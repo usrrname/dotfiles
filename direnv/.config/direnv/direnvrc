@@ -1,32 +1,40 @@
 echo "🚀 Loading global direnvrc..."
 
-# ---- NodeJS nvm ----
-# Load NVM based on project context
-# 1. If a .nvmrc file exists ⇒ ensure that version is installed & used.
-# 2. Else if a package.json exists ⇒ just source NVM so it’s available on-demand.
+# ---- NodeJS fnm ----
+# Load fnm based on project context
+# 1. If a .nvmrc or .node-version file exists ⇒ ensure that version is installed & used.
+# 2. Else if a package.json exists ⇒ just source fnm so it's available on-demand.
+#
+# Sources:
+# - https://blog.ffff.lt/posts/direnv-and-nvmrc/
+# - https://github.com/Schniz/fnm
 
-if [[ -f ".nvmrc" ]]; then
-    # Source NVM (first time only per direnv session)
-    get-nvm
+# Define use_fnm function for direnv integration
+use_fnm() {
+    # fnm use automatically detects .nvmrc or .node-version and switches to that version
+    # It will also install the version if it's not already installed
+    fnm use
+}
 
-    NODE_VERSION=$(cat .nvmrc)
-    echo "current node version: $(nvm current)"
-
-    # Install the requested Node version if it isn’t installed yet
-    if ! nvm ls "$NODE_VERSION" > /dev/null 2>&1; then
-        echo "installing node version: $NODE_VERSION …"
-        nvm install "$NODE_VERSION"
+# Initialize fnm if not already initialized
+if ! command -v fnm &> /dev/null; then
+    # Try to source fnm from common locations
+    if [[ -s "$HOME/.fnm/fnm" ]]; then
+        eval "$("$HOME/.fnm/fnm" env --use-on-cd)"
+    elif [[ -s "$HOME/.local/share/fnm/fnm" ]]; then
+        eval "$("$HOME/.local/share/fnm/fnm" env --use-on-cd)"
     fi
+fi
 
-    echo "using node version: $NODE_VERSION"
-    nvm use "$NODE_VERSION"
-
+if [[ -f ".nvmrc" ]] || [[ -f ".node-version" ]]; then
+    # fnm use automatically handles version detection, installation, and switching
+    use_fnm
 elif [[ -f "package.json" ]]; then
-    # No .nvmrc, but JavaScript project detected → just source NVM for convenience
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    echo "✨ NVM sourced due to package.json (no .nvmrc found)."
+    # No .nvmrc/.node-version, but JavaScript project detected → just source fnm for convenience
+    # Ensure fnm is available in PATH
+    if command -v fnm &> /dev/null; then
+        echo "✨ fnm available due to package.json (no .nvmrc/.node-version found)."
+    fi
 fi
 
 
