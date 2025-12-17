@@ -9,6 +9,7 @@
 
 # CLI tools and development libraries (installed via 'brew install')
 declare -gax BREW_PACKAGES=(
+    "fnm"
     "git"             # Version control system
     "1password-cli"   # 1Password command-line tool
     "nvm"            # Node Version Manager - npm is installed with each node version
