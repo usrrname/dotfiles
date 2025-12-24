@@ -9,7 +9,6 @@ echo "🚀 Loading global direnvrc..."
 # - https://blog.ffff.lt/posts/direnv-and-nvmrc/
 # - https://github.com/Schniz/fnm
 
-# Define use_fnm function for direnv integration
 use_fnm() {
     # fnm use automatically detects .nvmrc or .node-version and switches to that version
     # It will also install the version if it's not already installed
