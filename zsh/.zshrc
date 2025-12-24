@@ -74,12 +74,10 @@ source ~/.iterm2_shell_integration.zsh
 # mysql
 export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
-
 # Docker CLI completions.
 fpath=(/Users/jenc/.docker/completions $fpath)
-# End of Docker CLI completions
 
-# devbox called only when11 1``
+# devbox called only when `devbox` is typed
 devbox() {
   unfunction devbox
   eval "$(command devbox global shellenv --preserve-path-stack -r)"
