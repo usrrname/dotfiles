@@ -50,6 +50,9 @@ declare -gax APT_PACKAGES_BASE=(
     "software-properties-common" # Software properties management
     "apt-transport-https" # HTTPS transport for APT
     "lsb-release"    # Linux Standard Base
+    "gpiod"
+    "bc"
+    "fail2ban"
 )
 
 # MySQL server package name differs between Ubuntu and Debian
