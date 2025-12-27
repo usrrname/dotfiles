@@ -99,7 +99,7 @@ setup_naspi() {
     fi
 }
 
-# Call setup_naspi after git installation
+# Call setup_naspi (requires git from APT packages)
 setup_naspi
 
 # Install special packages
