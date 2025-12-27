@@ -63,6 +63,45 @@ for PKG in "${APT_PACKAGES[@]}"; do
     fi
 done
 
+# Setup NASPi (for Geekworm NAS hardware on Debian trixie)
+setup_naspi() {
+    # Check if OS is Debian trixie
+    if [[ "$DISTRO" == "debian" ]] && [[ "$DISTRO_CODENAME" == "trixie" ]]; then
+        echo "🔧 Setting up NASPi for Debian trixie..."
+        
+        local xscript_dir="$HOME/xscript"
+        
+        # Clone xscript repository if not already present
+        if [[ ! -d "$xscript_dir" ]]; then
+            if [[ "$DRY_RUN" == "true" ]]; then
+                echo "[DRY RUN] Would clone xscript repository"
+            else
+                echo "📥 Cloning xscript repository (trixie branch)..."
+                if git clone -b trixie https://github.com/geekworm-com/xscript.git "$xscript_dir"; then
+                    echo "✅ xscript repository cloned successfully"
+                else
+                    echo "⚠️  Failed to clone xscript repository"
+                    return 1
+                fi
+            fi
+        else
+            echo "✅ xscript directory already exists"
+        fi
+        
+        # Set executable permissions for shell scripts
+        if [[ -d "$xscript_dir" ]] && [[ "$DRY_RUN" != "true" ]]; then
+            echo "🔐 Setting executable permissions for shell scripts..."
+            find "$xscript_dir" -type f -name "*.sh" -exec chmod +x {} \;
+            echo "✅ Executable permissions set"
+        elif [[ "$DRY_RUN" == "true" ]]; then
+            echo "[DRY RUN] Would set executable permissions for shell scripts"
+        fi
+    fi
+}
+
+# Call setup_naspi (requires git from APT packages)
+setup_naspi
+
 # Install special packages
 echo ""
 echo "🔧 Installing special packages..."
