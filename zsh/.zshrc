@@ -89,6 +89,14 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
   eval "$(ssh-agent -s)" > /dev/null
 fi
 
+# Add SSH key to agent with macOS keychain support
+# This will prompt for passphrase once, then store it in macOS keychain
+# Check if key is already in agent to avoid repeated prompts
+if ! ssh-add -l 2>/dev/null | grep -q "id_ed25519"; then
+  ssh-add --apple-use-keychain ~/.ssh/id_ed25519 2>/dev/null || true
+  ssh-add --apple-use-keychain ~/.ssh/id_rsa 2>/dev/null || true
+fi
+
 # pnpm
 export PNPM_HOME="/Users/jenc/Library/pnpm"
 case ":$PATH:" in
