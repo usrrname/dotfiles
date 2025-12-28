@@ -5,7 +5,6 @@
 eval "$(fzf --bash)"
 eval "$(devbox global shellenv --init-hook)"
 eval "$(direnv hook bash)"
-eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(pyenv init -)"
 # cargo
 . "$HOME/.cargo/env"
