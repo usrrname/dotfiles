@@ -1,11 +1,3 @@
-# Aliases
-alias update='sudo apt update && sudo apt upgrade'
-alias install='sudo apt install'
-alias remove='sudo apt remove'
-alias search='apt search'
-alias py='python3'
-alias pip='pip3'
-
 # Functions
 mkcd() {
     mkdir -p "$1" && cd "$1"
@@ -32,9 +24,34 @@ extract() {
     fi
 }
 # Add color to grep output
-   alias grep='grep --color=auto'
+alias grep='grep --color=auto'
 
-   # Improved directory listing
-   alias ll='ls -alF'
-   alias la='ls -A'
-   alias l='ls -CF'
+alias update='sudo apt update && sudo apt upgrade'
+alias install='sudo apt install'
+alias remove='sudo apt remove'
+alias search='apt search'
+alias py='python3'
+alias pip='pip3'
+
+# Improved directory listing
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# git
+alias g='git'
+
+# gh cli
+alias copilot='gh copilot'
+alias gcs='gh copilot suggest'
+alias gce='gh copilot explain'
+
+# Make files untracked by git
+# example: untrack <filename>
+alias untrack='git update-index --assume-unchanged'
+# example: restore-tracking <filename>
+alias 'restore-tracking'='git update-index --no-assume-unchanged'
+
+# editors/code assistants
+alias cc='claude code'
+alias vi='nvim'
