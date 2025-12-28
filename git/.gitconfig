@@ -2,7 +2,7 @@
 	username=usrrname
 	name = Jen Chan
 	email = 6406037+usrrname@users.noreply.github.com
-  signingkey = ~/.ssh/id_rsa.pub
+  signingkey = ~/.ssh/id_ed25519.pub
 [color]
 	ui = auto
 
