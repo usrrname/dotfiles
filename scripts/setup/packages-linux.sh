@@ -41,7 +41,6 @@ declare -gax APT_PACKAGES_BASE=(
     "curl"            # HTTP client (needed for many install scripts)
     "wget"            # HTTP client
     "build-essential" # Essential build tools (gcc, make, etc.)
-    "neovim"          # Neovim text editor
     "openssl"        # OpenSSL
     "libyaml-dev"     # YAML library development files
     "libgmp-dev"      # GNU Multiple Precision Arithmetic Library
@@ -71,7 +70,6 @@ declare -gax SPECIAL_PACKAGES_BASE=(
     "direnv"         # Environment variable manager (custom install)
     "bruno"          # API client (custom install)
     "rust"           # Rust programming language (rustup)
-    "npq"            # audit node packages before install (npm)
     "tailscale"      # VPN mesh networking (official script)
 )
 
@@ -81,11 +79,11 @@ declare -gax SPECIAL_PACKAGES_BASE=(
 
 # Additional packages for Raspberry Pi
 declare -gax APT_PACKAGES_PI=(
-    "mysql-client"    # MySQL client tools
     "ufw"             # Uncomplicated Firewall
     "openssh-server"  # OpenSSH server
     "openssh-client"  # OpenSSH client
     "nfs-kernel-server" # NFS Kernel Server
+    "fail2ban" # Firewall protection
 )
 
 # Docker packages (for Pi setup)
