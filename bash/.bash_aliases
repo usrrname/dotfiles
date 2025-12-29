@@ -54,4 +54,5 @@ alias 'restore-tracking'='git update-index --no-assume-unchanged'
 
 # editors/code assistants
 alias cc='claude code'
-alias vi='nvim'
+alias vi='~/nvim-linux-arm64/bin/nvim'
+alias nvim='~/nvim-linux-arm64/bin/nvim'
