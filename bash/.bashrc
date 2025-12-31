@@ -114,3 +114,4 @@ export NVM_DIR="$HOME/.nvm"
 
 # move nvim into /opt/ for debian
 export PATH="/opt/nvim/bin:$PATH"
+alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'
