@@ -21,3 +21,4 @@ scripts/*
 setup/*
 test/*
 bats
+husky
