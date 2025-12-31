@@ -54,5 +54,18 @@ alias 'restore-tracking'='git update-index --no-assume-unchanged'
 
 # editors/code assistants
 alias cc='claude code'
-alias vi='/nvim-linux-arm64/bin/nvim'
-alias nvim='~/nvim-linux-arm64/bin/nvim'
+alias vi='/opt/nvim/bin/nvim'
+alias nvim='/opt/nvim/bin/nvim'
+alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+  test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+  alias ls='ls --color=auto'
+  #alias dir='dir --color=auto'
+  #alias vdir='vdir --color=auto'
+
+  alias grep='grep --color=auto'
+  alias fgrep='fgrep --color=auto'
+  alias egrep='egrep --color=auto'
+fi
