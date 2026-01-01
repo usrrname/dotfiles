@@ -85,6 +85,7 @@ declare -gax APT_PACKAGES_PI=(
   "openssh-client"    # OpenSSH client
   "nfs-kernel-server" # NFS Kernel Server
   "fail2ban"          # Firewall protection
+  "hd-idle"
 )
 
 # Docker packages (for Pi setup)
