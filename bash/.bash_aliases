@@ -23,8 +23,6 @@ extract() {
     echo "'$1' is not a valid file"
   fi
 }
-# Add color to grep output
-alias grep='grep --color=auto'
 
 alias update='sudo apt update && sudo apt upgrade'
 alias install='sudo apt install'
@@ -69,3 +67,11 @@ if [ -x /usr/bin/dircolors ]; then
   alias fgrep='fgrep --color=auto'
   alias egrep='egrep --color=auto'
 fi
+
+cd() {
+  builtin cd "$@" || return
+
+  if [ "$PWD" = "$HOME" ] || [[ $PWD == "$HOME"/* ]]; then
+    ls -AClht --color=auto --group-directories-first --time-style=full-iso
+  fi
+}
