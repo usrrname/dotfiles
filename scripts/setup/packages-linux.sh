@@ -46,7 +46,6 @@ declare -gax APT_PACKAGES_BASE=(
   "libgmp-dev"                 # GNU Multiple Precision Arithmetic Library
   "ca-certificates"            # CA certificates
   "gnupg"                      # GPG tools
-  "software-properties-common" # Software properties management
   "apt-transport-https"        # HTTPS transport for APT
   "lsb-release"                # Linux Standard Base
   "tree"
@@ -85,7 +84,8 @@ declare -gax APT_PACKAGES_PI=(
   "openssh-client"    # OpenSSH client
   "nfs-kernel-server" # NFS Kernel Server
   "fail2ban"          # Firewall protection
-  "hd-idle"
+  "hd-idle"           # Idle detection for hard drives
+  "unattended-upgrades" # Automatic security updates
 )
 
 # Docker packages (for Pi setup)
