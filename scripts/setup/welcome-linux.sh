@@ -1,0 +1,23 @@
+#!/bin/bash
+kernel=$(uname -r)
+uptime=$(uptime -p)
+
+# Get IPs with interface labels
+ip=$(ip -o addr show | awk '!/127.0.0.1|::1|fe80::/ {gsub(/\/.*/, "", $4); print $2": "$4}')
+total_memory=$(awk '/^MemTotal:/ {print int($2/1024)}' /proc/meminfo)
+free_memory=$(awk '/^MemAvailable:/ {print int($2/1024)}' /proc/meminfo)
+used_memory=$((total_memory - free_memory))
+
+if ((total_memory > 0)); then
+  memory_usage_percent=$((used_memory * 100 / total_memory))
+else
+  memory_usage_percent=0
+fi
+
+cowsay -f dragon "${ip}" | lolcat
+
+echo -e "Operating System:\t$(lsb_release -ds) ($(uname -o))"
+echo -e "Processor:\t\t$(lscpu | awk -F ':' '/Model name/ {gsub(/^[ \t]+/, "", $2); print $2}')"
+echo -e "Kernel:\t\t\t${kernel}"
+echo -e "Uptime:\t\t\tHost up for${uptime}"
+echo -e "Memory Usage:\t\tUsed ${used_memory} MB of ${total_memory} MB (${memory_usage_percent} %) ${free_memory} MB available "
