@@ -14,16 +14,27 @@ Dotfiles setup made with:
 `./setup-osx.sh` tested with [Bats](https://github.com/bats-core/bats-core)
 
 ### Contents
-- [act](#act)
-- [zsh](#zsh)
-- [Symlinking](#symlinking)
-- [Mise](#mise)
-- [Nvim/LazyVim](#nvimlazyvim)
-- [1Password](#1password)
-- [Devbox](#devbox)
-- [OrbStack](#orbstack)
-- [uv](#uv)
-- [Maintenance](#maintenance)
+- [dotfiles](#dotfiles)
+    - [Contents](#contents)
+  - [Maintenance](#maintenance)
+  - [act](#act)
+  - [zsh](#zsh)
+  - [Mise](#mise)
+  - [Symlinking](#symlinking)
+  - [Nvim/LazyVim](#nvimlazyvim)
+  - [1Password](#1password)
+  - [Devbox](#devbox)
+  - [OrbStack](#orbstack)
+  - [uv](#uv)
+
+
+## Maintenance
+
+Keep submodules updated
+
+```bash
+git submodule update
+```
 
 ## act
 
@@ -70,13 +81,13 @@ Build plugins
 nvim --headless -c "Lazy sync" -c "qa"
 ```
 
-Refresh and sync plugins
+Force clean and reinstall LazyVim plugins
+
 ```bash
-# Force clean and reinstall LazyVim plugins
 nvim --headless -c "lua require('lazy').clean()" -c "lua require('lazy').sync()" -c "qa"
 ```
 
-Refresh and sync plugins
+Refresh and sync plugins (interactive)
 
 ```bash
 :Lazy clean
@@ -147,16 +158,18 @@ docker context use orbstack
 
 ## uv
 
-python package manager to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, etc.
+Python package manager to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, etc.
 
 ```bash
-uv 
-```
+# Install uv
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-## Maintenance
+# Create a virtual environment
+uv venv
 
-Keep submodules updated
+# Install packages
+uv pip install <package>
 
-```bash
-git submodule update
+# Run commands in the virtual environment
+uv run <command>
 ```
