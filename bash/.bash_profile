@@ -2,6 +2,7 @@
 # Get the aliases and functions
 if [ -f ~/.bashrc ]; then
   . ~/.bashrc
+  . ~/.bash_login
 fi
 
 # If not running interactively, don't do anything
