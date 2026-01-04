@@ -19,5 +19,5 @@ cowsay -f dragon "${ip}" | lolcat
 echo -e "Operating System:\t$(lsb_release -ds) ($(uname -o))"
 echo -e "Processor:\t\t$(lscpu | awk -F ':' '/Model name/ {gsub(/^[ \t]+/, "", $2); print $2}')"
 echo -e "Kernel:\t\t\t${kernel}"
-echo -e "Uptime:\t\t\tHost up for${uptime}"
+echo -e "Uptime:\t\t\t${uptime}"
 echo -e "Memory Usage:\t\tUsed ${used_memory} MB of ${total_memory} MB (${memory_usage_percent} %) ${free_memory} MB available "

@@ -12,4 +12,3 @@ fi
 eval "$(fzf --bash)"
 eval "$(devbox global shellenv --init-hook)"
 eval "$(direnv hook bash)"
-eval "$(pyenv init -)"
