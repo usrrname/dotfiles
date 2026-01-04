@@ -6,7 +6,7 @@
 
 # Value of 'encoding' when this file was written
 *encoding=utf-8
-
+set nocompatible
 
 # hlsearch on (H) or off (h):
 ~h
