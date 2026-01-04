@@ -5,10 +5,6 @@
 -- macOS-style keybindings
 vim.keymap.set("n", "<C-s>", "<cmd>w<cr>", { desc = "Save" })
 vim.keymap.set({ "n", "v", "i" }, "<D-s>", "<cmd>w<cr><esc>", { desc = "Save file" })
-vim.keymap.set({ "n", "v", "i" }, "<D-z>", "<cmd>undo<cr>", { desc = "Undo" })
-vim.keymap.set({ "n", "v", "i" }, "<D-S-z>", "<cmd>redo<cr>", { desc = "Redo" })
-vim.keymap.set({ "n", "v" }, "<D-c>", '"+y', { desc = "Copy" })
-vim.keymap.set({ "v" }, "<D-x>", '"+d', { desc = "Cut" })
 vim.keymap.set({ "n", "v", "i" }, "<D-v>", '"+p', { desc = "Paste" })
 vim.keymap.set({ "n", "v", "i" }, "<D-a>", "ggVG", { desc = "Select all" })
 vim.keymap.set({ "n", "v", "i" }, "<D-f>", "<cmd>Telescope live_grep<cr>", { desc = "Find in files" })
