@@ -13,8 +13,78 @@ Dotfiles setup made with:
 
 `./setup-osx.sh` tested with [Bats](https://github.com/bats-core/bats-core)
 
+## Quick Start
+
+The setup script automatically detects your operating system and runs the appropriate installer. 
+
+**No special requirements** - works with standard shells on supported systems.
+
+**Supported Systems:**
+- **macOS** - Uses Homebrew for package management
+- **Linux (Debian/Ubuntu)** - Uses APT for package management (including Raspberry Pi 4 running Debian Trixie)
+- **NixOS** - Package management via `/etc/nixos/configuration.nix` (setup script provides guidance, stow script works normally)
+
+```bash
+# Install packages (auto-detects OS)
+./setup.sh
+
+# Check package status
+./setup.sh check
+
+# List all packages
+./setup.sh list
+
+# Validate package configuration (macOS only)
+./setup.sh validate
+```
+
+The script will automatically:
+- **macOS**: Run `scripts/setup-osx.sh` (uses Homebrew)
+- **Linux (Debian/Ubuntu)**: Run `scripts/setup-linux.sh` (uses APT)
+- **NixOS**: Shows guidance (package management via configuration.nix)
+
+You can still run the OS-specific scripts directly if needed:
+- `./scripts/setup-osx.sh` for macOS
+- `./scripts/setup-linux.sh` for Linux
+
+### Symlinking Dotfiles
+
+After installing packages, symlink your dotfiles using the OS-aware stow script:
+
+```bash
+# Stow all dotfiles (auto-detects OS and only stows relevant packages)
+./stow-dotfiles.sh
+
+# Stow without adopting existing files (use if starting fresh)
+./stow-dotfiles.sh ""
+```
+
+The script automatically:
+- **Stows common packages** on all systems (bash, zsh, nvim, git, etc.)
+- **Stows macOS-specific packages** on macOS only (iterm2, orbstack, cursor, zprofile)
+- **Skips OS-specific packages** on other systems (e.g., Raspberry Pi won't get macOS packages)
+- **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
+
+### Updating Dotfiles
+
+After pulling updates from the repository, use the update script to sync everything:
+
+```bash
+# Pull updates, update submodules, install new packages, and update symlinks
+./update.sh
+```
+
+This will:
+1. Pull latest changes from git
+2. Update git submodules
+3. Install any new packages (setup scripts check if already installed)
+4. Update dotfile symlinks (stow is idempotent, safe to run multiple times)
+
 ### Contents
 - [dotfiles](#dotfiles)
+  - [Quick Start](#quick-start)
+    - [Symlinking Dotfiles](#symlinking-dotfiles)
+    - [Updating Dotfiles](#updating-dotfiles)
     - [Contents](#contents)
   - [Maintenance](#maintenance)
   - [act](#act)
@@ -60,6 +130,14 @@ mise activate zsh
 ```
 
 ## Symlinking
+
+**Recommended**: Use the OS-aware stow script (see [Quick Start](#quick-start) above):
+
+```bash
+./stow-dotfiles.sh
+```
+
+**Manual stow** (if you need to stow individual packages):
 
 ```bash
 cp <directory> <target>

@@ -21,21 +21,23 @@ Quick guide for setting up this dotfiles repository on Debian Trixie running on 
 
 ### 1. Install Packages
 
-Run the Linux setup script to install all required packages:
+Run the unified setup script (auto-detects Linux and runs the appropriate installer):
 
 ```bash
 # Preview what will be installed (dry run)
-DRY_RUN=true ./scripts/setup-linux.sh
+DRY_RUN=true ./setup.sh
 
 # Check current package status
-./scripts/setup-linux.sh check
+./setup.sh check
 
 # List all packages
-./scripts/setup-linux.sh list
+./setup.sh list
 
 # Run the installation
-./scripts/setup-linux.sh
+./setup.sh
 ```
+
+**Note**: The unified `setup.sh` script automatically detects Linux and runs `scripts/setup-linux.sh`. You can also run the Linux script directly if needed.
 
 The script automatically:
 - Detects Debian Trixie and architecture
@@ -45,31 +47,20 @@ The script automatically:
 
 ### 2. Symlink Dotfiles
 
-Use `stow` to create symlinks for your dotfiles:
+Use the OS-aware stow script to create symlinks (automatically stows only relevant packages for Debian):
 
-**If you have existing dotfiles** (use `--adopt` to preserve them):
 ```bash
-# Preview changes first
-stow --adopt -n bash
-stow --adopt -n zsh
-stow --adopt -n nvim
+# Stow all dotfiles (auto-detects OS and only stows relevant packages)
+./stow-dotfiles.sh
 
-# Apply changes
-stow --adopt bash
-stow --adopt zsh
-stow --adopt nvim
-stow --adopt git
-stow --adopt direnv
+# Stow without adopting existing files (use if starting fresh)
+./stow-dotfiles.sh ""
 ```
 
-**If starting fresh** (no existing dotfiles):
-```bash
-stow bash
-stow zsh
-stow nvim
-stow git
-stow direnv
-```
+The script automatically:
+- **Stows common packages** (bash, zsh, nvim, git, direnv, etc.)
+- **Skips macOS-specific packages** (iterm2, orbstack, cursor, zprofile)
+- **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
 
 **Verify symlinks:**
 ```bash
@@ -135,9 +126,9 @@ stow --adopt -n <package>
 
 ## Troubleshooting
 
-- **Check distribution detection**: `./scripts/setup-linux.sh check`
-- **List packages**: `./scripts/setup-linux.sh list`
-- **Dry run setup**: `DRY_RUN=true ./scripts/setup-linux.sh`
+- **Check distribution detection**: `./setup.sh check`
+- **List packages**: `./setup.sh list`
+- **Dry run setup**: `DRY_RUN=true ./setup.sh`
 - **Verify symlinks**: `ls -la ~ | grep "\->"`
 
 ## Notes
