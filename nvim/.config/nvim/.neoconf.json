@@ -1,6 +1,7 @@
 {
   "neodev": {
     "library": {
+      "enabled": true,
       "plugins": [
         "plenary.nvim"
       ]
