@@ -77,7 +77,7 @@ declare -gax SPECIAL_PACKAGES_BASE=(
 # PI-SPECIFIC PACKAGE DEFINITIONS
 # =============================================================================
 
-# Additional packages for Raspberry Pi
+# Additional packages for Raspberry Pi Home NAS
 declare -gax APT_PACKAGES_PI=(
   "ufw"               # Uncomplicated Firewall
   "openssh-server"    # OpenSSH server
