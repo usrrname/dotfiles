@@ -51,22 +51,14 @@ declare -gax APT_PACKAGES_BASE=(
   "tree"
 )
 
-# MySQL server package name differs between Ubuntu and Debian
-_get_mysql_server_package() {
-  if [[ "$DISTRO" == "ubuntu" ]]; then
-    echo "mysql-server"
-  else
-    echo "default-mysql-server"
-  fi
-}
-
 # Packages that require special installation (not via apt)
 declare -gax SPECIAL_PACKAGES_BASE=(
   "nvm"       # Node Version Manager (installed via script)
   "pnpm"      # Fast, disk space efficient package manager (npm)
   "direnv"    # Environment variable manager (custom install)
-  "rust"      # Rust programming language (rustup)
   "tailscale" # VPN mesh networking (official script)
+  "immich"    # Self-hosted photo and video backup solution (Docker)
+  "grafana"   # Self-hosted monitoring and analytics platform (Docker)
 )
 
 # =============================================================================
@@ -83,6 +75,8 @@ declare -gax APT_PACKAGES_PI=(
   "fail2ban"            # Firewall protection
   "hd-idle"             # Idle detection for hard drives
   "unattended-upgrades" # Automatic security updates
+  "apt-transport-https" # HTTPS transport for APT
+  "wget" # HTTP client
 )
 
 # Docker packages (for Pi setup)
@@ -106,12 +100,6 @@ declare -gax DOCKER_DEPENDENCIES=(
 )
 
 declare -gax SUPPORTING_LIBRARIES=(
-  "libharfbuzz-icu0|HarfBuzz ICU Library"
-  "libhyphen0|Hyphenation Library"
-  "libjavascriptcoregtk-4.1-0|JavaScriptCore GTK Library"
-  "libmanette-0.2-0|Manette Gamepad Library"
-  "libwebkit2gtk-4.1-0|WebKit2 GTK Library"
-  "libwoff1|WOFF Library"
 )
 
 # =============================================================================
