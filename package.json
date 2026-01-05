@@ -1,6 +1,12 @@
 {
   "name": "@usrrname/dotfiles",
   "scripts": {
+    "setup": "./setup.sh",
+    "stow": "./stow-dotfiles.sh",
+    "update": "./update.sh",
+    "validate": "./setup.sh validate",
+    "list": "./setup.sh list",
+    "check": "./setup.sh check",
     "test": "bats test/setup.bats"
   },
   "devDependencies": {
