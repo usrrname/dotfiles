@@ -37,17 +37,17 @@ _detect_distribution
 
 # CLI tools and development libraries (installed via 'apt install')
 declare -gax APT_PACKAGES_BASE=(
-  "git"                        # Version control system
-  "curl"                       # HTTP client (needed for many install scripts)
-  "wget"                       # HTTP client
-  "build-essential"            # Essential build tools (gcc, make, etc.)
-  "openssl"                    # OpenSSL
-  "libyaml-dev"                # YAML library development files
-  "libgmp-dev"                 # GNU Multiple Precision Arithmetic Library
-  "ca-certificates"            # CA certificates
-  "gnupg"                      # GPG tools
-  "apt-transport-https"        # HTTPS transport for APT
-  "lsb-release"                # Linux Standard Base
+  "git"                 # Version control system
+  "curl"                # HTTP client (needed for many install scripts)
+  "wget"                # HTTP client
+  "build-essential"     # Essential build tools (gcc, make, etc.)
+  "openssl"             # OpenSSL
+  "libyaml-dev"         # YAML library development files
+  "libgmp-dev"          # GNU Multiple Precision Arithmetic Library
+  "ca-certificates"     # CA certificates
+  "gnupg"               # GPG tools
+  "apt-transport-https" # HTTPS transport for APT
+  "lsb-release"         # Linux Standard Base
   "tree"
 )
 
@@ -64,11 +64,7 @@ _get_mysql_server_package() {
 declare -gax SPECIAL_PACKAGES_BASE=(
   "nvm"       # Node Version Manager (installed via script)
   "pnpm"      # Fast, disk space efficient package manager (npm)
-  "act"       # Run GitHub Actions locally (custom install)
-  "yarn"      # JavaScript package manager (npm or custom)
-  "pyenv"     # Python version management (git install)
   "direnv"    # Environment variable manager (custom install)
-  "bruno"     # API client (custom install)
   "rust"      # Rust programming language (rustup)
   "tailscale" # VPN mesh networking (official script)
 )
@@ -77,14 +73,15 @@ declare -gax SPECIAL_PACKAGES_BASE=(
 # PI-SPECIFIC PACKAGE DEFINITIONS
 # =============================================================================
 
-# Additional packages for Raspberry Pi Home NAS
+# Additional packages for Raspberry Pi NAS setup
 declare -gax APT_PACKAGES_PI=(
-  "ufw"               # Uncomplicated Firewall
-  "openssh-server"    # OpenSSH server
-  "openssh-client"    # OpenSSH client
-  "nfs-kernel-server" # NFS Kernel Server
-  "fail2ban"          # Firewall protection
-  "hd-idle"           # Idle detection for hard drives
+  "ufw"                 # Uncomplicated Firewall
+  "openssh-server"      # OpenSSH server
+  "openssh-client"      # OpenSSH client
+  "nfs-kernel-server"   # NFS Kernel Server
+  "samba"               # Samba for Windows/Linux file sharing
+  "fail2ban"            # Firewall protection
+  "hd-idle"             # Idle detection for hard drives
   "unattended-upgrades" # Automatic security updates
 )
 
@@ -108,17 +105,6 @@ declare -gax DOCKER_DEPENDENCIES=(
   "xdg-dbus-proxy|xdg-dbus-proxy"
 )
 
-# Desktop applications (for Pi with desktop environment)
-declare -gax DESKTOP_APPLICATIONS=(
-  "gnome-terminal|GNOME Terminal"
-  "gnome-terminal-data|GNOME Terminal Data"
-  "nautilus-extension-gnome-terminal|Nautilus GNOME Terminal Extension"
-  "libnautilus-extension4|Nautilus Extension Library"
-  "yelp|Yelp Help System"
-  "libyelp0|Yelp Library"
-  "yelp-xsl|Yelp XSL"
-)
-
 declare -gax SUPPORTING_LIBRARIES=(
   "libharfbuzz-icu0|HarfBuzz ICU Library"
   "libhyphen0|Hyphenation Library"
@@ -138,12 +124,6 @@ declare -gax APT_PACKAGES=("${APT_PACKAGES_BASE[@]}")
 # Default special packages (can be extended by setup scripts)
 declare -gax SPECIAL_PACKAGES=("${SPECIAL_PACKAGES_BASE[@]}")
 
-# GUI applications (installed via 'apt install' or snap/flatpak)
-declare -gax GUI_PACKAGES=(
-  "firefox"              # Web browser
-  "google-chrome-stable" # Web browser (custom repo)
-)
-
 # Auto-generated combined list (DO NOT EDIT MANUALLY)
 declare -gax PACKAGES=()
 
@@ -153,12 +133,7 @@ declare -gax PACKAGES=()
 
 # Initialize the combined PACKAGES array
 _init_packages() {
-  # Add MySQL server package based on distribution
-  local mysql_pkg=$(_get_mysql_server_package)
-  if [[ ! " ${APT_PACKAGES[*]} " =~ " ${mysql_pkg} " ]]; then
-    APT_PACKAGES+=("$mysql_pkg")
-  fi
-  PACKAGES=("${APT_PACKAGES[@]}" "${SPECIAL_PACKAGES[@]}" "${GUI_PACKAGES[@]}")
+  PACKAGES=("${APT_PACKAGES[@]}" "${SPECIAL_PACKAGES[@]}")
 }
 
 # =============================================================================
@@ -250,8 +225,6 @@ get_package_info() {
       package_type="apt"
     elif [[ " ${SPECIAL_PACKAGES[*]} " =~ " ${pkg_name} " ]] || [[ " ${SPECIAL_PACKAGES_BASE[*]} " =~ " ${pkg_name} " ]]; then
       package_type="special"
-    elif [[ " ${GUI_PACKAGES[*]} " =~ " ${pkg_name} " ]]; then
-      package_type="gui"
     fi
   fi
 
@@ -271,12 +244,6 @@ list_packages() {
   for pkg in "${SPECIAL_PACKAGES[@]}"; do
     get_package_info "$pkg"
   done
-  echo ""
-  echo "🖥️  GUI Packages (${#GUI_PACKAGES[@]}):"
-  for pkg in "${GUI_PACKAGES[@]}"; do
-    get_package_info "$pkg"
-  done
-  echo ""
   echo "📊 Total: ${#PACKAGES[@]} packages"
 }
 
