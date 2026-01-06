@@ -35,7 +35,6 @@ fi
 # Common packages (work on both macOS and Linux)
 COMMON=(
     bash
-    zsh
     nvim
     git
     direnv
@@ -43,22 +42,22 @@ COMMON=(
     docker
     gh
     op
-    act
     npm
-    yarn
-    gemini
-    verdaccio
     vim
-    husky
-    devbox.d
 )
 
 # macOS-specific packages
 MACOS_PACKAGES=(
+    act
     iterm2
     orbstack
     cursor
+    zsh
     zprofile
+    yarn
+    nvm
+    verdaccio
+    husky
 )
 
 # Note: nix/ folder is not stowed automatically

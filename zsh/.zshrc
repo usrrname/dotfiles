@@ -107,6 +107,15 @@ esac
 # uv
 eval "$(uv generate-shell-completion zsh)"
 export PATH="$HOME/.local/bin:$PATH"
+# ------------ Paths ------------
+
+# mysql
+export PATH="/opt/homebrew/opt/mysql/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
+export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+# add homebrew sbin to path
+export PATH="/opt/homebrew/sbin:$PATH"
 
 # Load fnm (Fast Node Manager)
 eval "$(fnm env --use-on-cd)"
