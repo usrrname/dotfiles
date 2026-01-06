@@ -46,7 +46,6 @@ declare -gax APT_PACKAGES_BASE=(
   "libgmp-dev"          # GNU Multiple Precision Arithmetic Library
   "ca-certificates"     # CA certificates
   "gnupg"               # GPG tools
-  "apt-transport-https" # HTTPS transport for APT
   "lsb-release"         # Linux Standard Base
   "tree"
 )
@@ -71,7 +70,6 @@ declare -gax APT_PACKAGES_PI=(
   "openssh-server"      # OpenSSH server
   "openssh-client"      # OpenSSH client
   "nfs-kernel-server"   # NFS Kernel Server
-  "samba"               # Samba for Windows/Linux file sharing
   "fail2ban"            # Firewall protection
   "hd-idle"             # Idle detection for hard drives
   "unattended-upgrades" # Automatic security updates

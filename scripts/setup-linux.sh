@@ -67,18 +67,6 @@ done
 echo ""
 echo "🔧 Installing special packages..."
 
-# Install mise
-if ! command -v mise &> /dev/null; then
-    echo "Installing mise..."
-    if [[ "$DRY_RUN" == "true" ]]; then
-        echo "[DRY RUN] Would install mise"
-    else
-        curl https://mise.run | sh
-    fi
-else
-    echo "✅ mise already installed"
-fi
-
 # Install devbox
 if ! command -v devbox &> /dev/null; then
     echo "Installing devbox..."
