@@ -7,11 +7,7 @@ Dotfiles setup made with:
 
 - [direnv](https://direnv.net) w/ global config in `~/.config/direnv/direnvrc`
 
-- Mac setup from [mac.install.guide](https://mac.install.guide/)
-
 - Underlying ideals from [12 Factor App config](https://12factor.net/config)
-
-`./setup-osx.sh` tested with [Bats](https://github.com/bats-core/bats-core)
 
 ## Quick Start
 
@@ -20,8 +16,8 @@ The setup script automatically detects your operating system and runs the approp
 **No special requirements** - works with standard shells on supported systems.
 
 **Supported Systems:**
-- **macOS** - Uses Homebrew for package management
-- **Linux (Debian/Ubuntu)** - Uses APT for package management (including Raspberry Pi 4 running Debian Trixie)
+- [macOS setup](setup-osx.md) based on [mac.install.guide](https://mac.install.guide/) tested with [Bats](https://github.com/bats-core/bats-core) (see [setup-osx.md](setup-osx.md))
+- [Raspberry Pi 4 setup](setup-pi.md) running Debian Trixie
 - **NixOS** - Package management via `/etc/nixos/configuration.nix` (setup script provides guidance, stow script works normally)
 
 ```bash
@@ -61,7 +57,7 @@ After installing packages, symlink your dotfiles using the OS-aware stow script:
 
 The script automatically:
 - **Stows common packages** on all systems (bash, zsh, nvim, git, etc.)
-- **Stows macOS-specific packages** on macOS only (iterm2, orbstack, cursor, zprofile)
+- **Stows macOS-specific packages** on macOS only (see [setup-osx.md](setup-osx.md) for details)
 - **Skips OS-specific packages** on other systems (e.g., Raspberry Pi won't get macOS packages)
 - **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
 
@@ -80,22 +76,27 @@ This will:
 3. Install any new packages (setup scripts check if already installed)
 4. Update dotfile symlinks (stow is idempotent, safe to run multiple times)
 
+## Troubleshooting
+
+- **Check distribution detection**: `./setup.sh check`
+- **List packages**: `./setup.sh list`
+- **Dry run setup**: `DRY_RUN=true ./setup.sh`
+- **Verify symlinks**: `ls -la ~ | grep "\->"`
+- **macOS-specific**: See [setup-osx.md](setup-osx.md) for additional troubleshooting
+
 ### Contents
 - [dotfiles](#dotfiles)
   - [Quick Start](#quick-start)
     - [Symlinking Dotfiles](#symlinking-dotfiles)
     - [Updating Dotfiles](#updating-dotfiles)
+  - [Troubleshooting](#troubleshooting)
     - [Contents](#contents)
   - [Maintenance](#maintenance)
   - [act](#act)
-  - [zsh](#zsh)
-  - [Mise](#mise)
   - [Symlinking](#symlinking)
   - [Nvim/LazyVim](#nvimlazyvim)
   - [1Password](#1password)
   - [Devbox](#devbox)
-  - [OrbStack](#orbstack)
-  - [uv](#uv)
 
 
 ## Maintenance
@@ -113,25 +114,7 @@ git submodule update
 act -s GITHUB_TOKEN=$(op read $GITHUB_TOKEN)
 ```
 
-## zsh
-
-```bash
-## When each is loaded:
-.zshenv
-        → .zprofile
-                → .zshrc 
-                        → .zlogin
-```
-
-## Mise
-
-```bash
-mise activate zsh
-```
-
 ## Symlinking
-
-**Recommended**: Use the OS-aware stow script (see [Quick Start](#quick-start) above):
 
 ```bash
 ./stow-dotfiles.sh
@@ -143,12 +126,6 @@ mise activate zsh
 cp <directory> <target>
 mkdir -p <directory>
 stow <directory>
-```
-
-List all symlinks
-
-```bash
-ls -la ~ | grep "\->"
 ```
 
 ## Nvim/LazyVim
@@ -219,35 +196,8 @@ devbox version update # update devbox to the latest version
 devbox shell # initialize the devbox shell
 devbox generate direnv # generate a direnvrc file
 ```
-
 Clean up packages in nix store
 
 ```bash
 devbox run -- nix store gc --extra-experimental-features nix-command
-```
-
-## OrbStack
-
-Set the default docker context to orbstack
-
-```bash
-docker context use orbstack
-```
-
-## uv
-
-Python package manager to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, etc.
-
-```bash
-# Install uv
-curl -LsSf https://astral.sh/uv/install.sh | sh
-
-# Create a virtual environment
-uv venv
-
-# Install packages
-uv pip install <package>
-
-# Run commands in the virtual environment
-uv run <command>
 ```
