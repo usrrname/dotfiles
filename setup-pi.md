@@ -59,7 +59,7 @@ Use the OS-aware stow script to create symlinks (automatically stows only releva
 
 The script automatically:
 - **Stows common packages** (bash, zsh, nvim, git, direnv, etc.)
-- **Skips macOS-specific packages** (iterm2, orbstack, cursor, zprofile)
+- **Skips macOS-specific packages** (see `setup-osx.md` for macOS setup)
 - **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
 
 **Verify symlinks:**
@@ -104,6 +104,51 @@ sudo systemctl enable --now tailscaled
 ```bash
 nvim --headless -c "Lazy sync" -c "qa"
 ```
+
+### 5. Migrate Swap from zram to HDD (Recommended)
+
+Move swap from zram to a dedicated HDD partition to prevent SD card wear and improve reliability.
+
+**Prerequisites**: A dedicated HDD partition (e.g., `/dev/sda2`)
+
+```bash
+# 1. Format HDD partition as ext4
+sudo mkfs.ext4 /dev/sda2
+sudo mkdir -p /mnt/storage
+sudo mount /dev/sda2 /mnt/storage
+
+# 2. Create 2GB swap file
+sudo fallocate -l 2G /mnt/storage/swapfile
+sudo chmod 600 /mnt/storage/swapfile
+sudo mkswap /mnt/storage/swapfile
+sudo swapon /mnt/storage/swapfile
+
+# 3. Disable zram (Raspberry Pi specific)
+sudo mkdir -p /etc/rpi/swap.conf.d
+echo -e "[Main]\nMechanism=none" | sudo tee /etc/rpi/swap.conf.d/90-disable-swap.conf > /dev/null
+sudo systemctl mask systemd-zram-setup@zram0.service
+sudo systemctl mask systemd-zram-setup@.service
+sudo systemctl stop rpi-zram-writeback.timer
+sudo systemctl disable rpi-zram-writeback.timer
+
+# 4. Blacklist zram module
+echo "blacklist zram" | sudo tee /etc/modprobe.d/blacklist-zram.conf
+sudo update-initramfs -u
+
+# 5. Make persistent in /etc/fstab
+sudo vi /etc/fstab
+# Add:
+# /dev/sda2 /mnt/storage ext4 defaults 0 2
+# /mnt/storage/swapfile none swap sw 0 0
+
+# 6. Reboot and verify
+sudo reboot
+# After reboot:
+swapon --show  # Should show only /mnt/storage/swapfile
+lsmod | grep zram  # Should return nothing
+```
+
+**Note**: Adjust partition (`/dev/sda2`) and swap size (`2G`) as needed. Remaining space on partition can be used for other services.
 
 ## About `stow --adopt`
 
