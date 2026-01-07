@@ -117,18 +117,6 @@ else
     fi
 fi
 
-# Install pyenv
-if ! command -v pyenv &> /dev/null; then
-    echo "Installing pyenv..."
-    if [[ "$DRY_RUN" == "true" ]]; then
-        echo "[DRY RUN] Would install pyenv"
-    else
-        curl https://pyenv.run | bash
-    fi
-else
-    echo "✅ pyenv already installed"
-fi
-
 # Install direnv
 if ! command -v direnv &> /dev/null; then
     echo "Installing direnv..."
@@ -231,9 +219,3 @@ echo ""
 echo "📝 Next steps:"
 echo "   - Run 'sudo tailscale up' to connect to your Tailnet"
 echo "   - Run 'sudo systemctl enable --now tailscaled' to enable Tailscale service"
-echo "   - Add nvm, pyenv, and mise to your shell profile if not already done:"
-echo "     export NVM_DIR=\"\$HOME/.nvm\""
-echo "     [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\""
-echo "     export PATH=\"\$HOME/.pyenv/bin:\$PATH\""
-echo "     eval \"\$(pyenv init -)\""
-echo "     eval \"\$(mise activate bash)\"  # or zsh/fish as appropriate"
