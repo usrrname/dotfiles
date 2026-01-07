@@ -27,6 +27,7 @@ extract() {
 alias update='sudo apt update && sudo apt upgrade'
 alias install='sudo apt install'
 alias remove='sudo apt remove'
+alias autoremove='sudo apt autoremove'
 alias search='apt search'
 alias py='python3'
 alias pip='pip3'
@@ -44,12 +45,6 @@ alias copilot='gh copilot'
 alias gcs='gh copilot suggest'
 alias gce='gh copilot explain'
 
-# Make files untracked by git
-# example: untrack <filename>
-alias untrack='git update-index --assume-unchanged'
-# example: restore-tracking <filename>
-alias 'restore-tracking'='git update-index --no-assume-unchanged'
-
 # editors/code assistants
 alias cc='claude code'
 alias vi='/opt/nvim/bin/nvim'
@@ -62,11 +57,7 @@ if [ -x /usr/bin/dircolors ]; then
   test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
   alias ls='ls --color=auto'
   alias dir='dir --color=auto'
-  alias vdir='vdir --color=auto'
-
   alias grep='grep --color=auto'
-  alias fgrep='fgrep --color=auto'
-  alias egrep='egrep --color=auto'
 fi
 
 cd() {
