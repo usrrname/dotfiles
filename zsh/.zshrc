@@ -52,11 +52,8 @@ export NVM_DIR="$HOME/.nvm"
    export EDITOR='nvim'
  fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
 # ------- aliases --------
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# Overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
@@ -109,11 +106,13 @@ eval "$(uv generate-shell-completion zsh)"
 export PATH="$HOME/.local/bin:$PATH"
 # ------------ Paths ------------
 
-# mysql
-export PATH="/opt/homebrew/opt/mysql/bin:$PATH"
-export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
-export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
-export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+# mysql if using mysql
+if [[ -f /opt/homebrew/opt/mysql/bin/mysql ]]; then
+  export PATH="/opt/homebrew/opt/mysql/bin:$PATH"
+  export PATH="/opt/homebrew/opt/mysql@8.0/bin:$PATH"
+  export PATH="/opt/homebrew/opt/mysql@8.4/bin:$PATH"
+  export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"
+fi
 # add homebrew sbin to path
 export PATH="/opt/homebrew/sbin:$PATH"
 

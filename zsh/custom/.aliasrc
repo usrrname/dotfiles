@@ -7,8 +7,8 @@ alias g='git'
 
 # gh cli
 alias copilot='gh copilot'
-alias gcs='gh copilot suggest'
-alias gce='gh copilot explain'
+alias copilot-suggest='gh copilot suggest'
+alias copilot-explain='gh copilot explain'
 
 # Make files untracked by git
 # example: untrack <filename>
@@ -17,9 +17,13 @@ alias untrack='git update-index --assume-unchanged'
 alias 'restore-tracking'='git update-index --no-assume-unchanged'
 
 # editors/code assistants
-alias cc='claude code'
 alias vi='nvim'
 alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
+# Ollama aliases
+alias ol="ollama"
+alias olcode="ollama run codellama:7b"
+alias "ol ls"="ollama list"
+alias "ol upgrade"="brew upgrade ollama"
 
 # databases
 alias mysql=/opt/homebrew/bin/mysql
@@ -45,12 +49,6 @@ alias yarn="NPQ_PKG_MGR=yarn npq-hero"
 # pnpm
 alias pn="NPQ_PKG_MGR=pnpm npq-hero"
 
-# nvm / node
-alias get-nvm='(){
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-}'
-
 # php / Laravel
 alias composer="php /usr/local/bin/composer.phar"
 alias sail='[ -f sail ] && zsh sail || zsh vendor/bin/sail'
@@ -58,3 +56,39 @@ alias pint='./vendor/bin/pint'
 
 # nektos/act
 alias act='act --container-architecture linux/amd64'
+
+# Functions for common tasks
+
+## Ollama functions
+
+# Example: ask "What is the capital of France?"
+function ask() {
+    echo "$1" | ollama run llama3.2
+}
+
+# Example: review <filename>
+function review() {
+    cat "$1" | ollama run codellama "Review this code for bugs and improvements:"
+}
+
+# Example: translate "Hello" "French"
+function translate() {
+    echo "$1" | ollama run llama3.2 "Translate to $2:"
+}
+
+# Model management
+# olshow <model-name>
+# Example: olshow "llama3.2"
+function olshow() {
+    ollama show "$1"
+}
+
+function model_size() {
+    du -h ~/.ollama/models/*
+}
+
+# nvm / node
+alias get-nvm='(){
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+}'
