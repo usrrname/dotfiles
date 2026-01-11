@@ -1,0 +1,9 @@
+user:
+  always_allow:
+  - todo__todo_write
+  - code_execution__search_modules
+  - developer__analyze
+  - developer__list_windows
+  - code_execution__read_module
+  ask_before: []
+  never_allow: []
