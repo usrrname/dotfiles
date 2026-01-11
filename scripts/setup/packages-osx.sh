@@ -29,6 +29,9 @@ declare -gax BREW_PACKAGES=(
     "libyaml"        # YAML library
     "gmp"            # GNU Multiple Precision Arithmetic Library
     "npq"            # audit node packages before install
+    "stow"
+    "block-cli-goose" # Local AI assistant
+    "ollama" # Local AI model server
 )
 
 # GUI applications (installed via 'brew install --cask')
@@ -44,6 +47,7 @@ declare -gax CASK_PACKAGES=(
     "orbstack"       # Fast, light container & VM manager
     "claude-code"    # AI coding assistant
     "gpg-suite"      # GPG key management GUI
+    "dagger/tap/container-use" # Container use for local AI
 )
 
 # Auto-generated combined list (DO NOT EDIT MANUALLY)
