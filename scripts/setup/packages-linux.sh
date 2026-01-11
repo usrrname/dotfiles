@@ -70,7 +70,6 @@ declare -gax APT_PACKAGES_PI=(
   "ufw"                 # Uncomplicated Firewall
   "openssh-server"      # OpenSSH server
   "openssh-client"      # OpenSSH client
-  "nfs-kernel-server"   # NFS Kernel Server
   "fail2ban"            # Firewall protection
   "hd-idle"             # Idle detection for hard drives
   "unattended-upgrades" # Automatic security updates
