@@ -11,7 +11,9 @@ For usage instructions, see [README.md](README.md).
 └── scripts/
     ├── setup/
     │   ├── packages-osx.sh
+    │   ├── packages-pi.sh
     │   └── packages-linux.sh
+    └── setup-pi.sh
     ├── setup-osx.sh
     └── setup-linux.sh
 ```
@@ -30,6 +32,14 @@ For usage instructions, see [README.md](README.md).
 - `SPECIAL_PACKAGES_BASE` - Custom installation required (nvm, pyenv, tailscale, etc.)
 - `SPECIAL_PACKAGES` - Extended special packages
 - `GUI_PACKAGES` - GUI applications
+- `PACKAGES` - Auto-generated (DO NOT EDIT)
+
+### Raspberry Pi (`packages-pi.sh`)
+- `APT_PACKAGES_BASE` - Base CLI tools (installed via `apt install`)
+- `APT_PACKAGES` - Extended APT packages
+- `APT_PACKAGES_PI` - Raspberry Pi specific packages
+- `SPECIAL_PACKAGES_BASE` - Custom installation required (nvm, pyenv, tailscale, etc.)
+- `SPECIAL_PACKAGES` - Extended special packages
 - `PACKAGES` - Auto-generated (DO NOT EDIT)
 
 ## Core Functions
