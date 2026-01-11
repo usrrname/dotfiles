@@ -37,7 +37,7 @@ DRY_RUN=true ./setup.sh
 ./setup.sh
 ```
 
-**Note**: The unified `setup.sh` script automatically detects Linux and runs `scripts/setup-linux.sh`. You can also run the Linux script directly if needed.
+The unified `setup.sh` script automatically detects Raspberry Pi and runs `scripts/setup-pi.sh`. 
 
 The script automatically:
 - Detects Debian Trixie and architecture
@@ -122,6 +122,8 @@ sudo fallocate -l 2G /mnt/storage/swapfile
 sudo chmod 600 /mnt/storage/swapfile
 sudo mkswap /mnt/storage/swapfile
 sudo swapon /mnt/storage/swapfile
+
+The following is only for NAS setup:
 
 # 3. Disable zram (Raspberry Pi specific)
 sudo mkdir -p /etc/rpi/swap.conf.d

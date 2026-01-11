@@ -21,6 +21,16 @@ if [ "$(uname -s)" = "Linux" ]; then
     fi
 fi
 
+# Detect Raspberry Pi specifically
+IS_RASPBERRY_PI=false
+if [ "$(uname -s)" = "Linux" ]; then
+    if [ -f /sys/firmware/devicetree/base/model ]; then
+        if [ "$(cat /sys/firmware/devicetree/base/model)" = "Raspberry Pi" ]; then
+            IS_RASPBERRY_PI=true
+        fi
+    fi
+fi
+
 # Detect OS and run appropriate setup script
 case "$(uname -s)" in
     Darwin*)
@@ -28,7 +38,11 @@ case "$(uname -s)" in
         exec "$SCRIPT_DIR/scripts/setup-osx.sh" "$@"
         ;;
     Linux*)
-        if [ "$IS_NIXOS" = "true" ]; then
+        if [ "$IS_RASPBERRY_PI" = "true" ]; then
+            echo "🍎 Detected Raspberry Pi"
+            exec "$SCRIPT_DIR/scripts/setup-pi.sh" "$@"
+            exit 0
+        elif [ "$IS_NIXOS" = "true" ]; then
             echo "❄️  Detected NixOS"
             echo ""
             echo "⚠️  Note: NixOS uses a declarative configuration system."
