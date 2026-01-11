@@ -93,8 +93,6 @@ fi
 
 export PATH="$HOME/.local/bin:$PATH"
 
-. "$HOME/.cargo/env"
-
 # move nvim into /opt/ for debian
 export PATH="/opt/nvim/bin:$PATH"
 alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'
