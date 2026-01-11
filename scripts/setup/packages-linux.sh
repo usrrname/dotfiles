@@ -47,6 +47,7 @@ declare -gax APT_PACKAGES_BASE=(
   "ca-certificates"     # CA certificates
   "gnupg"               # GPG tools
   "lsb-release"         # Linux Standard Base
+  "stow"
   "tree"
 )
 
