@@ -5,13 +5,19 @@
 # macOS specific files and folders
 .DS_Store
 
+# Temporary files
+tmp/**
+
 # Editor specific files and folders
 .idea
 .vscode
 .cursorrules
 .cursor
+.goosehint
 
 # Environment variables
 !.env.schema
 .env*
 .envrc
+id_ed25519*
+id_rsa*
