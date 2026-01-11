@@ -43,6 +43,8 @@ declare -gax APT_PACKAGES_BASE=(
   "lsb-release"         # Linux Standard Base
   "stow"                # Symlink manager
   "tree"                # Tree command for directory structure visualization
+  "cowsay"              # ASCII art cows for terminal
+  "lolcat"              # Rainbow text for terminal
 )
 
 # Packages that require special installation (not via apt)
