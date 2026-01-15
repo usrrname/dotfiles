@@ -34,22 +34,22 @@
 	g = git
 	gco = checkout
 	gst = status
-	cb = checkout -b
-	cm = commit -m
+	gcb = checkout -b
+	gcm = commit -m
 	noedit = commit --amend --no-edit
 
-	# log all commits 
+	# log all commits
 	log = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate
 
 	# prevent git from tracking any changes to a file
 	assume = "update-index --assume-unchanged"
-	
+
 	# show all files that have been marked assume-unchanged
 	assumed = "!git ls-files -v | grep ^h | cut -c 3-"
 
 	# restore git trackable <filename>
 	unassume = "update-index --no-assume-unchanged"
-	
+
 	# unassume all the assumed files
 	unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged"
 
