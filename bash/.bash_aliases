@@ -23,6 +23,10 @@ extract() {
     echo "'$1' is not a valid file"
   fi
 }
+# check if bash is the current shell
+if [$SHELL === '/bin/bash']; then
+    alias reload='source ~/.bashrc'
+fi
 
 alias update='sudo apt update && sudo apt upgrade'
 alias install='sudo apt install'
