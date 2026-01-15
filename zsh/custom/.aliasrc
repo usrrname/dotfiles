@@ -11,10 +11,10 @@ alias copilot-suggest='gh copilot suggest'
 alias copilot-explain='gh copilot explain'
 
 # Make files untracked by git
-# example: untrack <filename>
-alias untrack='git update-index --assume-unchanged'
-# example: restore-tracking <filename>
-alias 'restore-tracking'='git update-index --no-assume-unchanged'
+# example: assume <filename>
+alias assume='git update-index --assume-unchanged'
+# example: unassume <filename>
+alias 'unassume'='git update-index --no-assume-unchanged'
 
 # editors/code assistants
 alias vi='nvim'
