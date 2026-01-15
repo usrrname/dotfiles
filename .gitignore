@@ -53,3 +53,4 @@ zsh/custom/plugins/**
 *id_rsa
 *.bak*
 goose/**/*/githubcopilot/**
+ollama/**/*
