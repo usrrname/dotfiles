@@ -7,6 +7,7 @@
 
 # Temporary files
 tmp/**
+.zcompdump-*
 
 # Editor specific files and folders
 .idea
@@ -19,5 +20,6 @@ tmp/**
 !.env.schema
 .env*
 .envrc
+id_*
 id_ed25519*
 id_rsa*
