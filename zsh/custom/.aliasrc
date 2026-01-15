@@ -15,6 +15,11 @@ alias copilot-explain='gh copilot explain'
 alias assume='git update-index --assume-unchanged'
 # example: unassume <filename>
 alias 'unassume'='git update-index --no-assume-unchanged'
+# check if zsh is the current shell
+
+if [$SHELL === '/bin/zsh']; then
+    alias reload='source ~/.zshrc'
+fi
 
 # editors/code assistants
 alias vi='nvim'
