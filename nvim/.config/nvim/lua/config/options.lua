@@ -3,3 +3,5 @@
 -- vim.g.lazyvim_php_lsp = "intelephense"
 vim.g.mapleader = " "
 vim.g.autoformat = true
+vim.opt.clipboard = "unnamedplus"
+
