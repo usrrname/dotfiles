@@ -44,6 +44,7 @@ COMMON=(
     op
     npm
     vim
+    1Password
 )
 
 # macOS-specific packages
@@ -52,6 +53,7 @@ MACOS_PACKAGES=(
     iterm2
     orbstack
     cursor
+    oh-my-zsh
     zsh
     zprofile
     yarn
@@ -105,4 +107,3 @@ echo "✅ Dotfiles setup complete!"
 echo ""
 echo "💡 Verify symlinks:"
 echo "   ls -la ~ | grep '\->'"
-
