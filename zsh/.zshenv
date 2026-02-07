@@ -6,3 +6,5 @@ defaults write com.apple.desktopservices DSDontWriteNetworkStores true
 defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
 # show hidden files in Finder by default
 defaults write com.apple.finder AppleShowAllFiles YES
+# load aliases
+source ~/.osx_aliasrc
