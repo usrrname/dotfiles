@@ -23,3 +23,6 @@ tmp/**
 id_*
 id_ed25519*
 id_rsa*
+.pem*
+.cert*
+.crt*
