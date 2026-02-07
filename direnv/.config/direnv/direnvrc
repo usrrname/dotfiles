@@ -1,5 +1,15 @@
 echo "🚀 Loading global direnvrc..."
 
+# -------Shell variables ------------
+export EDITOR='nvim' # default editor
+# default editor
+export EDITOR='nvim'
+export SUDOEDITOR='nvim'
+export VISUAL='nvim'
+export PROMPT='~🧻 '
+# Suppress direnv export output
+export DIRENV_LOG_FORMAT=""
+
 # ---- NodeJS fnm ----
 # Load fnm based on project context
 # 1. If a .nvmrc or .node-version file exists ⇒ ensure that version is installed & used.
@@ -42,11 +52,8 @@ fi
 if [[ $PWD != "$HOME/.dotfiles" && -f .git ]]; then
     dotenv_if_exists
     source_env_if_exists "$HOME/.dotfiles/.envrc"
-    source_env_if_exists "$HOME/.dotfiles/.env.secret" 
+    source_env_if_exists "$HOME/.dotfiles/.env.secret"
 fi
-
-# Suppress direnv export output
-export DIRENV_LOG_FORMAT=""
 
 # php composer
 if [[ -f composer.json ]]; then
