@@ -198,5 +198,8 @@ rm -rf nvim-linux-arm64.tar.gz
 sudo mv ~/nvim-linux-arm64 /opt/nvim
 echo 'export PATH="/opt/nvim/bin:$PATH"' >> ~/.bashrc
 source ~/.bashrc
+
+# Create a symlink to the nvim binary in /usr/local/bin to make it available globally
+sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
 ```
 
