@@ -114,3 +114,6 @@ export PATH="/opt/homebrew/sbin:$PATH"
 
 # Load fnm (Fast Node Manager)
 eval "$(fnm env --use-on-cd)"
+
+# load aliases
+source ~/.osx_aliasrc
