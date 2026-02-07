@@ -13,10 +13,8 @@
 [gpg]
   format = ssh
 
-# Disabled 1Password SSH signing - key not found in 1Password
-# To re-enable: add your SSH key to 1Password and uncomment below
-# [gpg "ssh"]
-#   program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
 
 [commit]
   gpgsign = true
