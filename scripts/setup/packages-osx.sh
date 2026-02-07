@@ -25,12 +25,8 @@ declare -gax BREW_PACKAGES=(
     "bruno"          # API client
     "ripgrep"        # Fast grep alternative
     "rust"           # Rust programming language
-    "openssl@3"      # OpenSSL
-    "libyaml"        # YAML library
-    "gmp"            # GNU Multiple Precision Arithmetic Library
-    "npq"            # audit node packages before install
-    "stow"
-    "block-cli-goose" # Local AI assistant
+    "openssl@3"      # OpenSSL library
+    "stow"           # Symlink manager for dotfiles
     "ollama" # Local AI model server
 )
 
@@ -38,7 +34,7 @@ declare -gax BREW_PACKAGES=(
 declare -gax CASK_PACKAGES=(
     "cursor"         # AI-powered code editor
     "docker"         # Docker Desktop
-    "google-chrome"  # Web browser
+    "firefox"  # Web browser
     "iterm2"         # Terminal emulator
     "slack"          # Team communication
     "spotify"        # Music streaming
@@ -47,7 +43,7 @@ declare -gax CASK_PACKAGES=(
     "orbstack"       # Fast, light container & VM manager
     "claude-code"    # AI coding assistant
     "gpg-suite"      # GPG key management GUI
-    "dagger/tap/container-use" # Container use for local AI
+    "1password"      # 1Password desktop app
 )
 
 # Auto-generated combined list (DO NOT EDIT MANUALLY)
@@ -82,9 +78,9 @@ _is_brew_installed() {
 # @returns 0 if installed, 1 if not installed or error
 is_brew_package_installed() {
     local package="${1:-}"
-    
+
     [[ -n "$package" ]] || { echo "❌ Error: Package name required" >&2; return 1; }
-    
+
     brew list "$package" &>/dev/null
 }
 
@@ -93,9 +89,9 @@ is_brew_package_installed() {
 # @returns 0 if installed, 1 if not installed or error
 is_cask_installed() {
     local package="${1:-}"
-    
+
     [[ -n "$package" ]] || { echo "❌ Error: Package name required" >&2; return 1; }
-    
+
     brew list --cask "$package" &>/dev/null
 }
 
@@ -104,9 +100,9 @@ is_cask_installed() {
 # @returns 0 if installed, 1 if not installed or error
 is_package_installed() {
     local package="${1:-}"
-    
+
     [[ -n "$package" ]] || { echo "❌ Error: Package name required" >&2; return 1; }
-    
+
     is_brew_package_installed "$package" || is_cask_installed "$package"
 }
 
@@ -120,10 +116,10 @@ is_package_installed() {
 get_package_info() {
     local package="${1:-}"
     [[ -n "$package" ]] || return 1
-    
+
     local package_type="unknown"
     local install_status="❌ missing"
-    
+
     # Determine package type and status
     if is_brew_package_installed "$package"; then
         package_type="brew"
@@ -141,16 +137,16 @@ get_package_info() {
             package_type="node"
         fi
     fi
-    
+
     printf "%-20s %-6s %s\n" "$package" "($package_type)" "$install_status"
 }
 
 # Validate package configuration consistency
 validate_package_config() {
     local errors=0
-    
+
     echo "🔍 Validating package configuration..."
-    
+
     # Check for duplicates within arrays
     local duplicates
     duplicates=$(printf '%s\n' "${BREW_PACKAGES[@]}" | sort | uniq -d)
@@ -158,13 +154,13 @@ validate_package_config() {
         echo "❌ Error: Duplicate packages in BREW_PACKAGES: $duplicates"
         ((errors++))
     fi
-    
+
     duplicates=$(printf '%s\n' "${CASK_PACKAGES[@]}" | sort | uniq -d)
     if [[ -n "$duplicates" ]]; then
         echo "❌ Error: Duplicate packages in CASK_PACKAGES: $duplicates"
         ((errors++))
     fi
-    
+
     # Check for overlap between brew and cask packages
     local overlap=()
     for pkg in "${BREW_PACKAGES[@]}"; do
@@ -172,26 +168,26 @@ validate_package_config() {
             overlap+=("$pkg")
         fi
     done
-    
+
     if [[ ${#overlap[@]} -gt 0 ]]; then
         echo "❌ Error: Packages appear in both BREW_PACKAGES and CASK_PACKAGES: ${overlap[*]}"
         ((errors++))
     fi
-    
+
     # Verify PACKAGES matches combined arrays
     local expected_count=$((${#BREW_PACKAGES[@]} + ${#CASK_PACKAGES[@]}))
     if [[ ${#PACKAGES[@]} -ne $expected_count ]]; then
         echo "❌ Error: PACKAGES array size (${#PACKAGES[@]}) doesn't match expected ($expected_count)"
         ((errors++))
     fi
-    
+
     if [[ $errors -eq 0 ]]; then
         echo "✅ Package configuration is valid"
         echo "   Brew packages: ${#BREW_PACKAGES[@]}"
         echo "   Cask packages: ${#CASK_PACKAGES[@]}"
         echo "   Total packages: ${#PACKAGES[@]}"
     fi
-    
+
     return $errors
 }
 

@@ -4,58 +4,44 @@ alias pip='pip3'
 
 # git
 alias g='git'
-
-# gh cli
-alias copilot='gh copilot'
-alias copilot-suggest='gh copilot suggest'
-alias copilot-explain='gh copilot explain'
-
 # Make files untracked by git
 # example: assume <filename>
 alias assume='git update-index --assume-unchanged'
 # example: unassume <filename>
-alias 'unassume'='git update-index --no-assume-unchanged'
-# check if zsh is the current shell
-
-if [$SHELL === '/bin/zsh']; then
-    alias reload='source ~/.zshrc'
-fi
+alias unassume='git update-index --no-assume-unchanged'
+alias reload='source ~/.zshrc'
 
 # editors/code assistants
 alias vi='nvim'
 alias cursor='/Applications/Cursor.app/Contents/Resources/app/bin/cursor'
 # Ollama aliases
-alias ol="ollama"
-alias olcode="ollama run codellama:7b"
-alias "ol ls"="ollama list"
-alias "ol upgrade"="brew upgrade ollama"
+alias ol='ollama'
+alias olcode='ollama run codellama:7b'
+alias 'ol ls'='ollama list'
+alias 'ol upgrade'='brew upgrade ollama'
 
 # databases
 alias mysql=/opt/homebrew/bin/mysql
 alias mysqladmin=/opt/homebrew/bin/mysqladmin
 
 # ssh
-alias nfslogin='ssh jenchan_ifcatsneedart@ssh.phx.nearlyfreespeech.net'
 alias thingymachine='ssh@68.183.204.78'
 alias expose=../script/expose.sh
 
 # shell aliases
 alias showFiles='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hideFiles='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias zshconfig="mate ~/.zshrc"
+alias zshconfig='mate ~/.zshrc'
 
 # brew
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 
 # package management
-# run npq before npm install
-alias npm='npq-hero'
-alias yarn="NPQ_PKG_MGR=yarn npq-hero"
 # pnpm
-alias pn="NPQ_PKG_MGR=pnpm npq-hero"
+alias p='pnpm'
 
 # php / Laravel
-alias composer="php /usr/local/bin/composer.phar"
+alias composer='php /usr/local/bin/composer.phar'
 alias sail='[ -f sail ] && zsh sail || zsh vendor/bin/sail'
 alias pint='./vendor/bin/pint'
 
@@ -66,26 +52,26 @@ alias act='act --container-architecture linux/amd64'
 
 ## Ollama functions
 
-# Example: ask "What is the capital of France?"
+# Example: ask 'What is the capital of France?'
 function ask() {
-    echo "$1" | ollama run llama3.2
+    echo '$1' | ollama run llama3.2
 }
 
 # Example: review <filename>
 function review() {
-    cat "$1" | ollama run codellama "Review this code for bugs and improvements:"
+    cat '$1' | ollama run codellama 'Review this code for bugs and improvements:'
 }
 
-# Example: translate "Hello" "French"
+# Example: translate 'Hello' 'French'
 function translate() {
-    echo "$1" | ollama run llama3.2 "Translate to $2:"
+    echo '$1' | ollama run llama3.2 'Translate to $2:'
 }
 
 # Model management
 # olshow <model-name>
-# Example: olshow "llama3.2"
+# Example: olshow 'llama3.2'
 function olshow() {
-    ollama show "$1"
+    ollama show '$1'
 }
 
 function model_size() {
@@ -94,6 +80,24 @@ function model_size() {
 
 # nvm / node
 alias get-nvm='(){
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  [ -s '$NVM_DIR/nvm.sh' ] && \. '$NVM_DIR/nvm.sh'
+  [ -s '$NVM_DIR/bash_completion' ] && \. '$NVM_DIR/bash_completion'
 }'
+
+# OS X specific aliases
+# delete .DS_Store files from a directory path
+# usage: delete_ds <directory_path>
+delete_ds(){
+    # list files to be deleted
+    echo -e 'This will delete all .DS_Store files from $1 and its subdirectories.\n'
+    find $1 -name '.DS_Store' -print
+    echo 'Are you sure? (y/n)'
+    read answer
+    if [[ '$answer' !== 'y' ]]; then
+        echo 'Aborting.'
+        return
+    elif [[ '$answer' !== 'y' ]]; then
+        echo 'Deleting .DS_Store files from $1...'
+        find $1 -name '.DS_Store' -delete -print
+    fi
+}

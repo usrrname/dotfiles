@@ -5,8 +5,6 @@
 export PROMPT='~🧻 '
 export ZSH_THEME="robbyrussell"
 
-# zstyle ':omz:update' mode auto # update automatically without asking
-
 # Uncomment the following line to change how often to auto-update (in days).
 zstyle ':omz:update' frequency 13
 
@@ -32,14 +30,15 @@ HIST_STAMPS="yyyy-mm-dd"
 # ---- Plugins ----
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
-plugins=(git 1password gh autosuggestions autocomplete direnv)
+plugins=(git 1password gh zsh-autosuggestions zsh-autocomplete direnv)
 
 # Set ZSH path before sourcing oh-my-zsh
 # ZSH must point to the oh-my-zsh installation directory
 export ZSH="$HOME/.oh-my-zsh"
 
 # ZSH_CUSTOM points to custom plugins/aliases (managed via stow)
-export ZSH_CUSTOM="$HOME/.dotfiles/zsh/custom"
+export ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
+# Load oh-my-zsh
 source "$ZSH/oh-my-zsh.sh"
 export NVM_DIR="$HOME/.nvm"
 
@@ -58,12 +57,6 @@ export NVM_DIR="$HOME/.nvm"
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
 # For a full list of active aliases, run `alias`.
 
-# get aliases
-if [ -f "$ZSH_CUSTOM/.aliasrc" ]; then
-  source "$ZSH_CUSTOM/.aliasrc"
-else
-  echo "⚠️ Warning: Alias file not found at $ZSH_CUSTOM/.aliasrc"
-fi  
 
 # use iterm2 on zsh init
 source ~/.iterm2_shell_integration.zsh
@@ -73,6 +66,9 @@ export PKG_CONFIG_PATH="/usr/local/opt/mysql-client/lib/pkgconfig"
 export PATH="/usr/local/opt/mysql-client/bin:$PATH"
 # Docker CLI completions.
 fpath=(/Users/jenc/.docker/completions $fpath)
+
+# SSH agent socket for 1Password integration
+export SSH_AUTH_SOCK=~/Library/Group\ Containers/2BUA8C4S2C.com.1password/t/agent.sock
 
 # devbox called only when `devbox` is typed
 devbox() {
