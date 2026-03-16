@@ -1,14 +1,14 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
+# Global system config
+# Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, ... }:
 
 {
-imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-     (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")   
+imports = [
+      # Include the results of the hardware scan.
+     #  ./hardware-configuration.nix
+     (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
 ];
 
 
@@ -46,9 +46,7 @@ users.users.jenc = {
   vimAlias = true;
 	configure = {
 	    customRC = ''
-
           let mapleader = "\<Space>"
-
           lua << EOF
             ${builtins.readFile /home/jenc/.config/nvim/init.lua}
 
@@ -61,9 +59,7 @@ users.users.jenc = {
 
         '';
 	};
-
  };
-
 
  # Configure keymap in X11
   services.xserver.xkb = {
@@ -74,7 +70,7 @@ users.users.jenc = {
   system.userActivationScripts.zshrc = "touch .zshrc"; # to avoid being prompted to generate the config for first time
 
   programs.direnv.enable = true;
- 
+
  # Enable Zsh with Oh My Zsh
   programs.zsh = {
     enable = true;
@@ -84,8 +80,8 @@ users.users.jenc = {
       theme = "robbyrussell";
     };
   };
- 
- 
+
+
  # Enable automatic login for the user.
   services.getty.autologinUser = "jenc";
 
@@ -127,7 +123,7 @@ users.users.jenc = {
     enable = true;
     installPath = "/home/jenc/.cursor-server";
   };
-  
+
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
@@ -141,7 +137,8 @@ users.users.jenc = {
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "24.11";
-  
+  # automatic garbage collection
   nix.gc.automatic = true;
-  nix.gc.dates = "03:15"; # Run daily at 3:15 AM
+  # Run daily at 3:15 AM
+  nix.gc.dates = "03:15";
 }
