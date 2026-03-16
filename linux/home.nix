@@ -25,7 +25,10 @@
     ca-certificates
     gnupg
 
-    # Node.js version manager
+    # 1Password CLI
+    op
+
+  # Node.js version manager
     fnm
 
   # Shell prompts
