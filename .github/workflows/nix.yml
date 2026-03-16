@@ -1,0 +1,60 @@
+name: Nix CI
+
+on:
+  push:
+    branches: [main, nix-migration]
+  pull_request:
+    branches: [main]
+
+jobs:
+  flake-check:
+    name: Flake Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Check Flake
+        run: nix flake check
+
+  home-manager-linux:
+    name: Home Manager (Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Build Home Manager (Linux)
+        run: home-manager build .#linux --show-trace
+
+  home-manager-pi:
+    name: Home Manager (RPi/aarch64)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Build Home Manager (Pi/aarch64)
+        run: home-manager build .#pi --show-trace
+
+  nixos:
+    name: NixOS Config Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Nix
+        uses: ./.github/actions/setup-nix
+
+      - name: Evaluate NixOS Config
+        run: nix eval .#nixosConfigurations.nixos.pkgs.system

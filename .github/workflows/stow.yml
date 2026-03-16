@@ -1,0 +1,59 @@
+name: Stow CI
+
+on:
+  push:
+    branches: [main, nix-migration]
+  pull_request:
+    branches: [main]
+
+jobs:
+  stow-check:
+    name: Stow Structure Check
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Stow
+        run: sudo apt-get update && sudo apt-get install -y stow
+
+      - name: Verify Stow Packages
+        run: |
+          # Check that common packages exist and have content
+          for pkg in stow/common/*; do
+            if [ -d "$pkg" ]; then
+              count=$(find "$pkg" -type f | wc -l)
+              if [ "$count" -eq 0 ]; then
+                echo "Warning: $pkg is empty"
+              fi
+            fi
+          done
+
+      - name: Verify OS-specific packages
+        run: |
+          # Check macOS packages
+          for pkg in stow/macos/*; do
+            if [ -d "$pkg" ]; then
+              count=$(find "$pkg" -type f | wc -l)
+              echo "macOS package: $(basename $pkg) - $count files"
+            fi
+          done
+
+          # Check Linux packages
+          for pkg in stow/linux/*; do
+            if [ -d "$pkg" ]; then
+              count=$(find "$pkg" -type f | wc -l)
+              echo "Linux package: $(basename $pkg) - $count files"
+            fi
+          done
+
+          # Check Pi packages
+          for pkg in stow/pi/*; do
+            if [ -d "$pkg" ]; then
+              count=$(find "$pkg" -type f | wc -l)
+              echo "Pi package: $(basename $pkg) - $count files"
+            fi
+          done
