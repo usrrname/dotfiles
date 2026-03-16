@@ -1,0 +1,28 @@
+# Direnv files
+.direnv
+.envrc
+
+# macOS specific files and folders
+.DS_Store
+
+# Temporary files
+tmp/**
+.zcompdump-*
+
+# Editor specific files and folders
+.idea
+.vscode
+.cursorrules
+.cursor
+.goosehint
+
+# Environment variables
+!.env.schema
+.env*
+.envrc
+id_*
+id_ed25519*
+id_rsa*
+.pem*
+.cert*
+.crt*

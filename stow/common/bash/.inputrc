@@ -1,0 +1,15 @@
+# allow the command prompt to wrap to the next line
+set horizontal-scroll-mode On
+
+# none, visible or audible
+set bell-style visible
+
+# Make Tab autocomplete regardless of filename case
+set completion-ignore-case on
+
+## -------  Keybindings ----- ##
+
+# Left Arrow (or Ctrl+Left Arrow)
+"\eOd": backward-word
+# Right Arrow (or Ctrl+Right Arrow
+"\eOc": forward-word

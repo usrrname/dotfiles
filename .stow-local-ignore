@@ -1,25 +1,65 @@
-Makefile
-/node_modules/
-\.DS_Store
-.DS_Store
+# =====================================================================
+# General Ignores (don't stow these)
+# =====================================================================
 .git
 .gitignore
-.vscode
-\.git
-\.gitignore
 README.*
 LICENSE
 .env
-test/*
-devbox.*
-package.*
-README.md
-.cursor/*
-.claude/*
-scripts/*
-setup/*
-test/*
-bats
-husky
-nix/
+.env.*
 *.lock
+
+# Build outputs
+node_modules/
+target/
+dist/
+build/
+vendor/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.vscode
+
+# Test files
+test/
+tests/
+bats/
+
+# Scripts (run separately, not stowed)
+scripts/
+setup*.sh
+*.md
+
+# =====================================================================
+# Stow Directory-Specific
+# =====================================================================
+# Nix/Flake files (managed separately)
+flake.nix
+hosts/
+linux/
+nix/
+
+# Package managers
+package.json
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Dev tools
+.devbox/
+devbox.d/
+.devbox
+
+# Temporary/Cache
+cache/
+tmp/
+temp/
+*.swp
+*.swo
+*~
+
+# macOS-specific cache
+.DS_Store
+.Spotlight-V100
+.Trashes

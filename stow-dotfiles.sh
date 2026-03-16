@@ -1,15 +1,18 @@
 #!/bin/bash
-# OS-aware stow script - only stows relevant dotfiles based on OS
+# OS-aware stow script - stows relevant dotfiles based on OS
+# Uses new directory structure: stow/common/, stow/macos/, stow/linux/, stow/pi/
 
 set -e
 
-# Get script directory (works with bash)
+# Get script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# Detect OS
 OS=$(uname -s)
+ARCH=$(uname -m)
 
-# Detect NixOS specifically (not just any Linux)
+# Detect NixOS specifically
 IS_NIXOS=false
 if [[ "$OS" == "Linux" ]]; then
     if [[ -f /etc/os-release ]]; then
@@ -22,6 +25,22 @@ if [[ "$OS" == "Linux" ]]; then
     fi
 fi
 
+# Detect Raspberry Pi (ARM64)
+IS_PI=false
+if [[ "$ARCH" == "aarch64" ]] || [[ "$ARCH" == "arm64" ]]; then
+    IS_PI=true
+fi
+
+# Determine which OS-specific directory to use
+STOW_OS=""
+if [[ "$OS" == "Darwin" ]]; then
+    STOW_OS="macos"
+elif [[ "$IS_PI" == "true" ]]; then
+    STOW_OS="pi"
+elif [[ "$OS" == "Linux" ]]; then
+    STOW_OS="linux"
+fi
+
 # Allow passing stow flags (defaults to --adopt if no arguments provided)
 # Pass empty string "" to skip --adopt flag
 if [[ $# -eq 0 ]]; then
@@ -32,45 +51,14 @@ else
     STOW_FLAGS="$1"
 fi
 
-# Common packages (work on both macOS and Linux)
-COMMON=(
-    bash
-    nvim
-    git
-    direnv
-    ssh
-    docker
-    gh
-    op
-    npm
-    vim
-    1Password
-)
-
-# macOS-specific packages
-MACOS_PACKAGES=(
-    act
-    iterm2
-    orbstack
-    cursor
-    oh-my-zsh
-    zsh
-    zprofile
-    yarn
-    nvm
-    verdaccio
-    husky
-)
-
-# Note: nix/ folder is not stowed automatically
-# It should be managed manually or via NixOS configuration.nix
-
 # Function to stow a package if it exists and is not empty
 stow_package() {
     local pkg="$1"
-    if [[ -d "$pkg" ]] && [[ -n "$(ls -A "$pkg" 2>/dev/null)" ]]; then
+    local dir="stow/$pkg"
+
+    if [[ -d "$dir" ]] && [[ -n "$(ls -A "$dir" 2>/dev/null)" ]]; then
         echo "📦 Stowing $pkg..."
-        if stow $STOW_FLAGS "$pkg" 2>/dev/null; then
+        if stow $STOW_FLAGS -d stow -t "$HOME" "$pkg" 2>/dev/null; then
             echo "   ✅ $pkg stowed successfully"
         else
             echo "   ⚠️  Warning: Could not stow $pkg (may already be stowed or have conflicts)"
@@ -81,26 +69,19 @@ stow_package() {
 }
 
 # Main execution
-echo "🔗 Setting up dotfiles for $(uname -s)..."
+echo "🔗 Setting up dotfiles for $OS..."
 echo ""
 
-# Stow common packages
+# Stow common packages (work on all OSes)
 echo "📦 Stowing common packages..."
-for pkg in "${COMMON[@]}"; do
-    stow_package "$pkg"
-done
+stow_package "common"
 
 # Stow OS-specific packages
-if [[ "$OS" == "Darwin" ]]; then
+if [[ -n "$STOW_OS" ]]; then
     echo ""
-    echo "🍎 Stowing macOS-specific packages..."
-    for pkg in "${MACOS_PACKAGES[@]}"; do
-        stow_package "$pkg"
-    fi
+    echo "📦 Stowing $STOW_OS-specific packages..."
+    stow_package "$STOW_OS"
 fi
-
-# Note: nix/ folder is not stowed automatically
-# It should be managed manually or via NixOS configuration.nix
 
 echo ""
 echo "✅ Dotfiles setup complete!"

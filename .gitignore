@@ -1,56 +1,121 @@
+# =====================================================================
+# OS/Editor Generated Files
+# =====================================================================
 .DS_Store
 \.DS_Store
-node_modules/**
-Makefile
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =====================================================================
+# Secrets & Credentials
+# =====================================================================
 *.pem
 *.key
 *.pub
 id_rsa*
-cache/**
-extensions/**
-**/extensions/**
-tmp/**
-**/tmp/**
-temp/**
-.zsh_history
-cache/**
-.vscode/**
-.netrwhist
-.zsh_sessions/**
-(.config|config)/**/(temp|tmp)/**
-.config/configstore/**
-verdaccio/htpasswd
-.config/yarn/**
-.*history
-known_hosts*
-(.gemini|gemini)/oauth_creds.json
-(.gemini|gemini)/tmp/**
-htpasswd
-oauth_creds.json
-*.vscode
-.devbox
-devbox.d
-docker/.docker/**
-!docker/.docker/config.json
-!docker/.docker/daemon.json
-.env*
-.env.d.ts
-.env.secret
-cursor/.cursor/*
-.cursor/*
-orbstack/.orbstack/*
-.yarnrc
-./npm/.npmrc
-.npmrc*
-test/bats.diff*
-tests/**/bats.log
-argv.json
-bats.diff
-tests/bats.diff*
-test/**/bats.diff*
-zsh/custom/plugins/**
 *id_ed25519*
 *id_rsa
+.env
+.env.*
+.env.secret
+.env.local
+.env.d.ts
+oauth_creds.json
+htpasswd
+verdaccio/htpasswd
+known_hosts*
+
+# =====================================================================
+# Build & Dependency Outputs
+# =====================================================================
+node_modules/**
+vendor/**
+target/**
+dist/**
+build/**
+*.o
+*.so
+*.a
+*.lib
+**/.docker/cli-plugins/**
+# =====================================================================
+# Temporary Files
+# =====================================================================
+tmp/**
+temp/**
+.zsh_history
+.zsh_sessions/**
+cache/**
+(.config|config)/**/(temp|tmp)/**
 *.bak*
-goose/**/*/githubcopilot/**
-ollama/**/*
+*~
+*.swp
+*.swo
+*#
+
+# =====================================================================
+# Development Tools
+# =====================================================================
+.devbox/
+devbox.d/
+.vscode/**
+*.vscode
+.idea/
+*.iml
+Makefile
+
+# =====================================================================
+# Test & Coverage
+# =====================================================================
+tests/**/bats.log
+test/**
+tests/bats.diff*
+test/bats.diff*
+
+# =====================================================================
+# Package Managers
+# =====================================================================
+.npmrc*
+.yarnrc
+./npm/.npmrc
+yarn-error.log
+
+# =====================================================================
+# Nix (keep flake.nix and *.nix configs, but not results)
+# =====================================================================
+result
+result-*
+*.lock
+
+# =====================================================================
+# Stow temporary
+# =====================================================================
+.stow*
+.stow-local-ignore
+
+# =====================================================================
+# Stow Package-Specific Ignores
+# =====================================================================
+# Cursor (macOS) - cache directories
+stow/macos/cursor/.cursor/plugins/cache/**
+stow/macos/cursor/.cursor/argv.json
+stow/macos/cursor/.cursor/(projects|plans|plugins|rules|skills-cursor)/**
+# 1Password (if contains sensitive data)
+stow/common/1Password/.op/
+stow/common/1Password/config**
+
+# Orbstack (macOS)
+orbstack/.orbstack/*
+
+# Gemini
+.gemini/**
+gemini/**
+
+# Ollama
+ollama/**
+stow/macos/cursor/.cursor/

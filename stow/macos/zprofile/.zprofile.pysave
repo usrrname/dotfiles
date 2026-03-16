@@ -1,0 +1,2 @@
+virtualenv venv --python=/usr/local/bin/python
+export PATH
