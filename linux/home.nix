@@ -25,7 +25,13 @@
     ca-certificates
     gnupg
 
-    # Utilities
+    # Node.js version manager
+    fnm
+
+  # Shell prompts
+    starship
+
+  # Utilities
     stow
     tree
     unzip
