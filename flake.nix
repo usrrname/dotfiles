@@ -13,7 +13,7 @@
   outputs = { self, nixpkgs, home-manager, ... }:
     let
       systems = {
-        linux = "x86_64-linux";
+        linux = "aarch64-linux";
         pi = "aarch64-linux";
       };
     in
@@ -33,7 +33,7 @@
 
       # NixOS configuration (system + home-manager integrated)
       nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+        system = "aarch64-linux";
         modules = [
           ./hosts/nixos/configuration.nix
           home-manager.nixosModules.home-manager
