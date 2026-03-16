@@ -18,8 +18,6 @@ declare -gax BREW_PACKAGES=(
     "yarn"           # JavaScript package manager
     "pyenv"          # Python version management
     "gh"             # GitHub CLI
-    "mysql-client"   # MySQL client tools
-    "mysql"          # MySQL database server
     "nvim"           # Neovim text editor
     "direnv"         # Environment variable manager
     "bruno"          # API client
