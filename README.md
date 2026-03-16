@@ -1,203 +1,194 @@
 # dotfiles
 
-[![Built with Devbox](https://www.jetify.com/img/devbox/shield_moon.svg)](https://www.jetify.com/devbox/docs/contributor-quickstart/)
+Dotfiles setup with:
+- [stow](https://www.gnu.org/software/stow/) - Dotfile symlinking
+- [Nix](https://nixos.org/) + [Home Manager](https://nix-community.github.io/home-manager/) - Package management
+- [direnv](https://direnv.net) - Environment variable management
 
-Dotfiles setup made with:
-- [stow](https://www.gnu.org/software/stow/)
+## Supported Systems
 
-- [direnv](https://direnv.net) w/ global config in `~/.config/direnv/direnvrc`
+| System | Package Manager | Dotfiles |
+|--------|---------------|----------|
+| **NixOS** | Nix (flake) | stow |
+| **Linux/Debian** | Home Manager | stow |
+| **Raspberry Pi** | Home Manager | stow |
+| **macOS** | Homebrew | stow |
 
-- Underlying ideals from [12 Factor App config](https://12factor.net/config)
+---
 
 ## Quick Start
 
-The setup script automatically detects your operating system and runs the appropriate installer. 
-
-**No special requirements** - works with standard shells on supported systems.
-
-**Supported Systems:**
-- [macOS setup](setup-osx.md) based on [mac.install.guide](https://mac.install.guide/) tested with [Bats](https://github.com/bats-core/bats-core) (see [setup-osx.md](setup-osx.md))
-- [Raspberry Pi 4 setup](setup-pi.md) running Debian Trixie
-- **NixOS** - Package management via `/etc/nixos/configuration.nix` (setup script provides guidance, stow script works normally)
+### 1. Clone the Repository
 
 ```bash
-# Install packages (auto-detects OS)
+git clone https://github.com/yourusername/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+```
+
+### 2. Install Packages
+
+#### NixOS
+
+```bash
+# Enable flakes (if not already enabled)
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# Apply configuration (includes Home Manager automatically)
+sudo nixos-rebuild switch --flake .#nixos
+```
+
+#### Linux (Debian/Ubuntu/Raspberry Pi)
+
+```bash
+# Install Nix (single-user)
+sh <(curl -L https://nixos.org/nix/install) --no-daemon
+
+# Enable flakes
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# Apply configuration
+home-manager switch --flake .#linux
+
+# For Raspberry Pi (aarch64)
+home-manager switch --flake .#pi
+```
+
+#### macOS
+
+```bash
+# Install Nix via Homebrew
+brew install nix
+
+# Enable flakes
+mkdir -p ~/.config/nix
+echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
+
+# Apply Home Manager (optional - can also use brew)
+home-manager switch --flake .#darwin
+
+# Or use Homebrew for packages
 ./setup.sh
-
-# Check package status
-./setup.sh check
-
-# List all packages
-./setup.sh list
-
-# Validate package configuration (macOS only)
-./setup.sh validate
 ```
 
-The script will automatically:
-- **macOS**: Run `scripts/setup-osx.sh` (uses Homebrew)
-- **Linux (Debian/Ubuntu)**: Run `scripts/setup-linux.sh` (uses APT)
-- **NixOS**: Shows guidance (package management via configuration.nix)
-
-You can still run the OS-specific scripts directly if needed:
-- `./scripts/setup-osx.sh` for macOS
-- `./scripts/setup-linux.sh` for Linux
-
-### Symlinking Dotfiles
-
-After installing packages, symlink your dotfiles using the OS-aware stow script:
+### 3. Link Dotfiles
 
 ```bash
-# Stow all dotfiles (auto-detects OS and only stows relevant packages)
+# Stow dotfiles (auto-detects OS)
 ./stow-dotfiles.sh
-
-# Stow without adopting existing files (use if starting fresh)
-./stow-dotfiles.sh ""
 ```
 
-The script automatically:
-- **Stows common packages** on all systems (bash, zsh, nvim, git, etc.)
-- **Stows macOS-specific packages** on macOS only (see [setup-osx.md](setup-osx.md) for details)
-- **Skips OS-specific packages** on other systems (e.g., Raspberry Pi won't get macOS packages)
-- **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
+---
 
-### Updating Dotfiles
+## Package Management
 
-After pulling updates from the repository, use the update script to sync everything:
+### Nix/Home Manager (Linux/NixOS/RPi)
+
+Packages are defined in:
+- `linux/home.nix` - Main package list
+- `flake.nix` - NixOS configuration
+
+To add packages, edit `linux/home.nix`:
+
+```nix
+home.packages = with pkgs; [
+  git
+  curl
+  wget
+  neovim
+  # add more packages here
+];
+```
+
+### Homebrew (macOS)
 
 ```bash
-# Pull updates, update submodules, install new packages, and update symlinks
-./update.sh
+# Add packages to setup-osx.md or use brew directly
+brew install <package>
 ```
 
-This will:
-1. Pull latest changes from git
-2. Update git submodules
-3. Install any new packages (setup scripts check if already installed)
-4. Update dotfile symlinks (stow is idempotent, safe to run multiple times)
+---
+
+## Stow Directory Structure
+
+```
+stow/
+├── common/       # Shared across all OSes (bash, git, nvim, etc.)
+├── macos/       # macOS-specific (zsh, cursor, iterm2, etc.)
+├── linux/       # Linux-specific (zsh config)
+└── pi/          # Raspberry Pi-specific (zsh config)
+```
+
+The `stow-dotfiles.sh` script automatically stows the correct packages for your OS.
+
+---
+
+## Updating
+
+### Pull Updates
+
+```bash
+git pull
+
+# Rebuild Nix configurations
+home-manager switch --flake .#linux
+
+# Re-stow dotfiles
+./stow-dotfiles.sh
+```
+
+---
 
 ## Troubleshooting
 
-- **Check distribution detection**: `./setup.sh check`
-- **List packages**: `./setup.sh list`
-- **Dry run setup**: `DRY_RUN=true ./setup.sh`
-- **Verify symlinks**: `ls -la ~ | grep "\->"`
-- **macOS-specific**: See [setup-osx.md](setup-osx.md) for additional troubleshooting
-
-### Contents
-- [dotfiles](#dotfiles)
-  - [Quick Start](#quick-start)
-    - [Symlinking Dotfiles](#symlinking-dotfiles)
-    - [Updating Dotfiles](#updating-dotfiles)
-  - [Troubleshooting](#troubleshooting)
-    - [Contents](#contents)
-  - [Maintenance](#maintenance)
-  - [act](#act)
-  - [Symlinking](#symlinking)
-  - [Nvim/LazyVim](#nvimlazyvim)
-  - [1Password](#1password)
-  - [Devbox](#devbox)
-
-
-## Maintenance
-
-Keep submodules updated
+### Nix/Home Manager
 
 ```bash
-git submodule update
+# Check what's installed
+home-manager packages
+
+# Dry-run (see changes without applying)
+home-manager switch --flake .#linux --dry-run
+
+# List available packages
+nix search nixpkgs <package-name>
 ```
 
-## act
+### Stow
 
 ```bash
-# insert 1password token into github action secrets
-act -s GITHUB_TOKEN=$(op read $GITHUB_TOKEN)
+# Verify symlinks
+ls -la ~ | grep "\->"
+
+# Restow specific package
+stow -R <package-name>
 ```
 
-## Symlinking
+---
+
+## Additional Tools
+
+### LazyVim
 
 ```bash
-./stow-dotfiles.sh
-```
-
-**Manual stow** (if you need to stow individual packages):
-
-```bash
-cp <directory> <target>
-mkdir -p <directory>
-stow <directory>
-```
-
-## Nvim/LazyVim
-
-Build plugins
-
-```bash
+# Build plugins
 nvim --headless -c "Lazy sync" -c "qa"
-```
 
-Force clean and reinstall LazyVim plugins
-
-```bash
+# Clean and reinstall
 nvim --headless -c "lua require('lazy').clean()" -c "lua require('lazy').sync()" -c "qa"
 ```
 
-Refresh and sync plugins (interactive)
+### 1Password CLI
 
 ```bash
-:Lazy clean
-:Lazy sync
-```
-## 1Password
-
-```bash
-op://<vault-name>/<item-name>/[section-name/]<field-name>
+# Read secret
+op read op://vault/item/field
 ```
 
-```bash
-Usage:  op read <reference> [flags]
-
-Examples:
-
-Print the secret saved in the field 'password', on the item 'db', in the vault 'app-prod':
-
-op read op://app-prod/db/password
-
-Use a secret reference with a query parameter to retrieve a one-time
-password:
-
-op read "op://app-prod/db/one-time password?attribute=otp"
-
-Use a secret reference with a query parameter to get an SSH key's private key in the OpenSSH format:
-
-op read "op://app-prod/ssh key/private key?ssh-format=openssh"
-
-Save the SSH key found on the item 'ssh' in the 'server' vault
-as a new file 'key.pem' on your computer:
-
-op read --out-file ./key.pem op://app-prod/server/ssh/key.pem
-
-Use 'op read' in a command with secret references in place of plaintext secrets:
-
-docker login -u $(op read op://prod/docker/username) -p $(op read op://prod/docker/password)
-      
-```
-
-## Devbox
-
-[FAQ](https://www.jetify.com/docs/devbox/faq/)
+### Devbox
 
 ```bash
-devbox add <package> # add a package to the devbox environment
-devbox rm <package> # remove a package from the devbox environment
-devbox info # show info about the devbox environment
-devbox update # update packages in devbox
-devbox version update # update devbox to the latest version
-devbox shell # initialize the devbox shell
-devbox generate direnv # generate a direnvrc file
-```
-Clean up packages in nix store
-
-```bash
-devbox run -- nix store gc --extra-experimental-features nix-command
+devbox add <package>
+devbox shell
 ```
