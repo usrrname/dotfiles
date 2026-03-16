@@ -20,9 +20,17 @@ jobs:
       - name: Check Flake
         run: nix flake check
 
-  home-manager-linux:
-    name: Home Manager (Linux)
+  home-manager:
+    name: Home Manager (${{ matrix.system }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - system: linux
+            attr: .#linux
+          - system: pi
+            attr: .#pi
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,21 +38,8 @@ jobs:
       - name: Setup Nix
         uses: ./.github/actions/setup-nix
 
-      - name: Build Home Manager (Linux)
-        run: home-manager build .#linux --show-trace
-
-  home-manager-pi:
-    name: Home Manager (RPi/aarch64)
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Nix
-        uses: ./.github/actions/setup-nix
-
-      - name: Build Home Manager (Pi/aarch64)
-        run: home-manager build .#pi --show-trace
+      - name: Build Home Manager (${{ matrix.system }})
+        run: home-manager build ${{ matrix.attr }} --show-trace
 
   nixos:
     name: NixOS Config Check
