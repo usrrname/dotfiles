@@ -101,10 +101,10 @@ result-*
 # =====================================================================
 # Stow Package-Specific Ignores
 # =====================================================================
-# Cursor (macOS) - cache directories
-stow/macos/cursor/.cursor/plugins/cache/**
-stow/macos/cursor/.cursor/argv.json
-stow/macos/cursor/.cursor/(projects|plans|plugins|rules|skills-cursor)/**
+# Cursor (macOS) - cache and plugin directories
+stow/macos/cursor/.cursor/
+cursor/.cursor/
+
 # 1Password (if contains sensitive data)
 stow/common/1Password/.op/
 stow/common/1Password/config**
@@ -118,4 +118,3 @@ gemini/**
 
 # Ollama
 ollama/**
-stow/macos/cursor/.cursor/
