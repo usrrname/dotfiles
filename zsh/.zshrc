@@ -1,3 +1,10 @@
+# OPENSPEC:START
+# OpenSpec shell completions configuration
+fpath=("/Users/jenc/.oh-my-zsh/custom/completions" $fpath)
+autoload -Uz compinit
+compinit
+# OPENSPEC:END
+
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
@@ -117,3 +124,5 @@ eval "$(fnm env --use-on-cd)"
 
 # load aliases
 source ~/.osx_aliasrc
+# opencode
+export PATH=/Users/jenc/.opencode/bin:$PATH

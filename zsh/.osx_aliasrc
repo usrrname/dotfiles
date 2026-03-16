@@ -53,6 +53,9 @@ alias pint='./vendor/bin/pint'
 # nektos/act
 alias act='act --container-architecture linux/amd64'
 
+# kubernetes
+alias k='kubectl'
+
 # Functions for common tasks
 
 ## Ollama functions

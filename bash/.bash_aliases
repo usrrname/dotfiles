@@ -57,6 +57,8 @@ alias sudov='sudo -e'
 # soft shutdown/restart
 alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'
 alias docker-compose='docker compose'
+# kubernetes
+alias k='kubectl'
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
