@@ -38,6 +38,9 @@ echo "experimental-features = nix-command flakes" >> ~/.config/nix/nix.conf
 sudo nixos-rebuild switch --flake .#nixos
 ```
 
+
+> **Note**: The NixOS configuration is in `hosts/nixos/configuration.nix`. Using flakes, you do NOT need to copy it to `/etc/nixos/` - it is read directly from your dotfiles directory.
+
 #### Linux (Debian/Ubuntu/Raspberry Pi)
 
 ```bash
