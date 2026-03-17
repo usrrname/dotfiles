@@ -62,6 +62,7 @@
   # =====================================================================
   home.stateVersion = "24.05";
   home.username = "jenc";
+  home.homeDirectory = "/home/jenc";
 
   home.sessionVariables = {
     EDITOR = "nvim";
