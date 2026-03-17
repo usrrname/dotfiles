@@ -8,7 +8,7 @@
 imports = [
       # Include the results of the hardware scan.
      #  ./hardware-configuration.nix
-     (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
+     # vscode-server managed via nixpkgs
 ];
 
 
