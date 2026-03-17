@@ -30,6 +30,9 @@
   # Shell prompts
     starship
 
+  # direnv
+    direnv
+
   # Utilities
     stow
     tree
@@ -53,8 +56,6 @@
   # - tailscale: via official script
   # =====================================================================
 
-  # Install direnv via nix (available in pkgs)
-  direnv
 
   # =====================================================================
   # ENVIRONMENT VARIABLES
