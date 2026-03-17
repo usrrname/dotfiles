@@ -1,4 +1,4 @@
-# Setting Up Dotfiles on Debian Trixie & Raspberry Pi 4
+Setting Up Dotfiles on Debian Trixie & Raspberry Pi 4
 
 Quick guide for setting up this dotfiles repository on Debian Trixie running on Raspberry Pi 4.
 
@@ -202,4 +202,3 @@ source ~/.bashrc
 # Create a symlink to the nvim binary in /usr/local/bin to make it available globally
 sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
 ```
-

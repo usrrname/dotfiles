@@ -1,7 +1,3 @@
-/Users/jenc/.dotfiles/linux/home.nix
-```
-
-```nix
 # linux/home.nix - Home Manager configuration for Linux (Debian/RPi)
 { config, pkgs, lib, ... }:
 
