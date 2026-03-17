@@ -61,6 +61,7 @@
   # ENVIRONMENT VARIABLES
   # =====================================================================
   home.stateVersion = "24.05";
+  home.username = "jenc";
 
   home.sessionVariables = {
     EDITOR = "nvim";
