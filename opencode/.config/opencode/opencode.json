@@ -4,5 +4,9 @@
   "instructions": [
     "AGENTS.md",
     ".cursor/rules/*"
+  ],
+  "plugin": [
+    "opencode-openmemory@latest",
+    "oh-my-opencode@latest"
   ]
 }
