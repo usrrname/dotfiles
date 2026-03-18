@@ -1,0 +1,225 @@
+// Zed settings
+//
+// For information on how to configure Zed, see the Zed
+// documentation: https://zed.dev/docs/configuring-zed
+//
+// To see all of Zed's default settings without changing your
+// custom settings, run `zed: open default settings` from the
+// command palette (cmd-shift-p / ctrl-shift-p)
+{
+  "git": {
+    "enable_status": true
+  },
+  "vim": {
+    "toggle_relative_line_numbers": true
+  },
+  "hover_popover_enabled": false,
+  "search": {
+    "button": true,
+  },
+  "which_key": {
+    "enabled": true,
+  },
+  "double_click_in_multibuffer": "open",
+  "language_models": {
+    "openai_compatible": {
+      "MiniMax-M2.5": {
+        "api_url": "https://api.minimax.io/v1",
+        "available_models": [
+          {
+            "name": "MiniMax-M2.5",
+            "max_tokens": 200000,
+            "max_output_tokens": 32000,
+            "max_completion_tokens": 200000,
+            "capabilities": {
+              "tools": true,
+              "images": true,
+              "parallel_tool_calls": true,
+              "prompt_cache_key": true,
+              "chat_completions": true,
+            },
+          },
+        ],
+      },
+    },
+  },
+  "terminal": {
+    "button": true,
+    "dock": "right",
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "close_position": "right",
+  },
+  "max_tabs": 6,
+  "on_last_window_closed": "quit_app",
+  "ssh_connections": [
+    {
+      "host": "house",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/jenc"],
+        },
+      ],
+    },
+    {
+      "host": "sink",
+      "username": "netserv",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/netserv"],
+        },
+      ],
+    },
+  ],
+  "languages": {
+    "Nix": {
+      "auto_indent_on_paste": false,
+      "use_on_type_format": false,
+      "show_edit_predictions": true,
+      "soft_wrap": "editor_width",
+      "language_servers": ["nixd"],
+    },
+  },
+  "context_servers": {
+    "varlock-docs-mcp": {
+      "command": "npx",
+      "args": ["mcp-remote", "https://docs.mcp.varlock.dev/mcp"],
+    },
+    "mcp-server-context7": {
+      "enabled": false,
+      "remote": false,
+      "settings": {},
+    },
+    "MiniMax": {
+      "enabled": true,
+      "remote": false,
+      "command": "uvx",
+      "args": ["minimax-coding-plan-mcp"],
+      "env": {
+        "MINIMAX_API_KEY": "op://Private/Minimax-M2.5/license key",
+        "MINIMAX_API_HOST": "https://api.minimax.io",
+      },
+    },
+    "mcp-server-github": {
+      "enabled": true,
+      "settings": {
+        "github_personal_access_token": "op://Private/Zed Github MCP/credential",
+      },
+    },
+  },
+  "use_system_window_tabs": true,
+  "bottom_dock_layout": "contained",
+  "current_line_highlight": "line",
+  "edit_predictions": {
+    "provider": "zed",
+    "disabled_globs": [".env*"],
+    "mode": "eager",
+  },
+  "disable_ai": false,
+  "outline_panel": {
+    "default_width": 320.0,
+  },
+  "agent": {
+    "single_file_review": true,
+    "inline_assistant_model": {
+      "provider": "Minimax",
+      "model": "MiniMax-M2.5",
+      "enable_thinking": false,
+    },
+    "dock": "right",
+    "favorite_models": [],
+    "show_turn_stats": false,
+    "tool_permissions": {
+      "default": "allow",
+    },
+    "enable_feedback": false,
+    "profiles": {
+      "ask": {
+        "name": "Ask",
+        "tools": {
+          "copy_path": true,
+          "diagnostics": true,
+          "fetch": true,
+          "list_directory": true,
+          "project_notifications": false,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "open": true,
+          "grep": true,
+          "thinking": true,
+          "web_search": true,
+          "terminal": true,
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {},
+      },
+    },
+    "default_profile": "write",
+    "default_model": {
+      "provider": "MiniMax-M2.5",
+      "model": "MiniMax-M2.5",
+    },
+    "model_parameters": [],
+  },
+  "project_panel": {
+    "button": true,
+    "entry_spacing": "standard",
+    "auto_fold_dirs": true,
+  },
+  "title_bar": {
+    "show_menus": false,
+    "show_sign_in": true,
+    "show_branch_icon": true,
+    "show_branch_name": true,
+    "show_user_menu": true,
+  },
+  "git_panel": {
+    "tree_view": true,
+  },
+  "redact_private_values": true,
+  "telemetry": {
+    "diagnostics": true,
+    "metrics": false,
+  },
+  "session": {
+    "trust_all_worktrees": true,
+  },
+  "vim_mode": true,
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Catppuccin Macchiato",
+    "dark": "Catppuccin Macchiato",
+  },
+  "base_keymap": "VSCode",
+  "status_bar": {
+    "cursor_position_button": true,
+    "active_encoding_button": "enabled",
+    "active_language_button": false,
+    "experimental.show": false,
+  },
+  "buffer_font_fallbacks": [
+    "Monaco",
+    "Courier New",
+    "monospace"
+  ],
+  "buffer_font_family": "Hacker",
+  "file_types": {
+    "nix": ["*.nix"],
+    "markdown": [
+      "*.mdx",
+      "*.mdx"
+    ],
+  },
+  "auto_indent_on_paste": false,
+  "use_on_type_format": false,
+  "show_edit_predictions": true,
+  "soft_wrap": "editor_width",
+  "ui_font_size": 16,
+  "buffer_font_size": 14.0,
+  "theme": "Catppuccin Macchiato",
+}

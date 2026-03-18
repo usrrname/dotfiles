@@ -1,0 +1,131 @@
+{
+  "terminal": {
+    "dock": "right"
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "close_position": "right"
+  },
+  "max_tabs": 8,
+  "on_last_window_closed": "quit_app",
+  "ssh_connections": [
+    {
+      "host": "house",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/jenc"]
+        }
+      ]
+    },
+    {
+      "host": "sink",
+      "username": "netserv",
+      "args": [],
+      "projects": [
+        {
+          "paths": ["/home/netserv"]
+        }
+      ]
+    }
+  ],
+  "context_servers": {
+    "mcp-server-github": {
+      "enabled": true,
+      "settings": {
+        "github_personal_access_token": ""
+      }
+    }
+  },
+  "use_system_window_tabs": true,
+  "bottom_dock_layout": "contained",
+  "current_line_highlight": "line",
+  "edit_predictions": {
+    "provider": "MiniMax-2.5",
+    "disabled_globs": [".env*"],
+    "mode": "eager"
+  },
+  "disable_ai": false,
+  "outline_panel": {
+    "default_width": 320.0
+  },
+  "agent": {
+    "inline_assistant_model": {
+      "provider": "copilot_chat",
+      "model": "claude-haiku-4.5"
+    },
+    "enable_feedback": false,
+    "profiles": {
+      "ask": {
+        "name": "Ask",
+        "tools": {
+          "copy_path": true,
+          "diagnostics": true,
+          "fetch": true,
+          "list_directory": true,
+          "project_notifications": false,
+          "now": true,
+          "find_path": true,
+          "read_file": true,
+          "open": true,
+          "grep": true,
+          "thinking": true,
+          "web_search": true,
+          "terminal": true
+        },
+        "enable_all_context_servers": false,
+        "context_servers": {}
+      }
+    },
+    "default_profile": "write",
+    "always_allow_tool_actions": true,
+    "default_model": {
+      "provider": "MiniMax",
+      "model": "minimax-m2.7"
+    },
+    "model_parameters": []
+  },
+  "project_panel": {
+    "entry_spacing": "standard",
+    "auto_fold_dirs": true
+  },
+  "title_bar": {
+    "show_branch_icon": true,
+    "show_branch_name": true,
+    "show_user_menu": true
+  },
+  "git_panel": {
+    "tree_view": true
+  },
+  "redact_private_values": true,
+  "telemetry": {
+    "diagnostics": true,
+    "metrics": false
+  },
+  "session": {
+    "trust_all_worktrees": true
+  },
+  "vim_mode": true,
+  "icon_theme": {
+    "mode": "dark",
+    "light": "Catppuccin Macchiato",
+    "dark": "Catppuccin Macchiato"
+  },
+  "base_keymap": "Cursor",
+  "status_bar": {
+    "experimental.show": true
+  },
+  "buffer_font_fallbacks": ["Monaco", "Courier New", ".ZedMono"],
+  "buffer_font_family": "Hacker",
+  "file_types": {
+    "markdown": ["*.mdx"]
+  },
+  "auto_indent_on_paste": false,
+  "use_on_type_format": false,
+  "show_edit_predictions": true,
+  "soft_wrap": "editor_width",
+  "ui_font_size": 16,
+  "buffer_font_size": 14.0,
+  "theme": "Catppuccin Macchiato"
+}
