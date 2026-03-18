@@ -54,3 +54,5 @@ zsh/custom/plugins/**
 *.bak*
 goose/**/*/githubcopilot/**
 ollama/**/*
+plans/**
+opencode/.config/opencode/plans/**
