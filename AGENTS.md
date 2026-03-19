@@ -29,6 +29,7 @@ Managed with stow. Supports macOS, Raspberry Pi (Debian), and NixOS.
 │   ├── zprofile/     # macOS: brew shellenv, OrbStack
 │   ├── iterm2/       # iTerm2 configuration
 │   ├── act/          # nektos/act configuration
+│   ├── husky/        # Git hooks
 │   └── yarn/         # Yarn configuration
 │
 ├── pi/               # Raspberry Pi only (stowed on Pi only)
