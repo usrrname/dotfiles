@@ -38,6 +38,7 @@ docker/.docker/**
 .env.secret
 cursor/.cursor/*
 .cursor/*
+macos/cursor/.cursor/*
 orbstack/.orbstack/*
 .yarnrc
 ./npm/.npmrc
@@ -56,3 +57,4 @@ goose/**/*/githubcopilot/**
 ollama/**/*
 plans/**
 opencode/.config/opencode/plans/**
+.git/*

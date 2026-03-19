@@ -55,11 +55,35 @@ After installing packages, symlink your dotfiles using the OS-aware stow script:
 ./stow-dotfiles.sh ""
 ```
 
-The script automatically:
-- **Stows common packages** on all systems (bash, zsh, nvim, git, etc.)
-- **Stows macOS-specific packages** on macOS only (see [setup-osx.md](setup-osx.md) for details)
-- **Skips OS-specific packages** on other systems (e.g., Raspberry Pi won't get macOS packages)
-- **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
+**Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
+
+## New Multi-OS Setup
+
+This repository uses OS-specific branches. Clone and checkout the branch for your operating system:
+
+**Ubuntu/Linux:**
+```bash
+git clone https://github.com/usrrname/dotfiles.git
+cd dotfiles
+git checkout ubuntu-main
+stow -v common linux
+```
+
+**macOS:**
+```bash
+git clone https://github.com/usrrname/dotfiles.git
+cd dotfiles
+git checkout macos-main
+stow -v common macos
+```
+
+**Raspberry Pi:**
+```bash
+git clone https://github.com/usrrname/dotfiles.git
+cd dotfiles
+git checkout pi-main
+stow -v common linux pi
+```
 
 ### Updating Dotfiles
 

@@ -1,0 +1,8 @@
+
+# Linux specific zprofile
+# Sources common .zprofile at start
+
+# Source common zprofile first
+if [ -f "$HOME/.zprofile.common" ]; then
+  source "$HOME/.zprofile.common"
+fi
