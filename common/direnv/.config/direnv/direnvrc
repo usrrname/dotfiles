@@ -7,6 +7,7 @@ export EDITOR='nvim'
 export SUDOEDITOR='nvim'
 export VISUAL='nvim'
 export PROMPT='~🧻 '
+
 # Suppress direnv export output
 export DIRENV_LOG_FORMAT=""
 

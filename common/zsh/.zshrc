@@ -54,9 +54,3 @@ devbox() {
 # uv
 eval "$(uv generate-shell-completion zsh)"
 export PATH="$HOME/.local/bin:$PATH"
-
-# Source OS-specific configuration at the end
-case "$OSTYPE" in
-  darwin*)   [ -f "$HOME/.zshrc.osx" ] && source "$HOME/.zshrc.osx" ;;
-  linux*)    [ -f "$HOME/.zshrc.linux" ] && source "$HOME/.zshrc.linux" ;;
-esac

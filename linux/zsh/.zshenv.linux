@@ -1,3 +1,0 @@
-# Linux-specific zshenv
-# Source common zshenv first (via .zshenv which sources .zshenv.linux at end)
-# Add Linux-specific environment variables here if needed

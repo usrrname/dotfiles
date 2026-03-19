@@ -1,7 +1,10 @@
-# Linux zshrc - sources .zshrc.linux at end
-# This file is stowed to ~/.zshrc on Linux
+# Linux specific zshrc
 
-# Source Linux-specific configuration
-if [ -f "$HOME/.zshrc.linux" ]; then
-  source "$HOME/.zshrc.linux"
-fi
+# Load fnm (Fast Node Manager)
+eval "$(fnm env --use-on-cd)"
+
+# uv
+eval "$(uv generate-shell-completion zsh)"
+
+# nvim
+export PATH="/opt/nvim/bin:$PATH"

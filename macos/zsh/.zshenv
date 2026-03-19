@@ -1,14 +1,7 @@
-# macOS zshenv
-# Sources common zshenv and adds macOS-specific environment
-
-DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
-
-# Source common base
-if [ -f "$DOTFILES_DIR/common/zsh/.zshenv" ]; then
-    source "$DOTFILES_DIR/common/zsh/.zshenv"
-fi
-
-# Source macOS-specific environment
-if [ -f "$DOTFILES_DIR/macos/zsh/.zshenv.osx" ]; then
-    source "$DOTFILES_DIR/macos/zsh/.zshenv.osx"
-fi
+# macOS specific environment
+# don't create .DS_Store files on network volumes
+defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+# don't create .DS_Store files on USB volumes
+defaults write com.apple.desktopServices DSDontWriteUSBStores -bool true
+# show hidden files in Finder by default
+defaults write com.apple.finder AppleShowAllFiles YES
