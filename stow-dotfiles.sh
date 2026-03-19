@@ -94,6 +94,9 @@ if [[ "$STOW_FLAGS" == "--adopt" ]]; then
 		unstow_package "$pkg" macos 2>/dev/null || true
 	done
 	rm -f ~/.config/.DS_Store ~/.DS_Store 2>/dev/null || true
+	if [[ "$OS" == "Darwin" ]]; then
+		find . -name ".DS_Store" -delete 2>/dev/null || true
+	fi
 
 	find ~ -maxdepth 2 -type l -name ".*" 2>/dev/null | while read -r link; do
 		link_target=$(readlink "$link" 2>/dev/null || true)
