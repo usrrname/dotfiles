@@ -1,6 +1,6 @@
 # Dotfiles
 
-Managed with stow. Supports macOS, Raspberry Pi (Debian), and NixOS.
+Managed with stow. Supports macOS, Linux (Debian/Ubuntu), Raspberry Pi, and NixOS.
 
 ## Repository Structure
 
@@ -8,7 +8,7 @@ Managed with stow. Supports macOS, Raspberry Pi (Debian), and NixOS.
 .dotfiles/
 ├── common/          # Shared (stowed on ALL OS)
 │   ├── bash/         # Bash shell configuration
-│   ├── git/          # Git configuration (shared user/aliases)
+│   ├── git/          # Git ignore (shared)
 │   ├── nvim/         # Neovim/LazyVim configuration
 │   ├── ssh/          # SSH configuration
 │   ├── docker/       # Docker configuration
@@ -16,65 +16,59 @@ Managed with stow. Supports macOS, Raspberry Pi (Debian), and NixOS.
 │   ├── direnv/       # direnv configuration
 │   ├── vim/          # Vim configuration
 │   ├── op/           # 1Password CLI configuration
-│   ├── opencode/     # OpenCode configuration
-│   ├── zsh/          # Shared zsh config (sources OS-specific at end)
-│   └── zprofile/     # Shared zprofile (direnv, pyenv)
+│   └── opencode/     # OpenCode configuration
 │
-├── linux/            # Ubuntu/Linux (stowed on Linux + Pi)
-│   ├── zsh/          # Linux: fnm, uv, nvim path, .zshrc.linux
-│   └── zprofile/     # Linux-specific zprofile
+├── linux/            # Linux (stowed on Debian/Ubuntu + Pi)
+│   ├── git/          # Linux gitconfig (op-ssh-sign path)
+│   ├── zsh/          # Linux zsh (fnm, uv, nvim path)
+│   └── zprofile/     # Linux zprofile
 │
-├── macos/            # macOS only (stowed on macOS only)
-│   ├── zsh/          # macOS: Homebrew, pnpm, mysql, SSH_AUTH_SOCK
-│   ├── zprofile/     # macOS: brew shellenv, OrbStack
+├── macos/            # macOS only
+│   ├── git/          # macOS gitconfig (1Password SSH signing)
+│   ├── zsh/          # macOS zsh (Homebrew, pnpm, SSH_AUTH_SOCK)
+│   ├── zprofile/     # macOS zprofile
 │   ├── iterm2/       # iTerm2 configuration
 │   ├── act/          # nektos/act configuration
 │   ├── husky/        # Git hooks
-│   ├── yarn/         # Yarn configuration
 │   └── verdaccio/    # Local npm registry
 │
-├── pi/               # Raspberry Pi only (stowed on Pi only)
-│   └── (Pi-specific configs)
+├── bin/
+│   └── init.sh       # Auto-detect OS, sparse-checkout, stow
 │
-├── scripts/          # Setup and maintenance scripts
+├── scripts/          # Setup scripts
 ├── test/             # Bats tests
-└── nix/              # NixOS configuration (not auto-stowed)
+└── nix/              # NixOS configuration (copied to /etc/nixos on NixOS)
 ```
 
-## OS-Specific Branches
+## Setup
 
-| Branch | Purpose |
-|--------|---------|
-| `main` | Base - shared/common files only |
-| `ubuntu-main` | `main` + Ubuntu/Linux zsh configs |
-| `macos-main` | `main` + macOS zsh, zprofile, iterm2, cursor |
-| `pi-main` | `main` + Debian/Pi specific |
-
-## Installation
-
-**Ubuntu/Linux:**
 ```bash
 git clone https://github.com/usrrname/dotfiles.git
 cd dotfiles
-git checkout ubuntu-main
-stow -v common linux
+./bin/init.sh
 ```
 
-**macOS:**
+The init script:
+1. Detects your OS (macOS, Linux, or NixOS)
+2. Configures git sparse-checkout to only checkout relevant files
+3. **macOS/Linux**: Runs stow to create symlinks
+4. **NixOS**: Copies configuration and runs `nixos-rebuild switch`
+
+## Manual Stow
+
 ```bash
-git clone https://github.com/usrrname/dotfiles.git
-cd dotfiles
-git checkout macos-main
-stow -v common macos
+# Stow all (auto-detects OS)
+./stow-dotfiles.sh
+
+# Stow without adopting
+./stow-dotfiles.sh ""
 ```
 
-**Raspberry Pi:**
-```bash
-git clone https://github.com/usrrname/dotfiles.git
-cd dotfiles
-git checkout pi-main
-stow -v common linux pi
-```
+## Notes
+
+- `nix/` is not stowed - managed via NixOS configuration
+- OS-specific files (zsh, zprofile, git) replace common versions
+- Use `--adopt` flag to overwrite existing files
 
 If AGENTS.md does not exist, refer to:
 .cursor/rules/*
