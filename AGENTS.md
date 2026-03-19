@@ -30,7 +30,8 @@ Managed with stow. Supports macOS, Raspberry Pi (Debian), and NixOS.
 │   ├── iterm2/       # iTerm2 configuration
 │   ├── act/          # nektos/act configuration
 │   ├── husky/        # Git hooks
-│   └── yarn/         # Yarn configuration
+│   ├── yarn/         # Yarn configuration
+│   └── verdaccio/    # Local npm registry
 │
 ├── pi/               # Raspberry Pi only (stowed on Pi only)
 │   └── (Pi-specific configs)
