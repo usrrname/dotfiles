@@ -57,4 +57,16 @@ goose/**/*/githubcopilot/**
 ollama/**/*
 plans/**
 opencode/.config/opencode/plans/**
-.git/*
+# Ignore all dotfiles at root (except tracked directories)
+.*
+!.gitignore
+!.gitmodules
+
+# Keep tracked directories
+!common/
+!linux/
+!macos/
+!nix/
+!bin/
+!scripts/
+!test/
