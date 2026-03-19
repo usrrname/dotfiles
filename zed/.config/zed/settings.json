@@ -159,7 +159,7 @@
         "context_servers": {},
       },
     },
-    "default_profile": "write",
+    "default_profile": "minimal",
     "default_model": {
       "provider": "MiniMax-M2.5",
       "model": "MiniMax-M2.5",
@@ -172,7 +172,7 @@
     "auto_fold_dirs": true,
   },
   "title_bar": {
-    "show_menus": false,
+    "show_menus": true,
     "show_sign_in": true,
     "show_branch_icon": true,
     "show_branch_name": true,
