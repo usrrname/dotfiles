@@ -36,6 +36,7 @@ COMMON=(
 	gh
 	op
 	vim
+	zed
 	zsh
 	zprofile
 )
