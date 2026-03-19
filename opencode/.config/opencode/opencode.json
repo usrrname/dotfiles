@@ -7,6 +7,8 @@
   ],
   "plugin": [
     "opencode-openmemory@latest",
-    "oh-my-opencode@latest"
-  ]
+    "oh-my-opencode@latest",
+    "opencode-speech-to-text@latest"
+  ],
+  "default_agent": "build"
 }

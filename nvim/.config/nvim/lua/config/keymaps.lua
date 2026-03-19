@@ -15,8 +15,8 @@ vim.keymap.set({ "n", "v" }, "<leader>y", '"+y') -- yank motion
 -- Paste from system clipboard
 vim.keymap.set("n", "<leader>p", '"+p') -- paste after cursor
 
--- Reload LazyVim configuration
-vim.keymap.set("n", "<leader>r", function()
+-- Reload LazyVim configuration with space+rl
+vim.keymap.set("n", "<leader>rl", function()
 	vim.cmd("Lazy reload")
 	vim.cmd("Lazy sync")
 end, { desc = "Reload Config" })
