@@ -29,7 +29,6 @@ fi
 COMMON=(
 	bash
 	nvim
-	git
 	direnv
 	ssh
 	docker
@@ -40,11 +39,13 @@ COMMON=(
 )
 
 LINUX=(
+	git
 	zsh
 	zprofile
 )
 
 MACOS=(
+	git
 	act
 	iterm2
 	yarn
