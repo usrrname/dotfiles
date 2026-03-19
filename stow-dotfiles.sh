@@ -40,30 +40,25 @@ COMMON=(
 	zprofile
 )
 
-LINUX_PACKAGES=(
-	zsh
-	zprofile
-)
-
 MACOS_PACKAGES=(
 	act
 	iterm2
-	zsh
-	zprofile
 	yarn
+	husky
 )
 
 stow_package() {
 	local pkg="$1"
-	if [[ -d "$pkg" ]] && [[ -n "$(ls -A "$pkg" 2>/dev/null)" ]]; then
+	local dir="${2:-common}"
+	if [[ -d "$dir/$pkg" ]] && [[ -n "$(ls -A "$dir/$pkg" 2>/dev/null)" ]]; then
 		echo "Stowing $pkg..."
-		if stow $STOW_FLAGS -d common "$pkg" 2>/dev/null; then
+		if stow $STOW_FLAGS -d "$dir" "$pkg" 2>/dev/null; then
 			echo "   $pkg stowed successfully"
 		else
 			echo "   Warning: Could not stow $pkg"
 		fi
 	else
-		echo "Skipping $pkg (directory doesn't exist or is empty)"
+		echo "Skipping $dir/$pkg (directory doesn't exist or is empty)"
 	fi
 }
 
@@ -72,14 +67,14 @@ echo ""
 
 echo "Stowing common packages..."
 for pkg in "${COMMON[@]}"; do
-	stow_package "$pkg"
+	stow_package "$pkg" common
 done
 
 if [[ "$OS" == "Darwin" ]]; then
 	echo ""
 	echo "Stowing macOS-specific packages..."
 	for pkg in "${MACOS_PACKAGES[@]}"; do
-		stow_package "$pkg"
+		stow_package "$pkg" macos
 	done
 fi
 
