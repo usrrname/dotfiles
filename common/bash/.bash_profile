@@ -10,5 +10,8 @@ fi
 
 # Set up fzf key bindings and fuzzy completion
 eval "$(fzf --bash)"
-eval "$(devbox global shellenv --init-hook)"
+# If devbox exists, initialize it
+if [ -f "$HOME/.devbox/shellenv" ]; then
+  eval "$(devbox global shellenv --init-hook)"
+fi
 eval "$(direnv hook bash)"

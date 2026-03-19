@@ -1,9 +1,0 @@
-# Linux 1Password SSH signing
-[gpg]
-  format = ssh
-
-[gpg "ssh"]
-	program = "/usr/bin/op-ssh-sign"
-
-[commit]
-  gpgsign = true

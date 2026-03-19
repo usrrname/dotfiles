@@ -1,7 +1,5 @@
 # dotfiles
 
-[![Built with Devbox](https://www.jetify.com/img/devbox/shield_moon.svg)](https://www.jetify.com/devbox/docs/contributor-quickstart/)
-
 Dotfiles setup made with:
 - [stow](https://www.gnu.org/software/stow/)
 
@@ -18,7 +16,7 @@ The setup script automatically detects your operating system and runs the approp
 **Supported Systems:**
 - [macOS setup](setup-osx.md) based on [mac.install.guide](https://mac.install.guide/) tested with [Bats](https://github.com/bats-core/bats-core) (see [setup-osx.md](setup-osx.md))
 - [Raspberry Pi 4 setup](setup-pi.md) running Debian Trixie
-- **NixOS** - Package management via `/etc/nixos/configuration.nix` (setup script provides guidance, stow script works normally)
+- **NixOS** - Managed via `/etc/nixos/configuration.nix` (auto-configured by `bin/init.sh`)
 
 ```bash
 # Install packages (auto-detects OS)
@@ -55,8 +53,6 @@ After installing packages, symlink your dotfiles using the OS-aware stow script:
 ./stow-dotfiles.sh ""
 ```
 
-**Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
-
 ## Setup
 
 Clone the repository and run the init script — it auto-detects your OS and configures everything:
@@ -70,9 +66,8 @@ cd dotfiles
 The init script:
 1. Detects your OS (macOS, Linux, or NixOS)
 2. Configures git sparse-checkout to only checkout relevant files
-3. Runs stow to create symlinks
-
-**Note**: NixOS users should manage dotfiles via `/etc/nixos/configuration.nix` instead.
+3. **macOS/Linux**: Runs stow to create symlinks
+4. **NixOS**: Copies configuration and runs `nixos-rebuild switch`
 
 ### Updating Dotfiles
 
