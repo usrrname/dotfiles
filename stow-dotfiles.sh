@@ -60,7 +60,7 @@ unstow_all() {
 	for pkg in "${COMMON[@]}" "${LINUX[@]}" "${MACOS[@]}"; do
 		for dir in common linux macos; do
 			if [[ -d "$dir/$pkg" ]]; then
-				stow -D -d "$dir" "$pkg" 2>/dev/null || true
+				stow -D -d "$dir" -t ~ "$pkg" 2>/dev/null || true
 			fi
 		done
 	done
@@ -92,7 +92,7 @@ stow_package() {
 			find "$dir/$pkg" -name ".DS_Store" -delete 2>/dev/null || true
 		fi
 		local stow_output
-		stow_output=$(stow $STOW_FLAGS -d "$dir" "$pkg" 2>&1) && {
+		stow_output=$(stow $STOW_FLAGS -d "$dir" -t ~ "$pkg" 2>&1) && {
 			echo "   $pkg stowed successfully"
 		} || {
 			echo "   Warning: Could not stow $pkg"

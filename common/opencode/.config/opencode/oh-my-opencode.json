@@ -29,7 +29,7 @@
       "model": "opencode/kimi-k2.5"
     },
     "sisyphus": {
-      "model": "opencode/kimi-k2.5"
+      "model": "MiniMax-M2.7 MiniMax (minimax.io)"
     },
     "sisyphus-junior": {
       "model": "opencode/gpt-5-nano"
