@@ -45,6 +45,7 @@ MACOS_PACKAGES=(
 	iterm2
 	yarn
 	husky
+	verdaccio
 )
 
 stow_package() {
