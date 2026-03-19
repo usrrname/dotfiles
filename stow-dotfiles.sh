@@ -34,6 +34,7 @@ COMMON=(
 	docker
 	gh
 	op
+	opencode
 	vim
 	zed
 )
