@@ -58,6 +58,12 @@ stow_package() {
 	local pkg="$1"
 	local dir="${2:-common}"
 	if [[ -d "$dir/$pkg" ]] && [[ -n "$(ls -A "$dir/$pkg" 2>/dev/null)" ]]; then
+		if [[ "$STOW_FLAGS" != "--adopt" ]]; then
+			local existing=$(find "$dir/$pkg" -type f -exec test -e ~/{} \; -print 2>/dev/null | head -5)
+			if [[ -n "$existing" ]]; then
+				echo "   Warning: Existing files will be replaced: $existing"
+			fi
+		fi
 		echo "Stowing $pkg..."
 		if stow $STOW_FLAGS -d "$dir" "$pkg" 2>/dev/null; then
 			echo "   $pkg stowed successfully"
@@ -69,8 +75,35 @@ stow_package() {
 	fi
 }
 
+unstow_package() {
+	local pkg="$1"
+	local dir="${2:-common}"
+	if [[ -d "$dir/$pkg" ]]; then
+		stow -D -d "$dir" "$pkg" 2>/dev/null || true
+	fi
+}
+
 echo "Setting up dotfiles for $OS..."
 echo ""
+
+if [[ "$STOW_FLAGS" == "--adopt" ]]; then
+	echo "Cleaning old symlinks and .DS_Store files..."
+	for pkg in "${COMMON[@]}" "${LINUX[@]}" "${MACOS[@]}"; do
+		unstow_package "$pkg" common 2>/dev/null || true
+		unstow_package "$pkg" linux 2>/dev/null || true
+		unstow_package "$pkg" macos 2>/dev/null || true
+	done
+	rm -f ~/.config/.DS_Store ~/.DS_Store 2>/dev/null || true
+
+	find ~ -maxdepth 2 -type l -name ".*" 2>/dev/null | while read -r link; do
+		link_target=$(readlink "$link" 2>/dev/null || true)
+		if [[ "$link_target" == *".dotfiles/"* ]] && [[ "$link_target" != *".dotfiles/common/"* ]] && [[ "$link_target" != *".dotfiles/macos/"* ]] && [[ "$link_target" != *".dotfiles/linux/"* ]]; then
+			echo "   Removing old symlink: $link -> $link_target"
+			rm -f "$link"
+		fi
+	done
+	echo ""
+fi
 
 echo "Stowing common packages..."
 for pkg in "${COMMON[@]}"; do
