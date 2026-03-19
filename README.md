@@ -66,7 +66,7 @@ This repository uses OS-specific branches. Clone and checkout the branch for you
 git clone https://github.com/usrrname/dotfiles.git
 cd dotfiles
 git checkout ubuntu-main
-stow -v common linux
+./stow-dotfiles.sh
 ```
 
 **macOS:**
@@ -74,15 +74,15 @@ stow -v common linux
 git clone https://github.com/usrrname/dotfiles.git
 cd dotfiles
 git checkout macos-main
-stow -v common macos
+./stow-dotfiles.sh
 ```
 
 **Raspberry Pi:**
 ```bash
 git clone https://github.com/usrrname/dotfiles.git
 cd dotfiles
-git checkout pi-main
-stow -v common linux pi
+git checkout ubuntu-main  # Use ubuntu-main for Pi (Debian-based)
+./stow-dotfiles.sh
 ```
 
 ### Updating Dotfiles
