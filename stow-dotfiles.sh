@@ -37,16 +37,21 @@ COMMON=(
 	op
 	vim
 	zed
+)
+
+LINUX=(
 	zsh
 	zprofile
 )
 
-MACOS_PACKAGES=(
+MACOS=(
 	act
 	iterm2
 	yarn
 	husky
 	verdaccio
+	zsh
+	zprofile
 )
 
 stow_package() {
@@ -75,8 +80,14 @@ done
 if [[ "$OS" == "Darwin" ]]; then
 	echo ""
 	echo "Stowing macOS-specific packages..."
-	for pkg in "${MACOS_PACKAGES[@]}"; do
+	for pkg in "${MACOS[@]}"; do
 		stow_package "$pkg" macos
+	done
+elif [[ "$OS" == "Linux" ]] && [[ "$IS_NIXOS" == "false" ]]; then
+	echo ""
+	echo "Stowing Linux-specific packages..."
+	for pkg in "${LINUX[@]}"; do
+		stow_package "$pkg" linux
 	done
 fi
 

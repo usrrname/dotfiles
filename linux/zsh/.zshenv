@@ -1,12 +1,14 @@
-# Linux zshenv - sources common .zshenv and adds Linux-specific env
-# This file is stowed to ~/.zshenv on Linux
+# Linux zshenv
+# Sources common zshenv and adds Linux-specific environment
 
-# Source common zshenv
-if [ -f "$HOME/.zshenv.common" ]; then
-  source "$HOME/.zshenv.common"
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+
+# Source common base
+if [ -f "$DOTFILES_DIR/common/zsh/.zshenv" ]; then
+    source "$DOTFILES_DIR/common/zsh/.zshenv"
 fi
 
-# Source Linux-specific zshenv if it exists
-if [ -f "$HOME/.zshenv.linux" ]; then
-  source "$HOME/.zshenv.linux"
+# Source Linux-specific environment
+if [ -f "$DOTFILES_DIR/linux/zsh/.zshenv.linux" ]; then
+    source "$DOTFILES_DIR/linux/zsh/.zshenv.linux"
 fi

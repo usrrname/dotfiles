@@ -1,7 +1,9 @@
-# Linux zprofile - sources .zprofile.linux at end
-# This file is stowed to ~/.zprofile on Linux
 
-# Source Linux-specific configuration
-if [ -f "$HOME/.zprofile.linux" ]; then
-  source "$HOME/.zprofile.linux"
+# Linux zprofile - sources common and adds Linux-specific config
+
+DOTFILES_DIR="${DOTFILES_DIR:-$HOME/.dotfiles}"
+
+# Source common zprofile first
+if [ -f "$DOTFILES_DIR/common/zprofile/.zprofile" ]; then
+    source "$DOTFILES_DIR/common/zprofile/.zprofile"
 fi
