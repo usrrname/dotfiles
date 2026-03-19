@@ -68,14 +68,15 @@ unstow_all() {
 clean_symlinks() {
 	echo "Cleaning existing symlinks pointing to .dotfiles..."
 
+	find ~ -maxdepth 3 -type l 2>/dev/null | while read -r link; do
+		target=$(readlink "$link" 2>/dev/null || true)
+		if [[ "$target" == *".dotfiles/"* ]]; then
+			echo "   Removing: $link -> $target"
+			rm -f "$link"
+		fi
+	done
+
 	if [[ "$OS" == "Darwin" ]]; then
-		find ~ -maxdepth 3 -type l 2>/dev/null | while read -r link; do
-			target=$(readlink "$link" 2>/dev/null || true)
-			if [[ "$target" == *".dotfiles/"* ]]; then
-				echo "   Removing: $link -> $target"
-				rm -f "$link"
-			fi
-		done
 		find . -name ".DS_Store" -delete 2>/dev/null || true
 		rm -f ~/.config/.DS_Store ~/.DS_Store 2>/dev/null || true
 	fi
@@ -86,11 +87,16 @@ stow_package() {
 	local dir="${2:-common}"
 	if [[ -d "$dir/$pkg" ]] && [[ -n "$(ls -A "$dir/$pkg" 2>/dev/null)" ]]; then
 		echo "Stowing $pkg..."
-		if stow $STOW_FLAGS -d "$dir" "$pkg" 2>/dev/null; then
-			echo "   $pkg stowed successfully"
-		else
-			echo "   Warning: Could not stow $pkg"
+		if [[ "$OS" == "Darwin" ]]; then
+			find "$dir/$pkg" -name ".DS_Store" -delete 2>/dev/null || true
 		fi
+		local stow_output
+		stow_output=$(stow $STOW_FLAGS -d "$dir" "$pkg" 2>&1) && {
+			echo "   $pkg stowed successfully"
+		} || {
+			echo "   Warning: Could not stow $pkg"
+			echo "   Error: $stow_output"
+		}
 	else
 		echo "Skipping $dir/$pkg (directory doesn't exist or is empty)"
 	fi
