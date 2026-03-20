@@ -8,6 +8,8 @@ vim.opt.clipboard = "unnamedplus"
 -- Hide unnamed buffer from tabline
 vim.opt.shortmess:append("S")
 
+vim.g.mini_starter_autoopen = false
+
 -- disable markdownlint noise --
 vim.g.render_markdown = {
 	lint = {
