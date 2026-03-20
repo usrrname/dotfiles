@@ -3,7 +3,8 @@
   "autoupdate": true,
   "instructions": [
     "AGENTS.md",
-    ".cursor/rules/*"
+    ".cursor/rules/*",
+    "commit-conventions.md"
   ],
   "plugin": [
     "opencode-openmemory@latest",
