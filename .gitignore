@@ -34,6 +34,7 @@ docker/.docker/**
 !docker/.docker/config.json
 !docker/.docker/daemon.json
 .env*
+!.envrc
 .env.d.ts
 .env.secret
 cursor/.cursor/*
@@ -61,6 +62,7 @@ opencode/.config/opencode/plans/**
 .*
 !.gitignore
 !.gitmodules
+!.envrc
 
 
 # Keep tracked directories
