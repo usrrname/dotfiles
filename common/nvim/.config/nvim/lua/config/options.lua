@@ -5,6 +5,9 @@ vim.g.mapleader = " "
 vim.g.autoformat = true
 vim.opt.clipboard = "unnamedplus"
 
+-- Hide unnamed buffer from tabline
+vim.opt.shortmess:append("S")
+
 -- disable markdownlint noise --
 vim.g.render_markdown = {
 	lint = {

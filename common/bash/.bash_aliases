@@ -25,9 +25,9 @@ extract() {
 }
 # check if bash is the current shell
 if [$SHELL === '/bin/bash']; then
-    alias reload='source ~/.bashrc'
+  alias reload='source ~/.bashrc'
 fi
-
+# Linux
 alias update='sudo apt update && sudo apt upgrade'
 alias install='sudo apt install'
 alias remove='sudo apt remove'
@@ -54,7 +54,7 @@ alias cc='claude code'
 alias vi='/opt/nvim/bin/nvim'
 alias nvim='/opt/nvim/bin/nvim'
 alias sudov='sudo -e'
-# soft shutdown/restart
+# soft shutdown/restart - NAS Pi only
 alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'
 alias docker-compose='docker compose'
 # kubernetes

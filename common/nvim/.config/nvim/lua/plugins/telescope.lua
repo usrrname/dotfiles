@@ -38,6 +38,12 @@ return {
 						".next/",
 						".turbo/",
 						".wrangler/",
+						".cache/",
+						"nix/store/",
+						"tmp/",
+						".venv",
+						"build/",
+						"results/",
 					},
 				})
 			end,

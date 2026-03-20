@@ -50,6 +50,7 @@ cd dotfiles
 ```
 
 The init script:
+
 1. Detects your OS (macOS, Linux, or NixOS)
 2. Configures git sparse-checkout to only checkout relevant files
 3. **macOS/Linux**: Runs stow to create symlinks
@@ -69,7 +70,7 @@ The init script:
 
 Stow maps `common/[pkg]/.config/[pkg]/` → `~/.config/[pkg]/`.
 
-### Steps to add a new ~/.config package (e.g., `mc`):
+### Steps to add a new ~/.config package (e.g., `mc`)
 
 ```bash
 # 1. Create directory structure
@@ -88,9 +89,10 @@ rm -rf ~/.config/mc
 ./stow-dotfiles.sh
 ```
 
-### For packages needing exclusion (symlinks cause issues):
+### For packages needing exclusion (symlinks cause issues)
 
 Add to `.stow-local-ignore` (one per line):
+
 - `op` — 1Password CLI refuses to follow symlinks for config files
 
 ## Notes
@@ -101,4 +103,5 @@ Add to `.stow-local-ignore` (one per line):
 
 If AGENTS.md does not exist, refer to:
 .cursor/rules/*
-.rules/*
+.rules/* for zed
+.claude/*
