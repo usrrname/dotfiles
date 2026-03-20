@@ -92,13 +92,38 @@ This will:
 - **Verify symlinks**: `ls -la ~ | grep "\->"`
 - **macOS-specific**: See [setup-osx.md](setup-osx.md) for additional troubleshooting
 
+## Adding a New Config Package
+
+Want to add `~/.config/someapp` to your dotfiles? Here's how:
+
+```bash
+# 1. Create the directory structure in your dotfiles repo
+mkdir -p common/someapp/.config/someapp
+
+# 2. Copy your existing config into it
+cp -r ~/.config/someapp/* common/someapp/.config/someapp/
+
+# 3. Remove the original (stow will recreate it as a symlink)
+rm -rf ~/.config/someapp
+
+# 4. Add the package name to the COMMON array in stow-dotfiles.sh
+# COMMON=(... someapp ...)
+
+# 5. Run stow to create the symlinks
+./stow-dotfiles.sh
+```
+
+That's it! Your config is now tracked in git and symlinked to `~/.config/someapp`.
+
+**Note:** Some tools (like the 1Password CLI) don't work with symlinks. For those, add the package name to `.stow-local-ignore` instead — this tells stow to skip it entirely.
+
 ### Contents
 - [dotfiles](#dotfiles)
   - [Quick Start](#quick-start)
     - [Symlinking Dotfiles](#symlinking-dotfiles)
     - [Updating Dotfiles](#updating-dotfiles)
   - [Troubleshooting](#troubleshooting)
-    - [Contents](#contents)
+  - [Adding a New Config Package](#adding-a-new-config-package)
   - [Maintenance](#maintenance)
   - [act](#act)
   - [Symlinking](#symlinking)

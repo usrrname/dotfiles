@@ -33,6 +33,7 @@ COMMON=(
 	ssh
 	docker
 	gh
+	mc
 	op
 	opencode
 	vim

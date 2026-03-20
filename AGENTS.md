@@ -14,6 +14,7 @@ Managed with stow. Supports macOS, Linux (Debian/Ubuntu), Raspberry Pi, and NixO
 │   ├── docker/       # Docker configuration
 │   ├── gh/           # GitHub CLI configuration
 │   ├── direnv/       # direnv configuration
+│   ├── mc/           # Midnight Commander configuration
 │   ├── vim/          # Vim configuration
 │   ├── op/           # 1Password CLI configuration
 │   └── opencode/     # OpenCode configuration
@@ -63,6 +64,34 @@ The init script:
 # Stow without adopting
 ./stow-dotfiles.sh ""
 ```
+
+## Adding a ~/.config Package to Dotfiles
+
+Stow maps `common/[pkg]/.config/[pkg]/` → `~/.config/[pkg]/`.
+
+### Steps to add a new ~/.config package (e.g., `mc`):
+
+```bash
+# 1. Create directory structure
+mkdir -p common/mc/.config/mc
+
+# 2. Copy existing config
+cp -r ~/.config/mc/* common/mc/.config/mc/
+
+# 3. Remove original (stow will recreate as symlink)
+rm -rf ~/.config/mc
+
+# 4. Add to COMMON array in stow-dotfiles.sh
+# COMMON=(... mc ...)
+
+# 5. Stow
+./stow-dotfiles.sh
+```
+
+### For packages needing exclusion (symlinks cause issues):
+
+Add to `.stow-local-ignore` (one per line):
+- `op` — 1Password CLI refuses to follow symlinks for config files
 
 ## Notes
 
