@@ -4,7 +4,8 @@
   "instructions": [
     "AGENTS.md",
     ".cursor/rules/*",
-    "commit-conventions.md"
+    "$HOME/.dotfiles/common/opencode/rules/commit-conventions.md",
+    "$HOME/.dotfiles/common/opencode/rules/communication-style.md"
   ],
   "plugin": [
     "opencode-openmemory@latest",
