@@ -1,6 +1,7 @@
 # dotfiles
 
 Dotfiles setup made with:
+
 - [stow](https://www.gnu.org/software/stow/)
 
 - [direnv](https://direnv.net) w/ global config in `~/.config/direnv/direnvrc`
@@ -9,11 +10,12 @@ Dotfiles setup made with:
 
 ## Quick Start
 
-The setup script automatically detects your operating system and runs the appropriate installer. 
+The setup script automatically detects your operating system and runs the appropriate installer.
 
 **No special requirements** - works with standard shells on supported systems.
 
 **Supported Systems:**
+
 - [macOS setup](setup-osx.md) based on [mac.install.guide](https://mac.install.guide/) tested with [Bats](https://github.com/bats-core/bats-core) (see [setup-osx.md](setup-osx.md))
 - [Raspberry Pi 4 setup](setup-pi.md) running Debian Trixie
 - **NixOS** - Managed via `/etc/nixos/configuration.nix` (auto-configured by `bin/init.sh`)
@@ -33,11 +35,13 @@ The setup script automatically detects your operating system and runs the approp
 ```
 
 The script will automatically:
+
 - **macOS**: Run `scripts/setup-osx.sh` (uses Homebrew)
 - **Linux (Debian/Ubuntu)**: Run `scripts/setup-linux.sh` (uses APT)
 - **NixOS**: Shows guidance (package management via configuration.nix)
 
 You can still run the OS-specific scripts directly if needed:
+
 - `./scripts/setup-osx.sh` for macOS
 - `./scripts/setup-linux.sh` for Linux
 
@@ -64,6 +68,7 @@ cd dotfiles
 ```
 
 The init script:
+
 1. Detects your OS (macOS, Linux, or NixOS)
 2. Configures git sparse-checkout to only checkout relevant files
 3. **macOS/Linux**: Runs stow to create symlinks
@@ -79,6 +84,7 @@ After pulling updates from the repository, use the update script to sync everyth
 ```
 
 This will:
+
 1. Pull latest changes from git
 2. Update git submodules
 3. Install any new packages (setup scripts check if already installed)
@@ -118,6 +124,7 @@ That's it! Your config is now tracked in git and symlinked to `~/.config/someapp
 **Note:** Some tools (like the 1Password CLI) don't work with symlinks. For those, add the package name to `.stow-local-ignore` instead — this tells stow to skip it entirely.
 
 ### Contents
+
 - [dotfiles](#dotfiles)
   - [Quick Start](#quick-start)
     - [Symlinking Dotfiles](#symlinking-dotfiles)
@@ -130,7 +137,6 @@ That's it! Your config is now tracked in git and symlinked to `~/.config/someapp
   - [Nvim/LazyVim](#nvimlazyvim)
   - [1Password](#1password)
   - [Devbox](#devbox)
-
 
 ## Maintenance
 
@@ -181,6 +187,7 @@ Refresh and sync plugins (interactive)
 :Lazy clean
 :Lazy sync
 ```
+
 ## 1Password
 
 ```bash
@@ -229,8 +236,10 @@ devbox version update # update devbox to the latest version
 devbox shell # initialize the devbox shell
 devbox generate direnv # generate a direnvrc file
 ```
+
 Clean up packages in nix store
 
 ```bash
 devbox run -- nix store gc --extra-experimental-features nix-command
 ```
+

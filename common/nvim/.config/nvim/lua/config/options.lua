@@ -20,6 +20,8 @@ vim.g.render_markdown = {
 			MD013 = false,
 			-- Disable trailing punctuation in headings
 			MD026 = false,
+			-- Disable blanks around headings
+			MD022 = false,
 		},
 	},
 }
