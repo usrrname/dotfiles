@@ -7,6 +7,13 @@
     "$HOME/.dotfiles/common/opencode/.config/opencode/skills/commit-conventions.md",
     "$HOME/.dotfiles/common/opencode/.config/opencode/skills/communication-style.md"
   ],
+  "mcp": {
+    "varlock-docs-mcp": {
+      "type": "remote",
+      "url": "https://docs.mcp.varlock.dev/mcp",
+      "enabled": true
+    }
+  },
   "plugin": [
     "opencode-openmemory@latest",
     "oh-my-opencode@latest",
