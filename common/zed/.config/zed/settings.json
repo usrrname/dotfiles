@@ -60,7 +60,9 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/jenc"],
+          "paths": [
+            "/home/jenc"
+          ],
         },
       ],
     },
@@ -70,7 +72,9 @@
       "args": [],
       "projects": [
         {
-          "paths": ["/home/netserv"],
+          "paths": [
+            "/home/netserv"
+          ],
         },
       ],
     },
@@ -81,13 +85,18 @@
       "use_on_type_format": false,
       "show_edit_predictions": true,
       "soft_wrap": "editor_width",
-      "language_servers": ["nixd"],
+      "language_servers": [
+        "nixd"
+      ],
     },
   },
   "context_servers": {
     "varlock-docs-mcp": {
       "command": "npx",
-      "args": ["mcp-remote", "https://docs.mcp.varlock.dev/mcp"],
+      "args": [
+        "mcp-remote",
+        "https://docs.mcp.varlock.dev/mcp"
+      ],
     },
     "mcp-server-context7": {
       "enabled": false,
@@ -98,7 +107,9 @@
       "enabled": true,
       "remote": false,
       "command": "uvx",
-      "args": ["minimax-coding-plan-mcp"],
+      "args": [
+        "minimax-coding-plan-mcp"
+      ],
       "env": {
         "MINIMAX_API_KEY": "op://Private/Minimax-M2.5/license key",
         "MINIMAX_API_HOST": "https://api.minimax.io",
@@ -116,7 +127,9 @@
   "current_line_highlight": "line",
   "edit_predictions": {
     "provider": "zed",
-    "disabled_globs": [".env*"],
+    "disabled_globs": [
+      ".env*"
+    ],
     "mode": "eager",
   },
   "disable_ai": false,
@@ -209,7 +222,9 @@
   ],
   "buffer_font_family": "Hacker",
   "file_types": {
-    "nix": ["*.nix"],
+    "nix": [
+      "*.nix"
+    ],
     "markdown": [
       "*.mdx",
       "*.mdx"
