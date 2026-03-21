@@ -5,6 +5,7 @@ Quick guide for setting up this dotfiles repository on Debian Trixie running on 
 ## Prerequisites
 
 1. Clone the repository:
+
    ```bash
    cd ~
    git clone <your-repo-url> .dotfiles
@@ -12,6 +13,7 @@ Quick guide for setting up this dotfiles repository on Debian Trixie running on 
    ```
 
 2. Install `stow` (for symlinking dotfiles):
+
    ```bash
    sudo apt update
    sudo apt install -y stow
@@ -37,9 +39,10 @@ DRY_RUN=true ./setup.sh
 ./setup.sh
 ```
 
-The unified `setup.sh` script automatically detects Raspberry Pi and runs `scripts/setup-pi.sh`. 
+The unified `setup.sh` script automatically detects Raspberry Pi and runs `scripts/setup-pi.sh`.
 
 The script automatically:
+
 - Detects Debian Trixie and architecture
 - Installs base packages (git, curl, neovim, build tools, etc.)
 - Installs special packages (nvm, pyenv, mise, devbox, tailscale, rust, etc.)
@@ -58,11 +61,13 @@ Use the OS-aware stow script to create symlinks (automatically stows only releva
 ```
 
 The script automatically:
+
 - **Stows common packages** (bash, zsh, nvim, git, direnv, etc.)
 - **Skips macOS-specific packages** (see `setup-osx.md` for macOS setup)
 - **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
 
 **Verify symlinks:**
+
 ```bash
 ls -la ~ | grep "\->"
 ```
@@ -80,14 +85,12 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 
-# Mise
-eval "$(mise activate bash)"  # or zsh if using zsh
-
 # Rust
 source "$HOME/.cargo/env"
 ```
 
 Reload your shell:
+
 ```bash
 source ~/.bashrc  # or source ~/.zshrc
 ```
@@ -95,12 +98,14 @@ source ~/.bashrc  # or source ~/.zshrc
 ### 4. Post-Installation (Optional)
 
 **Tailscale** (if installed):
+
 ```bash
 sudo tailscale up
 sudo systemctl enable --now tailscaled
 ```
 
 **Neovim plugins** (if using LazyVim):
+
 ```bash
 nvim --headless -c "Lazy sync" -c "qa"
 ```
@@ -157,6 +162,7 @@ lsmod | grep zram  # Should return nothing
 The `--adopt` flag moves existing files into the package directory and replaces them with symlinks. This preserves your current configuration while bringing it under Stow management.
 
 **Always use dry-run first:**
+
 ```bash
 stow --adopt -n <package>
 ```
@@ -184,7 +190,6 @@ stow --adopt -n <package>
 - Some packages (like Tailscale) require manual configuration after installation
 - Raspberry Pi-specific packages are available in `APT_PACKAGES_PI` but may need explicit inclusion
 
-
 ## Install Neovim from source
 
 ```bash
@@ -202,4 +207,3 @@ source ~/.bashrc
 # Create a symlink to the nvim binary in /usr/local/bin to make it available globally
 sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
 ```
-

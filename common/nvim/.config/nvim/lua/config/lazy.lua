@@ -37,25 +37,7 @@ return require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.lang.json" },
 		-- import/override with custom plugins
 		{ import = "plugins" },
-		-- NeoTree
-		{
-			"nvim-neo-tree/neo-tree.nvim",
-			opts = {
-				filesystem = {
-					filtered_items = {
-						hide_hidden = false,
-						hide_dotfiles = false,
-						hide_gitignored = true,
-						hide_ignored = false, -- hide files that are ignored by other gitignore-like files
-						-- other gitignore-like files, in descending order of precedence.
-						ignore_files = {
-							".neotreeignore",
-							-- ".rgignore"
-						},
-					},
-				},
-			},
-		},
+
 		-- Treesitter configuration
 		{
 			"nvim-treesitter/nvim-treesitter",
