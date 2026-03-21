@@ -73,3 +73,4 @@ opencode/.config/opencode/plans/**
 !bin/
 !scripts/
 !test/
+!.env.schema
