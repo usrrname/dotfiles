@@ -30,6 +30,7 @@ oauth_creds.json
 *.vscode
 .devbox
 devbox.d
+id_ed25519*
 docker/.docker/**
 !docker/.docker/config.json
 !docker/.docker/daemon.json
@@ -58,8 +59,8 @@ goose/**/*/githubcopilot/**
 ollama/**/*
 plans/**
 opencode/.config/opencode/plans/**
-# Ignore all dotfiles at root (except tracked directories)
-.*
+# Ignore dotfiles at root level only (not nested)
+/.*
 !.gitignore
 !.gitmodules
 !.envrc
