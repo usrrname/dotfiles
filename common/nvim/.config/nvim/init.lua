@@ -48,12 +48,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
         vim.defer_fn(function()
           if focus_center_window() then
-            vim.b.ministarter_config = {
+            starter.open({
               content_hooks = {
                 starter.gen_hook.aligning("center", "center"),
               },
-            }
-            starter.open()
+            })
           end
         end, 150)
       end, 100)
@@ -119,7 +118,11 @@ vim.api.nvim_create_autocmd("BufEnter", {
       if non_special == 0 then
         close_starter_buffer()
         if focus_center_window() then
-          require("mini.starter").open()
+          starter.open({
+            content_hooks = {
+              starter.gen_hook.aligning("center", "center"),
+            },
+          })
         end
       end
     end)
