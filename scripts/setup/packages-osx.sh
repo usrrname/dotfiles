@@ -26,8 +26,6 @@ declare -gax BREW_PACKAGES=(
   "openssl@3"              # OpenSSL library
   "stow"                   # Symlink manager for dotfiles
   "ollama"                 # Local AI model server
-  "portaudio"              # required to support opencode sst
-  "ffmpeg"                 # required to support opencode sst
   "anomalyco/tap/opencode" # opencode
   "oven-sh/bun/bun"        # bun
 )
