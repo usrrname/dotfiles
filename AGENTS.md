@@ -28,9 +28,9 @@ Managed with stow. Supports macOS, Linux (Debian/Ubuntu), Raspberry Pi, and NixO
 │   ├── git/          # macOS gitconfig (1Password SSH signing)
 │   ├── zsh/          # macOS zsh (Homebrew, pnpm, SSH_AUTH_SOCK)
 │   ├── zprofile/     # macOS zprofile
-│   ├── iterm2/       # iTerm2 configuration
+│   ├── wezterm/      # WezTerm configuration
 │   ├── act/          # nektos/act configuration
-│   ├── husky/        # Git hooks
+│   ├── husky/        # Git hooks (pre-commit scans for secrets)
 │   └── verdaccio/    # Local npm registry
 │
 ├── bin/
@@ -100,6 +100,7 @@ Add to `.stow-local-ignore` (one per line):
 - `nix/` is not stowed - managed via NixOS configuration
 - OS-specific files (zsh, zprofile, git) replace common versions
 - Use `--adopt` flag to overwrite existing files
+- `.gitignore` only ignores root-level dotfiles (`/.*`) — nested dotfiles in packages (e.g., `common/docker/.docker/`) are tracked
 
 If AGENTS.md does not exist, refer to:
 .cursor/rules/*
