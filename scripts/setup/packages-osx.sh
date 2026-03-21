@@ -35,7 +35,7 @@ declare -gax BREW_PACKAGES=(
 # GUI applications (installed via 'brew install --cask')
 declare -gax CASK_PACKAGES=(
   "firefox"   # Web browser
-  "iterm2"    # Terminal emulator
+  "wezterm"   # Terminal emulator
   "slack"     # Team communication
   "spotify"   # Music streaming
   "tailscale" # VPN mesh networking
