@@ -30,7 +30,7 @@ Managed with stow. Supports macOS, Linux (Debian/Ubuntu), Raspberry Pi, and NixO
 │   ├── zprofile/     # macOS zprofile
 │   ├── wezterm/      # WezTerm configuration
 │   ├── act/          # nektos/act configuration
-│   ├── husky/        # Git hooks (pre-commit scans for secrets)
+│   ├── husky/        # Git hooks
 │   └── verdaccio/    # Local npm registry
 │
 ├── bin/
