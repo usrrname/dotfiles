@@ -43,7 +43,19 @@ return {
 		end, { desc = "Execute opencode action…" })
 
 		vim.keymap.set({ "n", "t" }, "<leader>ao", function()
+			local terminal = require("opencode.terminal")
+			local was_hidden = terminal.winid == nil or not vim.api.nvim_win_is_valid(terminal.winid)
+
 			require("opencode").toggle()
+
+			if was_hidden then
+				vim.defer_fn(function()
+					if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
+						vim.api.nvim_set_current_win(terminal.winid)
+						vim.cmd("startinsert")
+					end
+				end, 200)
+			end
 		end, { desc = "Toggle opencode" })
 
 		vim.keymap.set({ "n", "x" }, "go", function()
@@ -53,12 +65,12 @@ return {
 		vim.keymap.set("n", "goo", function()
 			return require("opencode").operator("@this ") .. "_"
 		end, { desc = "Add line to opencode", expr = true })
-		-- Scroll up: shift ctrl + u --
-		vim.keymap.set("n", "<S-C-u>", function()
+
+		vim.keymap.set("n", "<S-Up>", function()
 			require("opencode").command("session.half.page.up")
 		end, { desc = "Scroll opencode up" })
-		-- Scroll down: shift ctrl + d --
-		vim.keymap.set("n", "<S-C-d>", function()
+
+		vim.keymap.set("n", "<S-Down>", function()
 			require("opencode").command("session.half.page.down")
 		end, { desc = "Scroll opencode down" })
 	end,

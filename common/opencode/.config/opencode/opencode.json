@@ -3,19 +3,23 @@
   "autoupdate": true,
   "instructions": [
     "AGENTS.md",
-    "$HOME/.dotfiles/common/opencode/.config/opencode/skills/commit-conventions.md"
+    "$HOME/.config/opencode/skills/agent-communication.md"
   ],
   "mcp": {
     "varlock-docs-mcp": {
       "type": "remote",
       "url": "https://docs.mcp.varlock.dev/mcp",
-      "enabled": true
+      "enabled": false
     }
   },
   "plugin": [
     "opencode-openmemory@latest",
-    "oh-my-opencode@latest",
-    "opencode-speech-to-text@latest"
+    "oh-my-opencode@latest"
   ],
+  "skills": {
+    "paths": [
+      "./skills/**"
+    ]
+  },
   "default_agent": "build"
 }
