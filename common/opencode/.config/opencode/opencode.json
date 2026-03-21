@@ -4,8 +4,7 @@
   "instructions": [
     "AGENTS.md",
     ".cursor/rules/*",
-    "$HOME/.dotfiles/common/opencode/.config/opencode/skills/commit-conventions.md",
-    "$HOME/.dotfiles/common/opencode/.config/opencode/skills/communication-style.md"
+    "$HOME/.dotfiles/common/opencode/.config/opencode/skills/commit-conventions.md"
   ],
   "mcp": {
     "varlock-docs-mcp": {
