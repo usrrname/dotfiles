@@ -65,7 +65,9 @@ return {
 				vim.api.nvim_set_current_win(terminal.winid)
 				vim.cmd("startinsert")
 			end
-			require("opencode").select()
+			vim.defer_fn(function()
+				require("opencode").select()
+			end, 50)
 		end, { desc = "Execute opencode action…" })
 
 		vim.keymap.set({ "n", "t" }, "<leader>ao", function()
