@@ -136,7 +136,6 @@ That's it! Your config is now tracked in git and symlinked to `~/.config/someapp
   - [Symlinking](#symlinking)
   - [Nvim/LazyVim](#nvimlazyvim)
   - [1Password](#1password)
-  - [Devbox](#devbox)
 
 ## Maintenance
 
@@ -221,25 +220,5 @@ Use 'op read' in a command with secret references in place of plaintext secrets:
 
 docker login -u $(op read op://prod/docker/username) -p $(op read op://prod/docker/password)
       
-```
-
-## Devbox
-
-[FAQ](https://www.jetify.com/docs/devbox/faq/)
-
-```bash
-devbox add <package> # add a package to the devbox environment
-devbox rm <package> # remove a package from the devbox environment
-devbox info # show info about the devbox environment
-devbox update # update packages in devbox
-devbox version update # update devbox to the latest version
-devbox shell # initialize the devbox shell
-devbox generate direnv # generate a direnvrc file
-```
-
-Clean up packages in nix store
-
-```bash
-devbox run -- nix store gc --extra-experimental-features nix-command
 ```
 

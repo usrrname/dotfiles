@@ -32,7 +32,7 @@
       "model": "minimax/Minimax-M2.7"
     },
     "sisyphus-junior": {
-      "model": "opencode/gpt-5-nano"
+      "model": "minimax/Minimax-M2.7"
     }
   },
   "categories": {

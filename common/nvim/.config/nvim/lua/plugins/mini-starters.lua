@@ -27,6 +27,7 @@ return {
 				item("Find text", function() require("telescope.builtin").live_grep() end, "Telescope"),
 				item("Restore session", function() require("persistence").load() end, "Session"),
 				item("Lazy", "Lazy", "Config"),
+				item("LazyExtras", "LazyExtras", "Config"),
 				item("Quit", "qa", "Built-in"),
 			},
 			content_hooks = {

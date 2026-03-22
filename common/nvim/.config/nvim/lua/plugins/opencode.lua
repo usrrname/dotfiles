@@ -59,7 +59,7 @@ return {
 		vim.keymap.set({ "n", "x" }, "<leader>aa", function()
 			require("opencode").ask("@this: ", { submit = true })
 		end, { desc = "Ask opencode…" })
-		vim.keymap.set({ "n", "x" }, "<leader>ac", function()
+		vim.keymap.set({ "n", "x" }, "<leader>oc", function()
 			local terminal = require("opencode.terminal")
 			if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
 				vim.api.nvim_set_current_win(terminal.winid)
@@ -70,7 +70,7 @@ return {
 			end, 50)
 		end, { desc = "Execute opencode action…" })
 
-		vim.keymap.set({ "n", "t" }, "<leader>ao", function()
+		vim.keymap.set({ "n", "t" }, "<leader>oo", function()
 			if toggle_in_progress then
 				return
 			end
@@ -95,7 +95,7 @@ return {
 			end
 		end, { desc = "Toggle opencode" })
 
-		vim.keymap.set({ "n", "x" }, "go", function()
+		vim.keymap.set({ "n", "v", "x" }, "go", function()
 			return require("opencode").operator("@this ")
 		end, { desc = "Add range to opencode", expr = true })
 
