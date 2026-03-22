@@ -63,6 +63,7 @@ return {
 			local terminal = require("opencode.terminal")
 			if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
 				vim.api.nvim_set_current_win(terminal.winid)
+				vim.cmd("startinsert")
 			end
 			require("opencode").select()
 		end, { desc = "Execute opencode action…" })
