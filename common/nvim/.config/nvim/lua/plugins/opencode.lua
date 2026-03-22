@@ -114,5 +114,12 @@ return {
 		vim.keymap.set("n", "<leader>ar", function()
 			vim.cmd("checktime")
 		end, { desc = "Reload buffer from disk" })
+
+		vim.api.nvim_create_autocmd("TermOpen", {
+			pattern = "term://*opencode*",
+			callback = function(args)
+				vim.keymap.set("t", "<C-n>", "<C-\\><C-n>", { buffer = args.buf })
+			end,
+		})
 	end,
 }
