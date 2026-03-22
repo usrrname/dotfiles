@@ -55,6 +55,7 @@ ASCII art header generated via `figlet -f big "CRAZY"`:
 | `<leader>ar` | Reload buffer from disk |
 | `<S-Up>` | Scroll OpenCode up |
 | `<S-Down>` | Scroll OpenCode down |
+| `<Ctrl+n>` | Leave OpenCode terminal mode |
 
 ## Auto-Reload
 

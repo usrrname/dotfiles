@@ -52,9 +52,9 @@ Feature: LazyVim Startup Sequence
 
 ## Keymap Functionality
 
-  Scenario: <leader>oa opens OpenCode ask prompt
+  Scenario: <leader>aa opens OpenCode ask prompt
     Given OpenCode is running
-    When the user presses <leader>oa
+    When the user presses <leader>aa
     Then an input prompt should appear
     And submitted text should be sent to OpenCode
 
@@ -70,6 +70,12 @@ Feature: LazyVim Startup Sequence
     Then OpenCode should scroll up
     When the user presses <S-Down>
     Then OpenCode should scroll down
+
+  Scenario: Ctrl+n leaves OpenCode terminal mode
+    Given OpenCode is running in terminal mode
+    When the user presses <Ctrl+n>
+    Then terminal mode should exit
+    And normal mode should be active in the OpenCode window
 
   Scenario: <leader>e toggles Neotree
     Given that Neotree is closed
