@@ -63,7 +63,6 @@ return require("lazy").setup({
 				vim.list_extend(opts.ensure_installed, {
 					"tsx",
 					"typescript",
-					"go",
 				})
 			end,
 		},
@@ -78,10 +77,7 @@ return require("lazy").setup({
 		},
 	},
 	install = { colorscheme = { "catppuccin-macchiato" } },
-	checker = {
-		enabled = true,
-		notify = true,
-	},
+	checker = { enabled = false },
 	performance = {
 		rtp = {
 			disabled_plugins = {

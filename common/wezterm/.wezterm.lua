@@ -34,7 +34,7 @@ config.font_rules = {
 config.enable_kitty_keyboard = true
 config.audible_bell = "Disabled"
 config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = false
+config.hide_tab_bar_if_only_one_tab = true
 config.automatically_reload_config = true
 config.detect_password_input = true
 config.enable_csi_u_key_encoding = true
@@ -58,4 +58,25 @@ config.keys = {
 	-- MacOS only: CMD + shift + P opens Terminal Command Pallete --
 	{ key = "P", mods = "SHIFT|CMD", action = wezterm.action.ActivateCommandPalette },
 }
+
+wezterm.on("update-status", function(window, pane)
+	local cwd = pane:get_current_working_dir()
+	local success, stdout, _ = wezterm.run_child_process({
+		"sh",
+		"-c",
+		"top -l 1 -n 1 | grep 'CPU usage' | awk '{print $3}' | tr -d '%'",
+	})
+	local cpu = "?"
+	if success then
+		cpu = stdout:gsub("\n", ""):match("(%d+)")
+	end
+
+	local cwd_text = cwd and cwd:gsub(".*/", "") or "?"
+	window:set_right_status(wezterm.format({
+		{ Text = string.format(" %s | CPU %s%% | %s ", cwd_text, cpu) },
+	}))
+end)
+
+config.status_update_interval = 2000
+
 return config

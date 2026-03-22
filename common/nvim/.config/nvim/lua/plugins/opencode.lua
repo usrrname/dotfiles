@@ -1,6 +1,6 @@
 return {
 	"nickjvandyke/opencode.nvim",
-	version = "*", -- Latest stable release
+	version = "*",
 	dependencies = {
 		{
 			-- `snacks.nvim` integration is recommended, but optional
@@ -34,6 +34,9 @@ return {
 
 		vim.o.autoread = true -- Required for `opts.events.reload`
 
+		-- Guard to prevent toggle spam
+		local toggle_in_progress = false
+
 		-- keymaps
 		vim.keymap.set({ "n", "x" }, "<leader>aa", function()
 			require("opencode").ask("@this: ", { submit = true })
@@ -43,17 +46,26 @@ return {
 		end, { desc = "Execute opencode action…" })
 
 		vim.keymap.set({ "n", "t" }, "<leader>ao", function()
+			if toggle_in_progress then
+				return
+			end
+			toggle_in_progress = true
+
 			local terminal = require("opencode.terminal")
-			local was_hidden = terminal.winid == nil or not vim.api.nvim_win_is_valid(terminal.winid)
+			local is_visible = terminal.winid ~= nil and vim.api.nvim_win_is_valid(terminal.winid)
 
-			require("opencode").toggle()
-
-			if was_hidden then
+			if is_visible then
+				vim.api.nvim_set_current_win(terminal.winid)
+				vim.cmd("startinsert")
+				toggle_in_progress = false
+			else
+				require("opencode").toggle()
 				vim.defer_fn(function()
 					if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
 						vim.api.nvim_set_current_win(terminal.winid)
 						vim.cmd("startinsert")
 					end
+					toggle_in_progress = false
 				end, 200)
 			end
 		end, { desc = "Toggle opencode" })
