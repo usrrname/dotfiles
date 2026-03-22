@@ -9,6 +9,7 @@ return {
 			optional = true,
 			opts = {
 				input = {}, -- Enhances `ask()`
+
 				picker = { -- Enhances `select()`
 					actions = {
 						opencode_send = function(...)
@@ -32,7 +33,24 @@ return {
 			-- Your configuration, if any; goto definition on the type or field for details
 		}
 
-		vim.o.autoread = true -- Required for `opts.events.reload`
+		vim.o.autoread = true
+
+		if vim.fs and vim.fs.watch then
+			local cwd = vim.fn.getcwd()
+			local watch = vim.fs.watch(cwd, function(path, name)
+				if name == "change" or name == "rename" then
+					vim.cmd("checktime")
+				end
+			end)
+			vim.api.nvim_create_autocmd("VimLeave", {
+				group = augroup("close_watch"),
+				callback = function()
+					if watch then
+						watch:close()
+					end
+				end,
+			})
+		end
 
 		-- Guard to prevent toggle spam
 		local toggle_in_progress = false
@@ -42,6 +60,10 @@ return {
 			require("opencode").ask("@this: ", { submit = true })
 		end, { desc = "Ask opencode…" })
 		vim.keymap.set({ "n", "x" }, "<leader>ac", function()
+			local terminal = require("opencode.terminal")
+			if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
+				vim.api.nvim_set_current_win(terminal.winid)
+			end
 			require("opencode").select()
 		end, { desc = "Execute opencode action…" })
 
@@ -85,5 +107,13 @@ return {
 		vim.keymap.set("n", "<S-Down>", function()
 			require("opencode").command("session.half.page.down")
 		end, { desc = "Scroll opencode down" })
+
+		vim.keymap.set("n", "<leader>ol", function()
+			require("opencode").command("session.last")
+		end, { desc = "Switch to last session" })
+
+		vim.keymap.set("n", "<leader>ar", function()
+			vim.cmd("checktime")
+		end, { desc = "Reload buffer from disk" })
 	end,
 }
