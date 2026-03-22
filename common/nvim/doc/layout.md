@@ -52,7 +52,6 @@ ASCII art header generated via `figlet -f big "CRAZY"`:
 | `<leader>ao` | Toggle OpenCode |
 | `<leader>ac` | Execute OpenCode action (focuses terminal first) |
 | `<leader>aa` | Ask OpenCode |
-| `<leader>os` | Switch session (opens picker) |
 | `<leader>ar` | Reload buffer from disk |
 | `<S-Up>` | Scroll OpenCode up |
 | `<S-Down>` | Scroll OpenCode down |
@@ -67,4 +66,3 @@ File watching via `vim.fs.watch` on CWD triggers `checktime` on file changes, ke
 - Mini-starter displays custom CrazyVim logo (figlet `big` font)
 - Neo-tree and OpenCode excluded from buffer cleanup logic
 - `<leader>ac` focuses OpenCode terminal before opening picker
-- `<leader>os` opens session picker for switching sessions

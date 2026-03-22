@@ -108,10 +108,6 @@ return {
 			require("opencode").command("session.half.page.down")
 		end, { desc = "Scroll opencode down" })
 
-		vim.keymap.set("n", "<leader>os", function()
-			require("opencode").select()
-		end, { desc = "Switch session…" })
-
 		vim.keymap.set("n", "<leader>ar", function()
 			vim.cmd("checktime")
 		end, { desc = "Reload buffer from disk" })
