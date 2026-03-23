@@ -95,6 +95,40 @@ Add to `.stow-local-ignore` (one per line):
 
 - `op` — 1Password CLI refuses to follow symlinks for config files
 
+## Adding a ~/.package-name Dotfile to Dotfiles
+
+For packages that live directly in `$HOME` (e.g., `~/.wezterm.lua`, `~/.gitconfig`).
+
+### Steps to add a home dotfile (e.g., `wezterm`)
+
+```bash
+# 1. Create directory structure
+mkdir -p common/wezterm
+
+# 2. Copy existing dotfile
+cp ~/.wezterm.lua common/wezterm/.wezterm.lua
+
+# 3. Remove original (stow will recreate as symlink)
+rm ~/.wezterm.lua
+
+# 4. Add to COMMON array in stow-dotfiles.sh
+# COMMON=(... wezterm ...)
+
+# 5. Stow
+./stow-dotfiles.sh
+```
+
+Stow maps `common/[pkg]/.[pkg]` → `~/.[pkg]`.
+
+### For packages with multiple dotfiles
+
+```bash
+# Example: gitconfig with multiple files
+mkdir -p common/git
+cp ~/.gitconfig common/git/.gitconfig
+cp ~/.gitignore_common common/git/.gitignore_common
+```
+
 ## Notes
 
 - `nix/` is not stowed - managed via NixOS configuration
@@ -106,5 +140,7 @@ If AGENTS.md does not exist, refer to:
 .cursor/rules/*
 .rules/* for zed
 .claude/*
+
+## WezTerm
 
 Refer to <https://wezterm.org/config/files.html> for WezTerm config
