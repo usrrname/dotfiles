@@ -106,3 +106,5 @@ If AGENTS.md does not exist, refer to:
 .cursor/rules/*
 .rules/* for zed
 .claude/*
+
+Refer to <https://wezterm.org/config/files.html> for WezTerm config
