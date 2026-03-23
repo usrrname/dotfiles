@@ -31,7 +31,6 @@ COMMON=(
   nvim
   direnv
   ssh
-  docker
   gh
   mc
   op
