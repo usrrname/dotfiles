@@ -72,6 +72,24 @@ config.keys = {
 	{ key = "P", mods = "SHIFT|CMD", action = wezterm.action.ActivateCommandPalette },
 }
 
--- Events
+-- Mouse
+config.mouse_bindings = {
+  {
+    event = { Up = { streak = 1, button = 'Left' } },
+    mods = 'SUPER',
+    action = wezterm.action.OpenLinkAtMouseCursor,
+  },
+  {
+    event = { Down = { streak = 1, button = 'Left' } },
+    mods = 'SUPER',
+    action = wezterm.action.Nop,
+  },
+}
+
+wezterm.on('open-uri', function(window, pane, uri)
+  if uri:find '^https?://' == 1 then
+    return
+  end
+end)
 
 return config
