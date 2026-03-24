@@ -27,3 +27,4 @@ nix/
 *.lock
 .sisyphus/*
 op
+^.*/doc/
