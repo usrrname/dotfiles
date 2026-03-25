@@ -29,6 +29,23 @@ Three-column Neovim layout with AI assistant on startup.
 | Startup screen | mini.starter | Welcome logo + actions |
 | AI assistant | opencode.nvim | Code completion/chat |
 | Keymaps | which-key | Leader key menus |
+| Merge conflicts | git-conflict.nvim | Visual conflict resolution |
+
+## Merge Conflict Resolution
+
+git-conflict.nvim provides VSCode-style conflict handling.
+
+**Keybindings** (active when a file has conflicts):
+
+| Key | Action |
+|-----|--------|
+| `co` | Choose ours (local changes) |
+| `ct` | Choose theirs (incoming changes) |
+| `cb` | Choose both |
+| `c0` | Choose none |
+| `[x` | Previous conflict |
+| `]x` | Next conflict |
+| `:GitConflictListQf` | List all conflicts in quickfix |
 
 ## Custom Logo
 
