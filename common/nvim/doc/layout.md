@@ -30,6 +30,7 @@ Three-column Neovim layout with AI assistant on startup.
 | AI assistant | opencode.nvim | Code completion/chat |
 | Keymaps | which-key | Leader key menus |
 | Merge conflicts | git-conflict.nvim | Visual conflict resolution |
+| Git blame | blame.nvim | Inline commit annotations + blame stack |
 
 ## Merge Conflict Resolution
 
@@ -46,6 +47,25 @@ git-conflict.nvim provides VSCode-style conflict handling.
 | `[x` | Previous conflict |
 | `]x` | Next conflict |
 | `:GitConflictListQf` | List all conflicts in quickfix |
+
+## Git Blame
+
+blame.nvim shows inline commit annotations (author, date, message) and supports a blame stack to navigate history.
+
+**Commands:**
+
+| Command | Description |
+|---------|-------------|
+| `:BlameToggle` | Toggle blame view on/off |
+| `:BlameToggle virtual` | Toggle inline virtual text |
+| `:BlameToggle window` | Toggle side window view |
+
+**Navigation:**
+
+| Key | Action |
+|-----|--------|
+| `[g` | Previous commit (blame stack pop) |
+| `]g` | Next commit (blame stack push) |
 
 ## Custom Logo
 
