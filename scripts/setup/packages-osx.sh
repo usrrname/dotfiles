@@ -28,6 +28,7 @@ declare -gax BREW_PACKAGES=(
   "ollama"                 # Local AI model server
   "anomalyco/tap/opencode" # opencode
   "oven-sh/bun/bun"        # bun
+  "tmux"
 )
 
 # GUI applications (installed via 'brew install --cask')

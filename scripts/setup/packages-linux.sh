@@ -37,7 +37,10 @@ _detect_distribution
 
 # CLI tools and development libraries (installed via 'apt install')
 declare -gax APT_PACKAGES_BASE=(
+<<<<<<< HEAD
   "wezterm"
+=======
+>>>>>>> 70fe691 (chore: adds tmux to setup and common)
   "git"             # Version control system
   "curl"            # HTTP client (needed for many install scripts)
   "wget"            # HTTP client
@@ -47,11 +50,13 @@ declare -gax APT_PACKAGES_BASE=(
   "libgmp-dev"      # GNU Multiple Precision Arithmetic Library
   "ca-certificates" # CA certificates
   "gnupg"           # GPG tools
-  "lsb-release"     # Linux Standard Base
+  "lsb-release"     # Linux Base
   "stow"            # Symlink manager
   "tree"            # Tree command
   "vim"             # Vim text editor
   "neovim"          # Neovim text editor
+  "ripgrep"         # Fast grep alternative
+  "tmux"
 )
 
 # Packages that require special installation (not via apt)
