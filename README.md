@@ -187,6 +187,21 @@ Refresh and sync plugins (interactive)
 :Lazy sync
 ```
 
+### OpenCode (AI Assistant)
+
+| Keymap | Description |
+|--------|-------------|
+| `<leader>oo` | Toggle terminal |
+| `<leader>oa` | Ask about file/selection |
+| `<leader>oc` | Execute action |
+| `<leader>os` | Send selection (visual) |
+| `<leader>oe` | Explain code |
+| `<leader>or` | Review code |
+| `go` / `goo` | Add range/line |
+| `<S-Up/Down>` | Scroll |
+
+**Security:** Background agents read-only; bash requires confirmation; sessions excluded from git
+
 ## 1Password
 
 ```bash

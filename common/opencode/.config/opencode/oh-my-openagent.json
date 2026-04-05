@@ -2,16 +2,34 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
   "agents": {
     "hephaestus": {
-      "model": "opencode/gpt-5-nano"
+      "model": "opencode/gpt-5-nano",
+      "permission": {
+        "edit": "allow",
+        "bash": "ask"
+      }
     },
     "oracle": {
-      "model": "opencode/gpt-5-nano"
+      "model": "opencode/gpt-5-nano",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
     },
     "librarian": {
-      "model": "minimax-coding-plan/MiniMax-M2.7-highspeed"
+      "model": "minimax-coding-plan/MiniMax-M2.7-highspeed",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "allow"
+      }
     },
     "explore": {
-      "model": "minimax-coding-plan/MiniMax-M2.7-highspeed"
+      "model": "minimax-coding-plan/MiniMax-M2.7-highspeed",
+      "permission": {
+        "edit": "deny",
+        "bash": "deny",
+        "webfetch": "allow"
+      }
     },
     "multimodal-looker": {
       "model": "minimax-coding-plan/MiniMax-M2.7"
@@ -20,16 +38,29 @@
       "model": "opencode/gpt-5-nano"
     },
     "metis": {
-      "model": "opencode/gpt-5-nano"
+      "model": "opencode/gpt-5-nano",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
     },
     "momus": {
-      "model": "opencode/gpt-5-nano"
+      "model": "opencode/gpt-5-nano",
+      "permission": {
+        "edit": "ask",
+        "bash": "ask"
+      }
     },
     "atlas": {
       "model": "opencode/kimi-k2.5"
     },
     "sisyphus": {
-      "model": "minimax/Minimax-M2.7"
+      "model": "minimax/Minimax-M2.7",
+      "permission": {
+        "edit": "allow",
+        "bash": "ask",
+        "task": "allow"
+      }
     },
     "sisyphus-junior": {
       "model": "minimax/Minimax-M2.7"

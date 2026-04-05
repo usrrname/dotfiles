@@ -56,7 +56,7 @@ return {
 		local toggle_in_progress = false
 
 		-- keymaps
-		vim.keymap.set({ "n", "x" }, "<leader>aa", function()
+		vim.keymap.set({ "n", "x" }, "<leader>oa", function()
 			require("opencode").ask("@this: ", { submit = true })
 		end, { desc = "Ask opencode…" })
 		vim.keymap.set({ "n", "x" }, "<leader>oc", function()
@@ -111,9 +111,21 @@ return {
 			require("opencode").command("session.half.page.down")
 		end, { desc = "Scroll opencode down" })
 
-		vim.keymap.set("n", "<leader>ar", function()
-			vim.cmd("checktime")
-		end, { desc = "Reload buffer from disk" })
+		vim.keymap.set("v", "<leader>os", function()
+			local start_line = vim.fn.line("'<")
+			local end_line = vim.fn.line("'>")
+			local lines = vim.fn.getline(start_line, end_line)
+			local text = table.concat(lines, "\n")
+			require("opencode").ask("```\n" .. text .. "\n```", { submit = false })
+		end, { desc = "Send selection to OpenCode" })
+
+		vim.keymap.set("n", "<leader>oe", function()
+			require("opencode").ask("Explain this code:\n```\n@this\n```", { submit = true })
+		end, { desc = "Explain code" })
+
+		vim.keymap.set("n", "<leader>or", function()
+			require("opencode").ask("Review this code for issues:\n```\n@this\n```", { submit = true })
+		end, { desc = "Review code" })
 
 		vim.api.nvim_create_autocmd("TermOpen", {
 			pattern = "term://*opencode*",

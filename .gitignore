@@ -64,6 +64,7 @@ opencode/.config/opencode/plans/**
 !.gitignore
 !.gitmodules
 !.envrc
+!.sisyphus
 
 
 # Keep tracked directories
