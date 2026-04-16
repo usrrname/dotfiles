@@ -93,6 +93,9 @@ fi
 
 export PATH="$HOME/.local/bin:$PATH"
 
+# 1Password secrets
+export FORGEJO_ACCESS_TOKEN=$(op read "op://rangle/forgejo MCP API key/credential")
+
 # move nvim into /opt/ for debian
 export PATH="/opt/nvim/bin:$PATH"
 alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'

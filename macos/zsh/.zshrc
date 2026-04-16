@@ -95,4 +95,7 @@ eval "$(fnm env --use-on-cd)"
 # opencode
 export PATH=/Users/jenc/.opencode/bin:$PATH
 
+# 1Password secrets
+export FORGEJO_ACCESS_TOKEN=$(op read "op://rangle/forgejo MCP API key/credential")
+
 source ~/.aliasrc-osx
