@@ -37,7 +37,6 @@ COMMON=(
   vim
   zed
   wezterm
-  op
   tmux
 )
 
