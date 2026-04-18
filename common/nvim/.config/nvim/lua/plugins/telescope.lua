@@ -5,28 +5,25 @@ return {
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = "make",
 		},
-		{
-			"nvim-telescope/telescope-file-browser.nvim",
-			dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
-		},
 	},
 
 	keys = {
-    -- add a keymap to browse plugin files
-    -- stylua: ignore
-    {
-      "<leader>fp",
-      function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
-      desc = "Find Plugin File",
-    },
-
 		{
-			"n",
+			"<leader>fp",
+			function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
+			desc = "Find Plugin File",
+		},
+		{
 			"<D-f>",
 			function()
+				-- Use valid directory, fallback to cwd if current buffer path is invalid
+				local cwd = vim.fn.expand("%:p:h")
+				if cwd == "" or cwd:match("ministarter") or not vim.fn.isdirectory(cwd) then
+					cwd = vim.fn.getcwd()
+				end
 				require("telescope.builtin").find_files({
 					prompt_title = "Find Files",
-					cwd = vim.fn.expand("%:p:h"),
+					cwd = cwd,
 					hidden = true,
 					file_ignore_patterns = {
 						".git/",
@@ -47,6 +44,7 @@ return {
 					},
 				})
 			end,
+			desc = "Find Files",
 		},
 	},
 	-- change some options
@@ -60,6 +58,9 @@ return {
 			preview = {
 				treesitter = false,
 			},
+			-- Prevent cwd change prompts
+			cwd_only = false,
+			cwd = vim.fn.getcwd(),
 		},
 		extensions = {
 			fzf = {

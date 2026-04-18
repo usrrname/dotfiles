@@ -8,7 +8,7 @@ return {
 			"folke/snacks.nvim",
 			optional = true,
 			opts = {
-				input = {}, -- Enhances `ask()`
+				input = { enabled = false }, -- Disable to prevent startup Telescope prompts
 
 				picker = { -- Enhances `select()`
 					actions = {
@@ -65,24 +65,24 @@ return {
 					if not terminal.winid or not vim.api.nvim_win_is_valid(terminal.winid) then
 						return
 					end
-					
+
 					local buf = args.buf
 					local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-					
+
 					if buftype ~= "terminal" then
 						return
 					end
-					
+
 					local term_buf = vim.api.nvim_win_get_buf(terminal.winid)
 					if buf ~= term_buf then
 						return
 					end
-					
+
 					local current_win = vim.api.nvim_get_current_win()
 					if current_win == terminal.winid then
 						return
 					end
-					
+
 					vim.api.nvim_win_close(current_win, true)
 				end, 10)
 			end,
@@ -128,7 +128,7 @@ return {
 				vim.cmd("startinsert")
 				toggle_in_progress = false
 			else
-				require("opencode").toggle()
+				require("opencode.terminal").toggle("opencode --port", { split = "right" })
 				vim.defer_fn(function()
 					if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
 						vim.api.nvim_set_current_win(terminal.winid)
@@ -185,37 +185,41 @@ return {
 			require("opencode").ask("handoff", { submit = true })
 
 			local timer = vim.loop.new_timer()
-			timer:start(1000, 1000, vim.schedule_wrap(function()
-				check_count = check_count + 1
+			timer:start(
+				1000,
+				1000,
+				vim.schedule_wrap(function()
+					check_count = check_count + 1
 
-				if check_count > max_checks then
-					timer:stop()
-					vim.notify("Handoff timeout - check file manually at " .. handoff_file, vim.log.levels.WARN)
-					return
-				end
-
-				if vim.fn.filereadable(handoff_file) == 1 then
-					local lines = vim.fn.readfile(handoff_file)
-					if #lines > 0 and lines[#lines] == "---HANDOFF_COMPLETE---" then
+					if check_count > max_checks then
 						timer:stop()
-
-						local content_lines = {}
-						for i = 1, #lines - 1 do
-							table.insert(content_lines, lines[i])
-						end
-
-						local content = table.concat(content_lines, "\n")
-
-						if vim.fn.has("mac") == 1 then
-							vim.fn.system("pbcopy", content)
-						elseif vim.fn.has("linux") == 1 then
-							vim.fn.system("xclip -selection clipboard", content)
-						end
-
-						vim.notify("Handoff copied to clipboard!", vim.log.levels.INFO)
+						vim.notify("Handoff timeout - check file manually at " .. handoff_file, vim.log.levels.WARN)
+						return
 					end
-				end
-			end))
+
+					if vim.fn.filereadable(handoff_file) == 1 then
+						local lines = vim.fn.readfile(handoff_file)
+						if #lines > 0 and lines[#lines] == "---HANDOFF_COMPLETE---" then
+							timer:stop()
+
+							local content_lines = {}
+							for i = 1, #lines - 1 do
+								table.insert(content_lines, lines[i])
+							end
+
+							local content = table.concat(content_lines, "\n")
+
+							if vim.fn.has("mac") == 1 then
+								vim.fn.system("pbcopy", content)
+							elseif vim.fn.has("linux") == 1 then
+								vim.fn.system("xclip -selection clipboard", content)
+							end
+
+							vim.notify("Handoff copied to clipboard!", vim.log.levels.INFO)
+						end
+					end
+				end)
+			)
 		end, { desc = "Smart handoff to clipboard" })
 
 		vim.keymap.set("n", "<leader>oy", function()
