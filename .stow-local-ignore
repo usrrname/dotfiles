@@ -27,4 +27,5 @@ nix/
 *.lock
 .sisyphus/*
 op
-^.*/doc/
+^.*/doc/.*
+^AGENTS.md
