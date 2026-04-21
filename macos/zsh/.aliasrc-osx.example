@@ -114,3 +114,5 @@ delete_ds(){
         find "$1" -name '.DS_Store' -delete -print
     fi
 }
+
+alias fwstate='sudo /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate'

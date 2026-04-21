@@ -29,3 +29,4 @@ nix/
 op
 ^.*/doc/.*
 ^AGENTS.md
+.aliasrc-osx.example
