@@ -2,10 +2,10 @@ echo "🚀 Loading global direnvrc..."
 
 # -------Shell variables ------------
 # default editor
-# export EDITOR='nvim' # default editor
-# export SUDOEDITOR='nvim'
-# export VISUAL='nvim'
-# export PROMPT='~🧻 '
+export EDITOR='nvim' # default editor
+export SUDOEDITOR='nvim'
+export VISUAL='nvim'
+export PROMPT='~🧻 '
 
 # Suppress direnv export output
 export DIRENV_LOG_FORMAT=""
