@@ -11,21 +11,15 @@ fi
 # Homebrew
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
-# Show all filename extensions in Finder
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-# Set screenshot location
-defaults write com.apple.screencapture "location" -string "~/pictures/screenshots"
-
-# Disable Liquid Glass
-defaults write -g com.apple.SwiftUI.DisableSolarium -bool YES
-
-# don't create .DS_Store files on network volumes
-defaults write com.apple.desktopservices DSDontWriteNetworkStores true
-# don't create .DS_Store files on USB volumes
-defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
-# show hidden files in Finder by default
-defaults write com.apple.finder AppleShowAllFiles YES
+# macOS preferences (persist once set, skip in sandboxed shells)
+if [[ ! -v CLAUDE_CODE_SANDBOX ]]; then
+  defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+  defaults write com.apple.screencapture "location" -string "~/pictures/screenshots"
+  defaults write -g com.apple.SwiftUI.DisableSolarium -bool YES
+  defaults write com.apple.desktopservices DSDontWriteNetworkStores true
+  defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+  defaults write com.apple.finder AppleShowAllFiles YES
+fi
 
 # Added by OrbStack
 [ -f ~/.orbstack/shell/init.zsh ] && source ~/.orbstack/shell/init.zsh 2>/dev/null || :
