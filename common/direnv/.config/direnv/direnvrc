@@ -59,3 +59,18 @@ fi
 if [[ -f composer.json ]]; then
     PATH_add vendor/bin
 fi
+
+# Lazy-load FORGEJO_ACCESS_TOKEN only in repos with forgejo remotes
+# Access via $(forgejo_token) - only then does it call op read, then caches
+if git rev-parse --git-dir >/dev/null 2>&1; then
+    if git remote -v 2>/dev/null | grep -q "forgejo"; then
+        __FORGEJO_TOKEN_CACHE=""
+        forgejo_token() {
+            if [[ -z "$__FORGEJO_TOKEN_CACHE" ]]; then
+                __FORGEJO_TOKEN_CACHE=$(op read "op://rangle/forgejo Access Token/credential")
+            fi
+            echo "$__FORGEJO_TOKEN_CACHE"
+        }
+        export -f forgejo_token 2>/dev/null || true
+    fi
+fi
