@@ -2,60 +2,60 @@
   "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-openagent/dev/assets/oh-my-opencode.schema.json",
   "agents": {
     "hephaestus": {
-      "model": "opencode/gpt-5-nano",
+      "model": "opencode-go/gpt-5-nano",
       "permission": {
         "edit": "allow",
         "bash": "ask"
       }
     },
     "oracle": {
-      "model": "opencode/gpt-5-nano",
+      "model": "opencode-go/gpt-5-nano",
       "permission": {
         "edit": "ask",
         "bash": "ask"
       }
     },
     "librarian": {
-      "model": "minimax-coding-plan/MiniMax-M2.7-highspeed",
+      "model": "opencode-go/minimax-m2.7",
       "permission": {
         "edit": "deny",
         "bash": "deny",
-        "webfetch": "allow"
+        "webfetch": "deny"
       }
     },
     "explore": {
-      "model": "minimax-coding-plan/MiniMax-M2.7-highspeed",
+      "model": "opencode-go/minimax-m2.7",
       "permission": {
         "edit": "deny",
         "bash": "deny",
-        "webfetch": "allow"
+        "webfetch": "deny"
       }
     },
     "multimodal-looker": {
       "model": "minimax-coding-plan/MiniMax-M2.7"
     },
     "prometheus": {
-      "model": "opencode/gpt-5-nano"
+      "model": "opencode-go/gpt-5-nano"
     },
     "metis": {
-      "model": "opencode/gpt-5-nano",
+      "model": "opencode-go/gpt-5-nano",
       "permission": {
         "edit": "ask",
         "bash": "ask"
       }
     },
     "momus": {
-      "model": "opencode/gpt-5-nano",
+      "model": "opencode-go/gpt-5-nano",
       "permission": {
         "edit": "ask",
         "bash": "ask"
       }
     },
     "atlas": {
-      "model": "opencode/kimi-k2.5"
+      "model": "opencode-go/kimi-k2.5"
     },
     "sisyphus": {
-      "model": "minimax/Minimax-M2.7",
+      "model": "opencode-go/kimi-k2.5",
       "permission": {
         "edit": "allow",
         "bash": "ask",
@@ -63,7 +63,7 @@
       }
     },
     "sisyphus-junior": {
-      "model": "minimax/Minimax-M2.7"
+      "model": "opencode-go/glm-5"
     }
   },
   "categories": {
@@ -90,7 +90,7 @@
       "model": "anthropic/claude-sonnet-4-6"
     },
     "unspecified-high": {
-      "model": "anthropic/claude-opus-4-6",
+      "model": "anthropic/claude-opus-4-7",
       "variant": "max"
     },
     "writing": {

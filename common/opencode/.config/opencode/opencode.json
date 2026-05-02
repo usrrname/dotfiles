@@ -3,7 +3,6 @@
   "autoupdate": true,
   "instructions": [
     "AGENTS.md",
-    "$HOME/.config/opencode/skills/agent-communication.md",
     "$HOME/.config/opencode/no-comment-hooks.md"
   ],
   "mcp": {
@@ -11,6 +10,15 @@
       "type": "remote",
       "url": "https://docs.mcp.varlock.dev/mcp",
       "enabled": false
+    },
+    "secure_fetch": {
+      "type": "local",
+      "command": [
+        "sh",
+        "-c",
+        "SECURE_FETCH_LOG_DIR=$PWD/.logs node $HOME/code/secure-fetch/dist/index.js"
+      ],
+      "enabled": true
     }
   },
   "plugin": [
@@ -22,5 +30,5 @@
       "./skills/**"
     ]
   },
-  "default_agent": "build"
+  "default_agent": "Sisyphus"
 }
