@@ -5,6 +5,16 @@ vim.g.mapleader = " "
 vim.g.autoformat = true
 vim.opt.clipboard = "unnamedplus"
 
+-- Fix tab display for Go files only (Go uses tabs, display as 4 spaces)
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "go",
+	callback = function()
+		vim.opt_local.tabstop = 4
+		vim.opt_local.shiftwidth = 4
+		vim.opt_local.softtabstop = 4
+	end,
+})
+
 -- Hide unnamed buffer from tabline
 vim.opt.shortmess:append("S")
 
