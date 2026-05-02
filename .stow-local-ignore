@@ -15,7 +15,8 @@ devbox.*
 package.*
 README.md
 .cursor/*
-.claude/*
+	.claude
+claude/hooks/peon-ping
 scripts/*
 setup/*
 test/*
@@ -30,3 +31,4 @@ op
 ^.*/doc/.*
 ^AGENTS.md
 .aliasrc-osx.example
+secure-fetch-*
