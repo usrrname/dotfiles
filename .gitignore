@@ -76,3 +76,4 @@ opencode/.config/opencode/plans/**
 !scripts/
 !test/
 !.env.schema
+secure-fetch-*.jsonl
