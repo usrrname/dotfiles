@@ -33,6 +33,7 @@ COMMON=(
 	direnv
 	ssh
 	gh
+	home-manager
 	mc
 	opencode
 	vim

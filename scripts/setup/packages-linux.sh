@@ -37,10 +37,6 @@ _detect_distribution
 
 # CLI tools and development libraries (installed via 'apt install')
 declare -gax APT_PACKAGES_BASE=(
-<<<<<<< HEAD
-  "wezterm"
-=======
->>>>>>> 70fe691 (chore: adds tmux to setup and common)
   "git"             # Version control system
   "curl"            # HTTP client (needed for many install scripts)
   "wget"            # HTTP client
