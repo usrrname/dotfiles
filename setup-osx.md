@@ -114,6 +114,21 @@ stow --adopt -n <package>
 - **Dry run setup**: `DRY_RUN=true ./setup.sh`
 - **Verify symlinks**: `ls -la ~ | grep "\->"`
 
+### Midnight Commander (mc) Colors
+
+When using **Catppuccin Macchiato** theme in WezTerm, mc's dropdown menus (Options, Left, Right) may appear with unreadable light-on-light colors.
+
+**Solution**: The `.aliasrc-osx` file includes an alias that launches mc with the `modarin256` skin:
+
+```bash
+alias mc='mc -S modarin256'
+```
+
+This skin is designed for 256-color terminals and provides better contrast with modern color schemes. Alternative skins if needed:
+- `mc -S modarin256-defbg` - Black background variant
+- `mc -S modarin256root` - Root user variant (darker, high contrast)
+- `mc -b` - Black & white mode (guaranteed readable)
+
 ## Notes
 
 - Homebrew will be installed automatically if missing

@@ -98,6 +98,10 @@ This will:
 - **Verify symlinks**: `ls -la ~ | grep "\->"`
 - **macOS-specific**: See [setup-osx.md](setup-osx.md) for additional troubleshooting
 
+### Terminal App Issues
+
+**Midnight Commander unreadable with Catppuccin theme**: The macOS aliases include a fix that launches mc with the `modarin256` skin for better colors. See [setup-osx.md](setup-osx.md) for details.
+
 ## Adding a New Config Package
 
 Want to add `~/.config/someapp` to your dotfiles? Here's how:
