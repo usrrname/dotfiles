@@ -1,0 +1,22 @@
+{
+  "active_pack": "peon",
+  "volume": 0.5,
+  "enabled": true,
+  "categories": {
+    "session.start": false,
+    "session.end": false,
+    "task.acknowledge": false,
+    "task.complete": true,
+    "task.error": true,
+    "task.progress": false,
+    "input.required": true,
+    "resource.limit": false,
+    "user.spam": false
+  },
+  "spam_threshold": 3,
+  "spam_window_seconds": 10,
+  "pack_rotation": [],
+  "debounce_ms": 500,
+  "notification_style": "standard",
+  "desktop_notifications": false
+}
