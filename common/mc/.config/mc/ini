@@ -20,7 +20,7 @@ use_8th_bit_as_meta=false
 mouse_move_pages_viewer=true
 mouse_close_dialog=false
 fast_refresh=false
-drop_menus=false
+drop_menus=true
 wrap_mode=true
 old_esc_mode=true
 cd_symlinks=true
@@ -62,7 +62,7 @@ editor_group_undo=false
 editor_state_full_filename=false
 editor_ask_filename_before_edit=false
 nice_rotating_dash=true
-shadows=true
+shadows=false
 mcview_remember_file_position=false
 auto_fill_mkdir_name=true
 copymove_persistent_attr=true
@@ -83,12 +83,12 @@ editor_backup_extension=~
 editor_filesize_threshold=64M
 editor_stop_format_chars=-+*\\,.;:&>
 mcview_eof=
-skin=julia256
+skin=julia256root
 filepos_max_saved_entries=1024
 
 [Layout]
 output_lines=0
-left_panel_size=81
+left_panel_size=90
 top_panel_size=0
 message_visible=true
 keybar_visible=true
@@ -132,10 +132,11 @@ panel_scroll_pages=true
 panel_scroll_center=false
 mouse_move_pages=true
 filetype_mode=true
-permission_mode=false
+permission_mode=true
 torben_fj_mode=false
-quick_search_mode=2
+quick_search_mode=0
 select_flags=6
+simple_swap=false
 
 [FindFile]
 file_case_sens=true
