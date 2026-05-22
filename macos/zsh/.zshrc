@@ -97,3 +97,10 @@ export PATH=/Users/jenc/.opencode/bin:$PATH
 
 source ~/.aliasrc-osx
 export PATH="/opt/homebrew/opt/libpq/bin:$PATH"
+export PATH="$HOME/go/bin:$PATH"
+export SOPS_AGE_KEY_FILE=$HOME/.config/sops/age/keys.txt
+
+# esp32
+eval "$(_ESPTOOL_COMPLETE=zsh_source esptool)"
+eval "$(_ESPSECURE_COMPLETE=zsh_source espsecure)"
+eval "$(_ESPEFUSE_COMPLETE=zsh_source espefuse)"

@@ -14,3 +14,12 @@ if [ -f "$HOME/.cargo/env" ]; then
   . "$HOME/.cargo/env"
 fi
 export PATH="$HOME/.local/bin:$PATH"
+
+# Forgejo token - lazy-loaded from 1Password
+forgejo_token() {
+  if [ -z "$FORGEJO_ACCESS_TOKEN" ]; then
+    FORGEJO_ACCESS_TOKEN=$(op read "op://rangle/forgejo Access Token/credential" 2>/dev/null)
+    export FORGEJO_ACCESS_TOKEN
+  fi
+  echo "$FORGEJO_ACCESS_TOKEN"
+}
