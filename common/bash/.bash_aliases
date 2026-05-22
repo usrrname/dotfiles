@@ -35,7 +35,8 @@ alias autoremove='sudo apt autoremove'
 alias search='apt search'
 alias py='python3'
 alias pip='pip3'
-
+alias npm="socket-npm"
+alias npx="socket-npx"
 # Improved directory listing
 alias ll='ls -alF'
 alias la='ls -A'
