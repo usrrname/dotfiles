@@ -10,6 +10,46 @@ vim.keymap.set({ "n", "v" }, "<leader>y", '"+y') -- yank motion
 -- Paste from system clipboard
 vim.keymap.set("n", "<leader>p", '"+p') -- paste after cursor
 
+-- Yank as shell command: cleans up line breaks, \n literals, and whitespace for pasting into terminals
+vim.keymap.set("v", "<leader>Y", function()
+	local start_pos = vim.fn.getpos("'<")
+	local end_pos = vim.fn.getpos("'>")
+	local lines = vim.fn.getline(start_pos[2], end_pos[2])
+
+	if #lines == 0 then
+		return
+	end
+
+	local first_line = lines[1]
+	local last_line = lines[#lines]
+
+	if start_pos[2] == end_pos[2] then
+		lines[1] = first_line:sub(start_pos[3], end_pos[3])
+	else
+		lines[1] = first_line:sub(start_pos[3])
+		lines[#lines] = last_line:sub(1, end_pos[3])
+	end
+
+	local text = table.concat(lines, "\n")
+	local transformations = {
+		{ "\\n", "\n" },
+		{ "\\\n%s*", " " },
+		{ "\n+", " " },
+		{ "%s+", " " },
+		{ "^%s*", "" },
+		{ "%s*$", "" },
+	}
+
+	for _, transform in ipairs(transformations) do
+		text = text:gsub(transform[1], transform[2])
+	end
+
+	vim.fn.setreg("+", text)
+	vim.fn.setreg('"', text)
+
+	vim.notify("Yanked as shell command: " .. text:sub(1, 50) .. (#text > 50 and "..." or ""), vim.log.levels.INFO)
+end, { desc = "Yank as shell command (clean format)" })
+
 -- Reload LazyVim configuration with space+rl
 vim.keymap.set("n", "<leader>rl", function()
 	vim.cmd("Lazy reload")
