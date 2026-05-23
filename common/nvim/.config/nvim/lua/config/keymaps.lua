@@ -8,7 +8,8 @@ vim.keymap.set("i", "<D-s>", "<Esc><cmd>w<cr>a", { desc = "Save" })
 vim.keymap.set({ "n", "v" }, "<leader>y", '"+y') -- yank motion
 
 -- Paste from system clipboard
-vim.keymap.set("n", "<leader>p", '"+p') -- paste after cursor
+vim.keymap.set({ "n", "v" }, "p", '"+p')
+vim.keymap.set({ "n", "v" }, "P", '"+P')
 
 -- Yank as shell command: cleans up line breaks, \n literals, and whitespace for pasting into terminals
 vim.keymap.set("v", "<leader>Y", function()

@@ -33,19 +33,7 @@ config.hide_tab_bar_if_only_one_tab = true
 config.automatically_reload_config = true
 config.detect_password_input = true
 
-local function bind_cmd_to_nvim(key, mods)
-	return function(window, pane)
-		local process_name = pane:get_foreground_process_name()
-		if process_name and process_name:match("nvim") then
-			window:perform_action({ SendKey = { key = key, mods = mods } }, pane)
-		else
-			window:perform_action({ SendKey = { key = key, mods = "CMD" } }, pane)
-		end
-	end
-end
-
 config.keys = {
-	{ key = "s", mods = "CMD", action = wezterm.action_callback(bind_cmd_to_nvim("s", "CTRL")) },
 	{ key = "P", mods = "SHIFT|CMD", action = action.ActivateCommandPalette },
 	{ key = "b", mods = "CTRL", action = "ActivateKeyTable", arg = "tmux_leader", one_shot = true },
 }
