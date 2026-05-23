@@ -63,3 +63,5 @@ eval "$(uv generate-shell-completion zsh)"
 
 # 1Password secrets
 export FORGEJO_ACCESS_TOKEN=$(op read "op://rangle/forgejo MCP API key/credential")
+
+export PATH="$PATH:/opt/nvim-linux-arm64/bin"
