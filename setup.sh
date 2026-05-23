@@ -22,10 +22,19 @@ if [ "$(uname -s)" = "Linux" ]; then
 fi
 
 # Detect Raspberry Pi specifically
+PI_MODEL=""
 IS_RASPBERRY_PI=false
 if [ "$(uname -s)" = "Linux" ]; then
     if [ -f /sys/firmware/devicetree/base/model ]; then
-        if [ "$(cat /sys/firmware/devicetree/base/model)" = "Raspberry Pi" ]; then
+        PI_MODEL=$(tr -d '\0' < /sys/firmware/devicetree/base/model)
+        case "$PI_MODEL" in
+            "Raspberry Pi"*)
+                IS_RASPBERRY_PI=true
+                ;;
+        esac
+    fi
+    if [ "$IS_RASPBERRY_PI" = "false" ] && [ -f /proc/cpuinfo ]; then
+        if grep -qE "Hardware.*:.*BCM(283[5-7]|271[12])" /proc/cpuinfo 2>/dev/null; then
             IS_RASPBERRY_PI=true
         fi
     fi
@@ -39,7 +48,8 @@ case "$(uname -s)" in
         ;;
     Linux*)
         if [ "$IS_RASPBERRY_PI" = "true" ]; then
-            echo "🍎 Detected Raspberry Pi"
+            echo "🍎 Detected $PI_MODEL"
+            export PI_MODEL
             exec "$SCRIPT_DIR/scripts/setup-pi.sh" "$@"
             exit 0
         elif [ "$IS_NIXOS" = "true" ]; then

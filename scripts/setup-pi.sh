@@ -32,6 +32,9 @@ fi
 
 # Display detected distribution
 echo "🖥️  Detected distribution: $DISTRO_ID $DISTRO_VERSION"
+if [[ -n "${PI_MODEL:-}" ]]; then
+    echo "🥧 Detected hardware: $PI_MODEL"
+fi
 echo ""
 
 # Check if running as root for apt operations
