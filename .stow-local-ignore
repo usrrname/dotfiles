@@ -15,8 +15,8 @@ devbox.*
 package.*
 README.md
 .cursor/*
-	.claude
-claude/hooks/peon-ping
+**/.claude/*
+common/claude/*
 scripts/*
 setup/*
 test/*
