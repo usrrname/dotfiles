@@ -4,12 +4,7 @@
 --- Save and append in insert mode --
 vim.keymap.set("i", "<D-s>", "<Esc><cmd>w<cr>a", { desc = "Save" })
 
--- Yank into system clipboard
-vim.keymap.set({ "n", "v" }, "<leader>y", '"+y') -- yank motion
-
--- Paste from system clipboard
-vim.keymap.set({ "n", "v" }, "p", '"+p')
-vim.keymap.set({ "n", "v" }, "P", '"+P')
+vim.keymap.set({ "n", "v" }, "<leader>y", '"+y', { desc = "Yank to system clipboard" })
 
 -- Yank as shell command: cleans up line breaks, \n literals, and whitespace for pasting into terminals
 vim.keymap.set("v", "<leader>Y", function()
