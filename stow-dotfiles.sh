@@ -28,7 +28,6 @@ fi
 
 COMMON=(
   bash
-  claude
   agents
   nvim
   direnv
@@ -52,6 +51,7 @@ LINUX=(
 MACOS=(
   git
   act
+  claude
   iterm2
   yarn
   husky

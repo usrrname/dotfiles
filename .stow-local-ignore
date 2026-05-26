@@ -16,7 +16,6 @@ package.*
 README.md
 .cursor/*
 **/.claude/*
-common/claude/*
 scripts/*
 setup/*
 test/*
