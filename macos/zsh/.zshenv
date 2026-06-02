@@ -1,6 +1,6 @@
 # macOS specific environment
 # defaults writes are skipped in sandboxed shells (e.g., Claude Code) since they persist once set
-if [[ ! -v CLAUDE_CODE_SANDBOX ]]; then
+if [[ ! -v SANDBOX_RUNTIME ]]; then
   # don't create .DS_Store files on network volumes
   defaults write com.apple.desktopservices DSDontWriteNetworkStores true
   # don't create .DS_Store files on USB volumes

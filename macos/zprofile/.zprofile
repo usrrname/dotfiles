@@ -12,7 +12,7 @@ fi
 [ -x /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # macOS preferences (persist once set, skip in sandboxed shells)
-if [[ ! -v CLAUDE_CODE_SANDBOX ]]; then
+if [[ ! -v SANDBOX_RUNTIME ]]; then
   defaults write NSGlobalDomain AppleShowAllExtensions -bool true
   defaults write com.apple.screencapture "location" -string "~/pictures/screenshots"
   defaults write -g com.apple.SwiftUI.DisableSolarium -bool YES
