@@ -59,6 +59,7 @@ goose/**/*/githubcopilot/**
 ollama/**/*
 plans/**
 opencode/.config/opencode/plans/**
+docs/plans/**
 # Ignore dotfiles at root level only (not nested)
 /.*
 !.gitignore
