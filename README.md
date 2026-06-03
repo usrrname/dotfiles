@@ -102,6 +102,14 @@ This will:
 
 **Midnight Commander unreadable with Catppuccin theme**: The macOS aliases include a fix that launches mc with the `modarin256` skin for better colors. See [setup-osx.md](setup-osx.md) for details.
 
+## Testing the Linux Setup from macOS
+
+Run a one-shot dry-run of `setup-linux.sh` inside an ephemeral Ubuntu VM via OrbStack:
+
+```bash
+orb run -m ubuntu bash -c "cd ~/.dotfiles && DRY_RUN=true bash scripts/setup-linux.sh"
+```
+
 ## Adding a New Config Package
 
 Want to add `~/.config/someapp` to your dotfiles? Here's how:
@@ -134,6 +142,7 @@ That's it! Your config is now tracked in git and symlinked to `~/.config/someapp
     - [Symlinking Dotfiles](#symlinking-dotfiles)
     - [Updating Dotfiles](#updating-dotfiles)
   - [Troubleshooting](#troubleshooting)
+  - [Testing the Linux Setup from macOS](#testing-the-linux-setup-from-macos)
   - [Adding a New Config Package](#adding-a-new-config-package)
   - [Maintenance](#maintenance)
   - [act](#act)
