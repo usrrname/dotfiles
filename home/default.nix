@@ -17,6 +17,7 @@ in
   home.packages =
     with pkgs;
     [
+      # Core CLI
       git
       curl
       wget
@@ -26,29 +27,55 @@ in
       stow
       tmux
 
+      # Editors
       neovim
       vim
 
+      # Dev tooling
       direnv
       gh
+      act # run GitHub Actions locally
+      bruno # API client
+      _1password-cli
 
+      # Build tools
       gnumake
       gcc
       openssl
 
+      # Language runtimes & package managers
+      nodejs # provides node + npm; replaces fnm/nvm
+      pnpm
+      yarn
+      bun
+      rustup # bring-your-own-toolchain rust
+
+      # Shell
       zsh
       oh-my-zsh
       starship
 
+      # Misc
       gnupg
       cacert
+      ollama # local LLM server
     ]
     ++ lib.optionals isLinux [
       lsb-release
     ]
     ++ lib.optionals isDarwin [
-      # Mac-only packages added in Phase 1
+      # Mac-only nixpkgs additions go here; GUI apps live in homebrew.casks
+      # under hosts/mac-jenc/default.nix.
     ];
+
+  # Install global npm packages that aren't in nixpkgs (Socket Security CLI).
+  # Runs after Home Manager writes its files; idempotent.
+  home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    export PATH="${pkgs.nodejs}/bin:$PATH"
+    if ! command -v socket >/dev/null 2>&1; then
+      $DRY_RUN_CMD npm install -g socket
+    fi
+  '';
 
   programs.home-manager.enable = true;
 

@@ -42,9 +42,20 @@
         test-aarch64-linux = mkLinuxHome "aarch64-linux";
       };
 
-      # Phase 1 will populate this:
-      #   mac-jenc = nix-darwin.lib.darwinSystem { ... };
-      darwinConfigurations = { };
+      # Phase 1 — Apple Silicon Mac. After installing Nix on the Mac:
+      #   nix run nix-darwin -- switch --flake .#mac-jenc
+      darwinConfigurations.mac-jenc = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          ./hosts/mac-jenc
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.users.jenc = import ./home;
+          }
+        ];
+      };
 
       # Phase 4 will populate this, folding in nix/etc/nixos/configuration.nix:
       #   nixos-box = nixpkgs.lib.nixosSystem { ... };
