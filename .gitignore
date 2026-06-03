@@ -60,6 +60,11 @@ ollama/**/*
 plans/**
 opencode/.config/opencode/plans/**
 docs/plans/**
+
+# Nix build artifacts (`nix build` / `home-manager build` create these)
+result
+result-*
+
 # Ignore dotfiles at root level only (not nested)
 /.*
 !.gitignore
