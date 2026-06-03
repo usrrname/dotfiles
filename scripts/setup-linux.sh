@@ -193,6 +193,20 @@ else
     echo "✅ Rust already installed"
 fi
 
+# Install Socket Security CLI (via npm, requires nvm/node)
+if ! command -v socket &> /dev/null; then
+    echo "Installing Socket CLI..."
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "[DRY RUN] Would install socket via npm"
+    elif command -v npm &> /dev/null; then
+        command npm install -g socket
+    else
+        echo "⚠️  npm not available; skipping socket install"
+    fi
+else
+    echo "✅ socket already installed"
+fi
+
 # Install ripgrep if not already installed
 if ! command -v rg &> /dev/null; then
     echo "Installing ripgrep..."

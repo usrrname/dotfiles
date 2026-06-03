@@ -11,11 +11,12 @@ after_each() {
   # Reset the package arrays
   BREW_PACKAGES=()
   CASK_PACKAGES=()
+  NODE_GLOBAL_PACKAGES=()
   _init_packages
 }
 
 @test "can run script in dry-run mode" {
-  DRY_RUN=true run ./setup-osx.sh
+  DRY_RUN=true run ./scripts/setup-osx.sh
   assert_success
   assert_output --partial 'Homebrew is installed'
   assert_output --partial 'Installing packages...'
@@ -27,7 +28,7 @@ after_each() {
 
 @test "should succeed check if brew is already installed" {
 
-  CHECK_ONLY=true run ./setup-osx.sh check
+  CHECK_ONLY=true run ./scripts/setup-osx.sh check
   if command -v brew &>/dev/null; then
     assert_success
     assert_output --partial 'Homebrew is installed'
@@ -68,7 +69,7 @@ after_each() {
 }
 
 @test 'packages can be listed' {
-  run ./setup-osx.sh list
+  run ./scripts/setup-osx.sh list
   assert_success
   assert_output --partial "📦 Package Configuration:"
 }
@@ -123,5 +124,44 @@ after_each() {
   assert_output --partial "✅ Package configuration is valid"
   assert_output --partial "Brew packages: ${#BREW_PACKAGES[@]}"
   assert_output --partial "Cask packages: ${#CASK_PACKAGES[@]}"
+  assert_output --partial "Node global packages: ${#NODE_GLOBAL_PACKAGES[@]}"
+}
+
+@test 'should detect duplicates in NODE_GLOBAL_PACKAGES' {
+  local orig_node=("${NODE_GLOBAL_PACKAGES[@]}")
+
+  NODE_GLOBAL_PACKAGES+=("socket") # socket already exists
+  _init_packages
+
+  run validate_package_config
+  assert_failure
+  assert_output --partial "❌ Error: Duplicate packages in NODE_GLOBAL_PACKAGES: socket"
+
+  NODE_GLOBAL_PACKAGES=("${orig_node[@]}")
+  _init_packages
+}
+
+@test 'should detect overlap between NODE_GLOBAL_PACKAGES and BREW_PACKAGES' {
+  local orig_brew=("${BREW_PACKAGES[@]}")
+  local orig_node=("${NODE_GLOBAL_PACKAGES[@]}")
+
+  BREW_PACKAGES+=("shared-pkg")
+  NODE_GLOBAL_PACKAGES+=("shared-pkg")
+  _init_packages
+
+  run validate_package_config
+  assert_failure
+  assert_output --partial "❌ Error: Packages appear in NODE_GLOBAL_PACKAGES and BREW_PACKAGES/CASK_PACKAGES: shared-pkg"
+
+  BREW_PACKAGES=("${orig_brew[@]}")
+  NODE_GLOBAL_PACKAGES=("${orig_node[@]}")
+  _init_packages
+}
+
+@test 'list_packages includes Node Global Packages section' {
+  run ./scripts/setup-osx.sh list
+  assert_success
+  assert_output --partial "📦 Node Global Packages (${#NODE_GLOBAL_PACKAGES[@]}):"
+  assert_output --partial "socket"
 }
 

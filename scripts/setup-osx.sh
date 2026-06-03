@@ -90,6 +90,22 @@ for PKG in "${CASK_PACKAGES[@]}"; do
 	fi
 done
 
+# Install global npm packages (requires node/npm to already be available)
+if command -v npm &>/dev/null; then
+	for PKG in "${NODE_GLOBAL_PACKAGES[@]}"; do
+		if [[ "$DRY_RUN" == "true" ]]; then
+			echo "[DRY RUN] Would install npm global $PKG"
+		elif command npm list -g --depth=0 "$PKG" &>/dev/null; then
+			echo "✅ $PKG (npm global) is already installed"
+		else
+			echo "📦 Installing $PKG via npm"
+			command npm install -g "$PKG"
+		fi
+	done
+else
+	echo "⚠️  npm not available; skipping NODE_GLOBAL_PACKAGES (${NODE_GLOBAL_PACKAGES[*]})"
+fi
+
 # configure nvm / node
 if command -v nvm &>/dev/null; then
 	if [[ "$DRY_RUN" == "true" ]]; then

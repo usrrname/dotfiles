@@ -44,6 +44,11 @@ declare -gax CASK_PACKAGES=(
 	"1password" # 1Password desktop app
 )
 
+# Global npm packages (installed via 'npm install -g')
+declare -gax NODE_GLOBAL_PACKAGES=(
+	"socket" # Socket Security CLI — wraps npm/npx for supply-chain scanning
+)
+
 # Auto-generated combined list (DO NOT EDIT MANUALLY)
 declare -gax PACKAGES=()
 
@@ -99,6 +104,21 @@ is_cask_installed() {
 	brew list --cask "$package" &>/dev/null
 }
 
+# Check if a global npm package is installed
+# @param $1 package name
+# @returns 0 if installed, 1 if not installed or error
+is_node_global_installed() {
+	local package="${1:-}"
+
+	[[ -n "$package" ]] || {
+		echo "❌ Error: Package name required" >&2
+		return 1
+	}
+
+	command -v npm &>/dev/null || return 1
+	command npm list -g --depth=0 "$package" &>/dev/null
+}
+
 # Check if any package is installed (auto-detects type)
 # @param $1 package name
 # @returns 0 if installed, 1 if not installed or error
@@ -110,7 +130,7 @@ is_package_installed() {
 		return 1
 	}
 
-	is_brew_package_installed "$package" || is_cask_installed "$package"
+	is_brew_package_installed "$package" || is_cask_installed "$package" || is_node_global_installed "$package"
 }
 
 # =============================================================================
@@ -133,6 +153,9 @@ get_package_info() {
 		install_status="✅ installed"
 	elif is_cask_installed "$package"; then
 		package_type="cask"
+		install_status="✅ installed"
+	elif is_node_global_installed "$package"; then
+		package_type="node"
 		install_status="✅ installed"
 	else
 		# Determine expected type based on our arrays
@@ -168,6 +191,12 @@ validate_package_config() {
 		((errors++))
 	fi
 
+	duplicates=$(printf '%s\n' "${NODE_GLOBAL_PACKAGES[@]}" | sort | uniq -d)
+	if [[ -n "$duplicates" ]]; then
+		echo "❌ Error: Duplicate packages in NODE_GLOBAL_PACKAGES: $duplicates"
+		((errors++))
+	fi
+
 	# Check for overlap between brew and cask packages
 	local overlap=()
 	for pkg in "${BREW_PACKAGES[@]}"; do
@@ -181,8 +210,21 @@ validate_package_config() {
 		((errors++))
 	fi
 
+	# Check for overlap between node globals and brew/cask
+	overlap=()
+	for pkg in "${NODE_GLOBAL_PACKAGES[@]}"; do
+		if [[ " ${BREW_PACKAGES[*]} " =~ " ${pkg} " ]] || [[ " ${CASK_PACKAGES[*]} " =~ " ${pkg} " ]]; then
+			overlap+=("$pkg")
+		fi
+	done
+
+	if [[ ${#overlap[@]} -gt 0 ]]; then
+		echo "❌ Error: Packages appear in NODE_GLOBAL_PACKAGES and BREW_PACKAGES/CASK_PACKAGES: ${overlap[*]}"
+		((errors++))
+	fi
+
 	# Verify PACKAGES matches combined arrays
-	local expected_count=$((${#BREW_PACKAGES[@]} + ${#CASK_PACKAGES[@]}))
+	local expected_count=$((${#BREW_PACKAGES[@]} + ${#CASK_PACKAGES[@]} + ${#NODE_GLOBAL_PACKAGES[@]}))
 	if [[ ${#PACKAGES[@]} -ne $expected_count ]]; then
 		echo "❌ Error: PACKAGES array size (${#PACKAGES[@]}) doesn't match expected ($expected_count)"
 		((errors++))
@@ -192,6 +234,7 @@ validate_package_config() {
 		echo "✅ Package configuration is valid"
 		echo "   Brew packages: ${#BREW_PACKAGES[@]}"
 		echo "   Cask packages: ${#CASK_PACKAGES[@]}"
+		echo "   Node global packages: ${#NODE_GLOBAL_PACKAGES[@]}"
 		echo "   Total packages: ${#PACKAGES[@]}"
 	fi
 
@@ -209,6 +252,11 @@ list_packages() {
 	echo ""
 	echo "📱 Cask Packages (${#CASK_PACKAGES[@]}):"
 	for pkg in "${CASK_PACKAGES[@]}"; do
+		get_package_info "$pkg"
+	done
+	echo ""
+	echo "📦 Node Global Packages (${#NODE_GLOBAL_PACKAGES[@]}):"
+	for pkg in "${NODE_GLOBAL_PACKAGES[@]}"; do
 		get_package_info "$pkg"
 	done
 	echo ""

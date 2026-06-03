@@ -65,6 +65,7 @@ declare -gax SPECIAL_PACKAGES_BASE=(
   "tailscale" # VPN mesh networking (official script)
   "oh-my-zsh" # Oh-My-Zsh framework (installed via script)
   "op"        # 1Password CLI (installed via script)
+  "socket"    # Socket Security CLI (installed via npm)
   "immich"    # Self-hosted photo and video backup solution (Docker)
   "grafana"   # Self-hosted monitoring and analytics platform (Docker)
 )
@@ -180,6 +181,29 @@ is_command_available() {
   command -v "$cmd" &>/dev/null
 }
 
+# Check if a global npm package is installed (looks under nvm-managed node too)
+# @param $1 package name
+# @returns 0 if installed, 1 if not installed
+is_node_global_installed() {
+  local package="${1:-}"
+
+  [[ -n "$package" ]] || {
+    echo "❌ Error: Package name required" >&2
+    return 1
+  }
+
+  # Already on PATH (nvm loaded, system npm, etc.)
+  command -v "$package" &>/dev/null && return 0
+
+  # Filesystem check: nvm-managed node, fnm, system npm prefix
+  shopt -s nullglob
+  local matches=("$HOME/.nvm/versions/node/"*"/bin/$package" \
+                 "$HOME/.local/share/fnm/node-versions/"*"/installation/bin/$package" \
+                 "/usr/local/bin/$package")
+  shopt -u nullglob
+  [[ ${#matches[@]} -gt 0 ]]
+}
+
 # Check if Tailscale is installed
 # @returns 0 if installed, 1 if not installed
 is_tailscale_installed() {
@@ -212,6 +236,9 @@ get_package_info() {
     install_status="✅ installed"
   elif is_command_available "$pkg_name"; then
     package_type="command"
+    install_status="✅ installed"
+  elif is_node_global_installed "$pkg_name"; then
+    package_type="node"
     install_status="✅ installed"
   else
     # Determine expected type based on our arrays
