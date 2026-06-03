@@ -1,34 +1,4 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "autoupdate": true,
-  "instructions": [
-    "AGENTS.md",
-    "$HOME/.config/opencode/no-comment-hooks.md"
-  ],
-  "mcp": {
-    "varlock-docs-mcp": {
-      "type": "remote",
-      "url": "https://docs.mcp.varlock.dev/mcp",
-      "enabled": false
-    },
-    "secure_fetch": {
-      "type": "local",
-      "command": [
-        "sh",
-        "-c",
-        "SECURE_FETCH_LOG_DIR=$PWD/.logs node $HOME/code/secure-fetch/dist/index.js"
-      ],
-      "enabled": true
-    }
-  },
-  "plugin": [
-    "opencode-openmemory@latest",
-    "oh-my-openagent@latest"
-  ],
-  "skills": {
-    "paths": [
-      "./skills/**"
-    ]
-  },
-  "default_agent": "Sisyphus"
+  "mcp": {}
 }
