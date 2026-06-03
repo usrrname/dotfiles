@@ -100,3 +100,12 @@ alias xoff='sudo /usr/local/bin/xSoft.sh 0 27'
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"                   # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+# Socket CLI completion for "socket"
+if [ -f "/Users/jenc/.local/share/socket/completion/socket-completion.bash" ]; then
+    # Load the tab completion script
+    source "/Users/jenc/.local/share/socket/completion/socket-completion.bash"
+    # Tell bash to use this function for tab completion of this function
+    complete -F _socket_completion socket
+fi
+alias npm="socket npm"
+alias npx="socket npx"
