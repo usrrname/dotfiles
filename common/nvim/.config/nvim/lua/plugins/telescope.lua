@@ -6,11 +6,12 @@ return {
 			build = "make",
 		},
 	},
-
 	keys = {
 		{
 			"<leader>fp",
-			function() require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root }) end,
+			function()
+				require("telescope.builtin").find_files({ cwd = require("lazy.core.config").options.root })
+			end,
 			desc = "Find Plugin File",
 		},
 		{
@@ -21,6 +22,7 @@ return {
 				if cwd == "" or cwd:match("ministarter") or not vim.fn.isdirectory(cwd) then
 					cwd = vim.fn.getcwd()
 				end
+
 				require("telescope.builtin").find_files({
 					prompt_title = "Find Files",
 					cwd = cwd,
@@ -28,6 +30,7 @@ return {
 					file_ignore_patterns = {
 						".git/",
 						"node_modules/",
+						".cargo",
 						"vendor/",
 						"dist/",
 						"public",

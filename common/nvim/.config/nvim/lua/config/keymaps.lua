@@ -67,3 +67,7 @@ end, { desc = "Move line down" })
 -- Insert mode Alt+Arrow
 vim.keymap.set("i", "<M-Up>", "<Cmd>m .-2<CR>==gi", { desc = "Move line up" })
 vim.keymap.set("i", "<M-Down>", "<Cmd>m .+1<CR>==gi", { desc = "Move line down" })
+
+vim.keymap.set("n", "<leader>mp", "<Plug>(md-render-preview)", { desc = "Markdown preview (toggle)" })
+vim.keymap.set("n", "<leader>mt", "<Plug>(md-render-preview-tab)", { desc = "Markdown preview in tab (toggle)" })
+vim.keymap.set("n", "<leader>md", "<Plug>(md-render-demo)", { desc = "Markdown render demo" })
