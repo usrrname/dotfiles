@@ -29,27 +29,30 @@ sudo darwin-rebuild switch --flake .#mac-jenc
 ├── flake.nix              # Nix flake entry point
 ├── hosts/mac-jenc/        # macOS system config (nix-darwin)
 ├── home/                  # Home Manager config (packages, programs)
-├── modules/               # Nix modules (direnv, gh, nvim, tmux)
-├── common/                # Stow packages (legacy, being migrated)
-└── macos/                 # macOS-specific stow packages
+├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux)
+├── common/                # Stow packages (agents)
+└── macos/                 # macOS-specific stow packages (act)
 ```
 
 ### What's managed by Nix
 
-- **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, fnm, etc.
-- **Homebrew casks**: wezterm, obsidian, 1password, orbstack, etc.
-- **Programs**: git, ssh, zsh, direnv, gh, tmux, starship, nvim (LazyVim)
-- **Configs**: SSH config, Wezterm, nvim/LazyVim, shell aliases, environment variables
+- **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, fnm, nodejs, pnpm, yarn, bun, rustup, etc.
+- **Homebrew casks**: wezterm, obsidian, 1password, orbstack, slack, spotify, firefox, brave-browser, tailscale, gpg-suite
+- **Programs**: git, ssh, bash, zsh, direnv, gh, tmux, starship, vim, nvim (LazyVim), opencode, claude
+- **Configs**: SSH config, Wezterm, nvim/LazyVim, bash aliases, shell aliases, environment variables, Claude Code settings/skills/hooks
 
 ### What's still stow-managed
 
-- `bash`, `agents`, `opencode`, `mc`, `zed` (common)
-- `act`, `claude`, `iterm2`, `husky`, `verdaccio` (macOS)
+- `agents` (common) - Cloudflare reference docs and skills
 
-To stow these:
+To stow:
 ```bash
 ./stow-dotfiles.sh
 ```
+
+### Removed (no longer needed)
+
+- `verdaccio`, `husky`, `zed`, `mc` (Midnight Commander), `iterm2`
 
 ## Adding a New Config
 
