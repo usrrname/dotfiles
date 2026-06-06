@@ -28,14 +28,12 @@ fi
 
 COMMON=(
   agents
-  opencode
 )
 
 LINUX=()
 
 MACOS=(
   act
-  claude
 )
 
 unstow_all() {
