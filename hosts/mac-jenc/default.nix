@@ -6,8 +6,8 @@
 
 {
   # System-level identity
-  networking.hostName = "mac-jenc";
-  networking.computerName = "mac-jenc";
+  networking.hostName = "m2";
+  networking.computerName = "mac";
 
   # Nix daemon settings — Determinate manages Nix itself, so disable
   # nix-darwin's native Nix management to avoid conflicts.
@@ -59,6 +59,7 @@
       "orbstack"
       "gpg-suite"
       "1password"
+      "obsidian"
     ];
   };
 

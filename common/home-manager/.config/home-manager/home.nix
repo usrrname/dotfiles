@@ -42,8 +42,8 @@ in
     starship              # Cross-shell prompt
     
     # === Programming Languages ===
-    # Note: Use mise/fnm for Node.js version management
-    # Note: Use rustup for Rust (not in nixpkgs directly)
+    go
+    fnm
     
     # === Additional Tools ===
     gnupg
@@ -66,6 +66,52 @@ in
     enable = true;
     userName = "jenc";
     # userEmail = "your.email@example.com";  # Add your email
+  };
+
+  # Vim configuration
+  programs.vim = {
+    enable = true;
+    extraConfig = ''
+      " enable modern features
+      set nocompatible
+
+      " arrow keys should work in insert mode
+      inoremap <Up> <C-o>k
+      inoremap <Down> <C-o>j
+      inoremap <Left> <C-o>h
+      inoremap <Right> <C-o>l
+      " map command s to save file
+      imap <D-s> <Esc>:w<CR>a
+    '';
+  };
+
+  # SSH configuration
+  programs.ssh = {
+    enable = true;
+    extraConfig = ''
+      Include ~/.orbstack/ssh/config
+
+      Host *
+        IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+      Host sink
+        Hostname 192.168.68.50
+        User netserv
+        IdentityFile "~/.ssh/netserv SSH Key.pub"
+        IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+        IdentitiesOnly yes
+
+      Host node05.din.gy
+        HostName fulton.din.gy
+        Port 8025
+        ForwardAgent yes
+        User jenc
+
+      Host paddington.io
+        AddKeysToAgent yes
+        UseKeychain yes
+        IdentityFile "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    '';
   };
   
   # Zsh configuration (complements your existing .zshrc)
@@ -114,6 +160,7 @@ in
   home.sessionPath = lib.optionals isDarwin [ "/opt/homebrew/bin" ];
 
   # === File Management ===
-  # You can symlink specific files if needed
+  # Wezterm config (Lua file)
+  xdg.configFile."wezterm/wezterm.lua".source = ../../../wezterm/.wezterm.lua;
   # home.file.".config/some-app/config".source = ./some-config-file;
 }

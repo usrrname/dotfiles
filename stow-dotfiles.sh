@@ -31,11 +31,9 @@ COMMON=(
   agents
   nvim
   direnv
-  ssh
   gh
   home-manager
   vim
-  wezterm
 )
 
 LINUX=()

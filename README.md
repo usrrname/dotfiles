@@ -1,182 +1,138 @@
 # dotfiles
 
-Dotfiles setup made with:
+Dotfiles managed with [Nix flakes](https://nixos.wiki/wiki/Flakes), [Home Manager](https://nix-community.github.io/home-manager/), and [nix-darwin](https://github.com/LnL7/nix-darwin) for macOS.
 
-- [stow](https://www.gnu.org/software/stow/)
+Legacy [stow](https://www.gnu.org/software/stow/) setup still available for Linux/non-Nix environments.
 
-- [direnv](https://direnv.net) w/ global config in `~/.config/direnv/direnvrc`
-
-- Underlying ideals from [12 Factor App config](https://12factor.net/config)
-
-## Quick Start
-
-The setup script automatically detects your operating system and runs the appropriate installer.
-
-**No special requirements** - works with standard shells on supported systems.
-
-**Supported Systems:**
-
-- [macOS setup](setup-osx.md) based on [mac.install.guide](https://mac.install.guide/) tested with [Bats](https://github.com/bats-core/bats-core) (see [setup-osx.md](setup-osx.md))
-- [Raspberry Pi 4 setup](setup-pi.md) running Debian Trixie
-- **NixOS** - Managed via `/etc/nixos/configuration.nix` (auto-configured by `bin/init.sh`)
+## Quick Start (macOS)
 
 ```bash
-# Install packages (auto-detects OS)
-./setup.sh
-
-# Check package status
-./setup.sh check
-
-# List all packages
-./setup.sh list
-
-# Validate package configuration (macOS only)
-./setup.sh validate
+# Clone and rebuild
+git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+sudo darwin-rebuild switch --flake .#mac-jenc
 ```
 
-The script will automatically:
+This installs packages, links configs, and sets up the system declaratively.
 
-- **macOS**: Run `scripts/setup-osx.sh` (uses Homebrew)
-- **Linux (Debian/Ubuntu)**: Run `scripts/setup-linux.sh` (uses APT)
-- **NixOS**: Shows guidance (package management via configuration.nix)
-
-You can still run the OS-specific scripts directly if needed:
-
-- `./scripts/setup-osx.sh` for macOS
-- `./scripts/setup-linux.sh` for Linux
-
-### Symlinking Dotfiles
-
-After installing packages, symlink your dotfiles using the OS-aware stow script:
+### Updating
 
 ```bash
-# Stow all dotfiles (auto-detects OS and only stows relevant packages)
+cd ~/.dotfiles
+git pull
+sudo darwin-rebuild switch --flake .#mac-jenc
+```
+
+## Structure
+
+```
+├── flake.nix              # Nix flake entry point
+├── hosts/mac-jenc/        # macOS system config (nix-darwin)
+├── home/                  # Home Manager config (packages, programs)
+├── modules/               # Nix modules (direnv, gh, nvim, tmux)
+├── common/                # Stow packages (legacy, being migrated)
+└── macos/                 # macOS-specific stow packages
+```
+
+### What's managed by Nix
+
+- **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, fnm, etc.
+- **Homebrew casks**: wezterm, obsidian, 1password, orbstack, etc.
+- **Programs**: git, ssh, zsh, direnv, gh, tmux, starship
+- **Configs**: SSH config, Wezterm, shell aliases, environment variables
+
+### What's still stow-managed
+
+- `bash`, `agents`, `vim`, `opencode` (common)
+- `act`, `claude`, `iterm2`, `husky`, `verdaccio` (macOS)
+
+To stow these:
+```bash
 ./stow-dotfiles.sh
-
-# Stow without adopting existing files (use if starting fresh)
-./stow-dotfiles.sh ""
 ```
 
-## Setup
+## Adding a New Config
 
-Clone the repository and run the init script — it auto-detects your OS and configures everything:
+### Option 1: Nix (preferred for macOS)
+
+Edit `home/default.nix` or `modules/`:
+
+```nix
+# Example: add a program
+programs.someapp = {
+  enable = true;
+  # ... settings
+};
+
+# Example: link a config file
+xdg.configFile."someapp/config.toml".source = ./someapp/config.toml;
+```
+
+Then rebuild:
+```bash
+sudo darwin-rebuild switch --flake .#mac-jenc
+```
+
+### Option 2: Stow (for Linux or unmigrated configs)
 
 ```bash
-git clone https://github.com/usrrname/dotfiles.git
-cd dotfiles
-./bin/init.sh
+# 1. Create the directory structure
+mkdir -p common/someapp/.config/someapp
+
+# 2. Copy your config
+cp -r ~/.config/someapp/* common/someapp/.config/someapp/
+
+# 3. Remove the original
+rm -rf ~/.config/someapp
+
+# 4. Add to COMMON array in stow-dotfiles.sh
+# 5. Run stow
+./stow-dotfiles.sh
 ```
 
-The init script:
+## Adding a Homebrew Package
 
-1. Detects your OS (macOS, Linux, or NixOS)
-2. Configures git sparse-checkout to only checkout relevant files
-3. **macOS/Linux**: Runs stow to create symlinks
-4. **NixOS**: Copies configuration and runs `nixos-rebuild switch`
+Edit `hosts/mac-jenc/default.nix`:
 
-### Updating Dotfiles
-
-After pulling updates from the repository, use the update script to sync everything:
-
-```bash
-# Pull updates, update submodules, install new packages, and update symlinks
-./update.sh
+```nix
+homebrew = {
+  brews = [
+    "some-formula"
+  ];
+  casks = [
+    "some-app"
+  ];
+};
 ```
 
-This will:
-
-1. Pull latest changes from git
-2. Update git submodules
-3. Install any new packages (setup scripts check if already installed)
-4. Update dotfile symlinks (stow is idempotent, safe to run multiple times)
+Then rebuild.
 
 ## Troubleshooting
 
-- **Check distribution detection**: `./setup.sh check`
-- **List packages**: `./setup.sh list`
-- **Dry run setup**: `DRY_RUN=true ./setup.sh`
-- **Verify symlinks**: `ls -la ~ | grep "\->"`
-- **macOS-specific**: See [setup-osx.md](setup-osx.md) for additional troubleshooting
-
-### Terminal App Issues
-
-**Midnight Commander unreadable with Catppuccin theme**: The macOS aliases include a fix that launches mc with the `modarin256` skin for better colors. See [setup-osx.md](setup-osx.md) for details.
-
-## Testing the Linux Setup from macOS
-
-Run a one-shot dry-run of `setup-linux.sh` inside an ephemeral Ubuntu VM via OrbStack:
-
+**Check what's installed:**
 ```bash
-orb run -m ubuntu bash -c "cd ~/.dotfiles && DRY_RUN=true bash scripts/setup-linux.sh"
+nix profile list
+brew list
 ```
 
-## Adding a New Config Package
-
-Want to add `~/.config/someapp` to your dotfiles? Here's how:
-
+**Verify configs:**
 ```bash
-# 1. Create the directory structure in your dotfiles repo
-mkdir -p common/someapp/.config/someapp
-
-# 2. Copy your existing config into it
-cp -r ~/.config/someapp/* common/someapp/.config/someapp/
-
-# 3. Remove the original (stow will recreate it as a symlink)
-rm -rf ~/.config/someapp
-
-# 4. Add the package name to the COMMON array in stow-dotfiles.sh
-# COMMON=(... someapp ...)
-
-# 5. Run stow to create the symlinks
-./stow-dotfiles.sh
+ssh -G hostname  # Check SSH config
+nvim --version   # Check neovim
 ```
 
-That's it! Your config is now tracked in git and symlinked to `~/.config/someapp`.
-
-**Note:** Some tools (like the 1Password CLI) don't work with symlinks. For those, add the package name to `.stow-local-ignore` instead — this tells stow to skip it entirely.
-
-### Contents
-
-- [dotfiles](#dotfiles)
-  - [Quick Start](#quick-start)
-    - [Symlinking Dotfiles](#symlinking-dotfiles)
-    - [Updating Dotfiles](#updating-dotfiles)
-  - [Troubleshooting](#troubleshooting)
-  - [Testing the Linux Setup from macOS](#testing-the-linux-setup-from-macos)
-  - [Adding a New Config Package](#adding-a-new-config-package)
-  - [Maintenance](#maintenance)
-  - [act](#act)
-  - [Symlinking](#symlinking)
-  - [Nvim/LazyVim](#nvimlazyvim)
-  - [1Password](#1password)
-
-## Maintenance
-
-Keep submodules updated
-
+**Rollback:**
 ```bash
-git submodule update
+# List generations
+darwin-rebuild --list-generations
+
+# Rollback to previous
+sudo darwin-rebuild switch --rollback
 ```
 
-## act
-
+**Dry run:**
 ```bash
-# insert 1password token into github action secrets
-act -s GITHUB_TOKEN=$(op read $GITHUB_TOKEN)
-```
-
-## Symlinking
-
-```bash
-./stow-dotfiles.sh
-```
-
-**Manual stow** (if you need to stow individual packages):
-
-```bash
-cp <directory> <target>
-mkdir -p <directory>
-stow <directory>
+nix build .#darwinConfigurations.mac-jenc.system --dry-run
 ```
 
 ## Nvim/LazyVim
