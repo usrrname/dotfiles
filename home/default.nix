@@ -16,6 +16,7 @@ in
     ../modules/direnv.nix
     ../modules/nvim.nix
     ../modules/opencode.nix
+    ../modules/bash.nix
   ];
 
   home.username = "jenc";

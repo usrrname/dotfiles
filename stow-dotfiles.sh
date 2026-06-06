@@ -27,10 +27,8 @@ else
 fi
 
 COMMON=(
-  bash
   agents
   opencode
-  mc
 )
 
 LINUX=()
@@ -38,7 +36,6 @@ LINUX=()
 MACOS=(
   act
   claude
-  iterm2
 )
 
 unstow_all() {
