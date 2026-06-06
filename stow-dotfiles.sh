@@ -29,11 +29,9 @@ fi
 COMMON=(
   bash
   agents
-  nvim
-  direnv
-  gh
-  home-manager
-  vim
+  opencode
+  mc
+  zed
 )
 
 LINUX=()
@@ -44,6 +42,7 @@ MACOS=(
   iterm2
   husky
   verdaccio
+  zed
 )
 
 unstow_all() {

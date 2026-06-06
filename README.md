@@ -38,12 +38,12 @@ sudo darwin-rebuild switch --flake .#mac-jenc
 
 - **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, fnm, etc.
 - **Homebrew casks**: wezterm, obsidian, 1password, orbstack, etc.
-- **Programs**: git, ssh, zsh, direnv, gh, tmux, starship
-- **Configs**: SSH config, Wezterm, shell aliases, environment variables
+- **Programs**: git, ssh, zsh, direnv, gh, tmux, starship, nvim (LazyVim)
+- **Configs**: SSH config, Wezterm, nvim/LazyVim, shell aliases, environment variables
 
 ### What's still stow-managed
 
-- `bash`, `agents`, `vim`, `opencode` (common)
+- `bash`, `agents`, `opencode`, `mc`, `zed` (common)
 - `act`, `claude`, `iterm2`, `husky`, `verdaccio` (macOS)
 
 To stow these:
