@@ -9,13 +9,9 @@
   networking.hostName = "mac-jenc";
   networking.computerName = "mac-jenc";
 
-  # Nix daemon settings (managed by Determinate Systems installer, but
-  # nix-darwin can own these declaratively).
-  nix.enable = true;
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
+  # Nix daemon settings — Determinate manages Nix itself, so disable
+  # nix-darwin's native Nix management to avoid conflicts.
+  nix.enable = false;
 
   nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = "aarch64-darwin";
@@ -33,10 +29,9 @@
     onActivation = {
       autoUpdate = true;
       upgrade = true;
-      # "uninstall" removes anything not declared here on every switch.
-      # "zap" also removes orphan config files. Leaving as uninstall to
-      # minimise surprise during Phase 1 migration.
-      cleanup = "uninstall";
+      # "none" — Homebrew's --cleanup now requires --force; nix-darwin
+      # hasn't caught up yet. Run `brew bundle cleanup --force` manually.
+      cleanup = "none";
     };
 
     taps = [
@@ -55,11 +50,12 @@
     # GUI apps. Casks always stay on Homebrew — nixpkgs doesn't ship
     # macOS .app bundles for these.
     casks = [
+      "brave-browser"
       "firefox"
       "wezterm"
       "slack"
       "spotify"
-      "tailscale"
+      "tailscale-app"
       "orbstack"
       "gpg-suite"
       "1password"
@@ -69,6 +65,9 @@
   # Let nix-darwin manage /etc/zshrc bits (Apple's defaults + nix paths).
   # User-level zsh config lives in Home Manager.
   programs.zsh.enable = true;
+
+  # Add Homebrew to system PATH
+  environment.systemPath = [ "/opt/homebrew/bin" ];
 
   # Sanity: pin the nix-darwin schema version so we don't accidentally
   # adopt breaking changes when bumping inputs.

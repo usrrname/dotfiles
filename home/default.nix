@@ -10,6 +10,13 @@ let
   isLinux = pkgs.stdenv.isLinux;
 in
 {
+  imports = [
+    ../modules/tmux.nix
+    ../modules/gh.nix
+    ../modules/direnv.nix
+    ../modules/nvim.nix
+  ];
+
   home.username = "jenc";
   home.homeDirectory = if isDarwin then "/Users/jenc" else "/home/jenc";
   home.stateVersion = "24.11";
@@ -28,7 +35,6 @@ in
       tmux
 
       # Editors
-      neovim
       vim
 
       # Dev tooling
@@ -68,22 +74,56 @@ in
       # under hosts/mac-jenc/default.nix.
     ];
 
+  programs.home-manager.enable = true;
+
+  # Use a user-writable npm global prefix (Nix store is read-only)
+  home.sessionVariables.NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+
   # Install global npm packages that aren't in nixpkgs (Socket Security CLI).
   # Runs after Home Manager writes its files; idempotent.
   home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    export PATH="${pkgs.nodejs}/bin:$PATH"
-    if ! command -v socket >/dev/null 2>&1; then
+    export NPM_CONFIG_PREFIX="$HOME/.npm-global"
+    export PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH"
+    $DRY_RUN_CMD mkdir -p "$HOME/.npm-global"
+    if ! "$HOME/.npm-global/bin/socket" --version >/dev/null 2>&1; then
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
 
-  programs.home-manager.enable = true;
-
   programs.git = {
     enable = true;
-    settings.user = {
-      name = "jenc";
-      # email = "jen.chan@rangle.io";  # populate before first switch
+    settings = {
+      user = {
+        name = "Jen Chan";
+        email = "6406037+usrrname@users.noreply.github.com";
+        signingkey = "~/.ssh/id_ed25519.pub";
+      };
+      color.ui = "auto";
+      core.editor = "nvim";
+      core.excludesFile = "~/.gitignore_global";
+      push.autoSetupRemote = true;
+      init.defaultBranch = "main";
+      pull.rebase = true;
+      alias = {
+        g = "git";
+        gco = "checkout";
+        gst = "status";
+        gcb = "checkout -b";
+        gcm = "commit -m";
+        noedit = "commit --amend --no-edit";
+        log = "log --pretty=format:\"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [%cn]\" --decorate";
+        assume = "update-index --assume-unchanged";
+        assumed = "!git ls-files -v | grep ^h | cut -c 3-";
+        unassume = "update-index --no-assume-unchanged";
+        unassumeall = "!git assumed | xargs git update-index --no-assume-unchanged";
+        alias = "!git config -l | grep alias | cut -c 7-";
+      };
+    } // lib.optionalAttrs isDarwin {
+      gpg.format = "ssh";
+      gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      commit.gpgsign = true;
+      credential."https://github.com".helper = [ "" "!/opt/homebrew/bin/gh auth git-credential" ];
+      credential."https://gist.github.com".helper = [ "" "!/opt/homebrew/bin/gh auth git-credential" ];
     };
   };
 

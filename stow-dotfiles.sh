@@ -34,30 +34,18 @@ COMMON=(
   ssh
   gh
   home-manager
-  mc
-  opencode
   vim
-  zed
   wezterm
-  tmux
 )
 
-LINUX=(
-  git
-  zsh
-  zprofile
-)
+LINUX=()
 
 MACOS=(
-  git
   act
   claude
   iterm2
-  yarn
   husky
   verdaccio
-  zsh
-  zprofile
 )
 
 unstow_all() {

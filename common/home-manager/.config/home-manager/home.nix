@@ -79,6 +79,10 @@ in
       plugins = [ "git" "direnv" "gh" ];
       theme = "robbyrussell";
     };
+    initExtra = ''
+      alias vi='nvim'
+      alias vim='nvim'
+    '';
   };
   
   # Direnv integration
@@ -105,6 +109,9 @@ in
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
+
+  # Add Homebrew to PATH on macOS
+  home.sessionPath = lib.optionals isDarwin [ "/opt/homebrew/bin" ];
 
   # === File Management ===
   # You can symlink specific files if needed

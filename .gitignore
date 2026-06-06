@@ -6,11 +6,10 @@ Makefile
 *.key
 *.pub
 id_rsa*
-cache/**
-extensions/**
+cache/*
 **/extensions/**
-tmp/**
 **/tmp/**
+.git/**
 temp/**
 .zsh_history
 cache/**

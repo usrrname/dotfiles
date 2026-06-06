@@ -37,6 +37,7 @@
       # without touching any real host. Both x86 and ARM Linux are
       # generated so this works in any OrbStack VM regardless of Mac
       # architecture.
+      #
       homeConfigurations = {
         test-x86_64-linux = mkLinuxHome "x86_64-linux";
         test-aarch64-linux = mkLinuxHome "aarch64-linux";
@@ -52,6 +53,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
             home-manager.users.jenc = import ./home;
           }
         ];

@@ -236,6 +236,18 @@
           }
         ]
       }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/tmux-session-summary.sh",
+            "timeout": 300
+          }
+        ]
+      }
     ]
   },
   "statusLine": {
@@ -257,6 +269,7 @@
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "stable",
+  "tui": "default",
   "voice": {
     "enabled": true,
     "mode": "hold"
