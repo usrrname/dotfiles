@@ -31,7 +31,6 @@ COMMON=(
   agents
   opencode
   mc
-  zed
 )
 
 LINUX=()
@@ -40,9 +39,6 @@ MACOS=(
   act
   claude
   iterm2
-  husky
-  verdaccio
-  zed
 )
 
 unstow_all() {
