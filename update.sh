@@ -1,6 +1,6 @@
 #!/bin/sh
 # Pull updates and sync dotfiles
-# Updates git repo, submodules, packages, and dotfile symlinks
+# Updates git repo, submodules, and applies Nix/stow configuration
 
 set -e
 
@@ -15,13 +15,8 @@ echo "📦 Updating submodules..."
 git submodule update --init --recursive
 
 echo ""
-echo "📦 Installing/updating packages..."
+echo "⚙️  Applying configuration..."
 ./setup.sh
 
 echo ""
-echo "🔗 Updating dotfile symlinks..."
-./stow-dotfiles.sh
-
-echo ""
 echo "✅ Update complete!"
-
