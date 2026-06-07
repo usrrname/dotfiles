@@ -32,7 +32,7 @@ if command -v nix >/dev/null 2>&1; then
                 sudo nixos-rebuild switch --flake .#nixos-box
             else
                 echo "🐧 Detected Linux - running home-manager..."
-                home-manager switch --flake .#fedora-mini
+                home-manager switch --flake .#fedora
             fi
             ;;
         *)

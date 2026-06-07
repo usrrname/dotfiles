@@ -10,7 +10,8 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 |------|------|--------|---------------|
 | `mac-jenc/` | nix-darwin | ✅ Done | `sudo darwin-rebuild switch --flake .#mac-jenc` |
 | `nixos-box/` | NixOS | ✅ Done | `nixos-rebuild switch --flake .#nixos-box` |
-| `fedora-mini/` | standalone HM | ✅ Done | `home-manager switch --flake .#fedora-mini` |
+| `fedora/` | standalone HM | ✅ Done | `home-manager switch --flake .#fedora` |
+| `ubuntu/` | standalone HM | ✅ Done | `home-manager switch --flake .#ubuntu` |
 | `pi-nas/` | standalone HM | ✅ Done | `home-manager switch --flake .#pi-nas` |
 
 ## Host configuration
@@ -25,9 +26,14 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 - Requires `hardware-configuration.nix` (gitignored, copied from `/etc/nixos/`)
 - Home Manager for user packages and dotfiles
 
-### fedora-mini (Fedora Workstation x86_64)
+### fedora (Fedora Workstation x86_64)
 - Standalone Home Manager (no nix-darwin/NixOS)
 - System packages managed via dnf
+- Nix only manages user environment
+
+### ubuntu (Ubuntu Workstation x86_64)
+- Standalone Home Manager (no nix-darwin/NixOS)
+- System packages managed via apt
 - Nix only manages user environment
 
 ### pi-nas (Raspberry Pi 4B NAS, Debian aarch64)

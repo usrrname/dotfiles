@@ -51,9 +51,13 @@
         test-x86_64-linux = mkLinuxHome "x86_64-linux";
         test-aarch64-linux = mkLinuxHome "aarch64-linux";
         
-        # Phase 2 — Fedora mini PC (standalone Home Manager)
-        # Apply on Fedora host: home-manager switch --flake .#fedora-mini
-        fedora-mini = mkStandaloneLinuxHome "x86_64-linux" ./hosts/fedora-mini;
+        # Fedora (standalone Home Manager)
+        # Apply on Fedora host: home-manager switch --flake .#fedora
+        fedora = mkStandaloneLinuxHome "x86_64-linux" ./hosts/fedora;
+        
+        # Ubuntu (standalone Home Manager)
+        # Apply on Ubuntu host: home-manager switch --flake .#ubuntu
+        ubuntu = mkStandaloneLinuxHome "x86_64-linux" ./hosts/ubuntu;
         
         # Raspberry Pi 4B NAS (standalone Home Manager on Debian)
         # Apply on Pi: home-manager switch --flake .#pi-nas

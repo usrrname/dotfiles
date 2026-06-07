@@ -8,6 +8,8 @@
 let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
+  username = let user = builtins.getEnv "USER"; in if user == "" then "jenc" else user;
+  homeDir = if isDarwin then "/Users/${username}" else "/home/${username}";
 in
 {
   imports = [
@@ -20,8 +22,8 @@ in
     ../modules/claude.nix
   ];
 
-  home.username = "jenc";
-  home.homeDirectory = if isDarwin then "/Users/jenc" else "/home/jenc";
+  home.username = username;
+  home.homeDirectory = homeDir;
   home.stateVersion = "24.11";
 
   home.packages =
@@ -172,7 +174,6 @@ in
       search = "apt search";
       py = "python3";
       pip = "pip3";
-      xoff = "sudo /usr/local/bin/xSoft.sh 0 27"; # Pi NAS soft shutdown
     };
   };
 

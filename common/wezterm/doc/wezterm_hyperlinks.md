@@ -1,4 +1,34 @@
-# Wezterm Hyperlink Integration
+## Wezterm config 
+
+### Font
+- Hack Nerd Font Mono at 13.3pt with 1.3 line height
+- Font rules map normal/italic text to specific font weights
+
+### Key features
+
+- Kitty keyboard protocol enabled (better key handling for TUI apps)
+- Fancy tab bar that hides when only one tab exists
+- Auto-reload config on changes
+- Password input detection (hides sensitive input)
+Keybindings (lines 36-64)
+- Cmd+Shift+P: Command palette
+- Ctrl+b: Tmux-style leader key (activates tmux_leader key table)
+- h/j/k/l: Navigate panes (left/down/up/right)
+- " / %: Split horizontal/vertical
+- d or x: Close pane
+- z: Toggle pane zoom
+- c: New window
+- n/p or o: Next/prev pane
+- Alt+Shift+Arrow: Resize panes by 5 cells
+- q: Visual pane selector
+- [: Copy mode (like tmux)
+- Escape/Enter: Exit key table
+Mouse (lines 67-70)
+
+### Security
+- Blocks non-HTTP(S) URIs from opening (prevents malicious protocols)
+
+## Hyperlink Integration
 
 ## Overview
 

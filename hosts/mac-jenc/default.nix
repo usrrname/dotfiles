@@ -4,6 +4,10 @@
   ...
 }:
 
+let
+  # Username for this host - change if deploying to a different user
+  username = "jenc";
+in
 {
   # System-level identity
   networking.hostName = "m2";
@@ -17,9 +21,9 @@
   nixpkgs.hostPlatform = "aarch64-darwin";
 
   # Declare the user nix-darwin manages so home-manager can attach to it.
-  users.users.jenc = {
-    name = "jenc";
-    home = "/Users/jenc";
+  users.users.${username} = {
+    name = username;
+    home = "/Users/${username}";
   };
 
   # Manage Homebrew declaratively — used for casks and tap-only formulae
@@ -74,5 +78,5 @@
   # adopt breaking changes when bumping inputs.
   system.stateVersion = 5;
 
-  system.primaryUser = "jenc";
+  system.primaryUser = username;
 }

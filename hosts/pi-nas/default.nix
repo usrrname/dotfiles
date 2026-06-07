@@ -3,6 +3,10 @@
 
 { config, pkgs, lib, ... }:
 
+let
+  username = let user = builtins.getEnv "USER"; in if user == "" then "jenc" else user;
+  homeDir = "/home/${username}";
+in
 {
   imports = [
     ../../home
@@ -12,8 +16,8 @@
   # Allow unfree packages (required for 1password-cli, etc.)
   nixpkgs.config.allowUnfree = true;
 
-  home.username = "jenc";
-  home.homeDirectory = "/home/jenc";
+  home.username = username;
+  home.homeDirectory = homeDir;
   home.stateVersion = "24.11";
 
   # Pi-specific packages (NAS setup)
@@ -45,6 +49,11 @@
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
+
+  # Pi-specific shell aliases
+  programs.zsh.shellAliases = {
+    xoff = "sudo /usr/local/bin/xSoft.sh 0 27"; # Pi NAS soft shutdown
+  };
 
   programs.home-manager.enable = true;
 }

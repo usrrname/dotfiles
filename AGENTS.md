@@ -15,7 +15,8 @@ Nix flakes (primary) + stow (fallback).
 |------|---------|
 | macOS (Apple Silicon) | `darwin-rebuild switch --flake .#mac-jenc` |
 | NixOS | `nixos-rebuild switch --flake .#nixos-box` |
-| Fedora (standalone HM) | `home-manager switch --flake .#fedora-mini` |
+| Fedora (standalone HM) | `home-manager switch --flake .#fedora` |
+| Ubuntu (standalone HM) | `home-manager switch --flake .#ubuntu` |
 | Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |
 
 ## Stow (fallback only)

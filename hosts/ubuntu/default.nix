@@ -1,11 +1,11 @@
-# Fedora mini PC host configuration
-# Standalone Home Manager configuration for Fedora Workstation
+# Ubuntu host configuration
+# Standalone Home Manager configuration for Ubuntu Workstation
 
 { config, pkgs, lib, ... }:
 
 let
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
+  username = let user = builtins.getEnv "USER"; in if user == "" then "jenc" else user;
+  homeDir = "/home/${username}";
 in
 {
   imports = [
@@ -13,11 +13,11 @@ in
     ../../home/linux.nix
   ];
 
-  home.username = "jenc";
-  home.homeDirectory = "/home/jenc";
+  home.username = username;
+  home.homeDirectory = homeDir;
   home.stateVersion = "24.11";
 
-  # Additional packages specific to Fedora host
+  # Additional packages specific to Ubuntu host
   home.packages = with pkgs; [
     # Build tools
     gcc
@@ -63,10 +63,6 @@ in
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
-
-  # Tailscale integration (optional - can be installed via dnf on Fedora)
-  # If you want Nix to manage it, uncomment:
-  # home.packages = [ pkgs.tailscale ];
 
   programs.home-manager.enable = true;
 }

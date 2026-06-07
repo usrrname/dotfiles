@@ -3,6 +3,10 @@
 
 { config, pkgs, ... }:
 
+let
+  # Username for this host - change if deploying to a different user
+  username = "jenc";
+in
 {
   imports = [
     # Include hardware configuration (must exist on the actual host)
@@ -30,9 +34,9 @@
   i18n.defaultLocale = "en_CA.UTF-8";
 
   # User account
-  users.users.jenc = {
+  users.users.${username} = {
     isNormalUser = true;
-    description = "jenc";
+    description = username;
     extraGroups = [ "networkmanager" "wheel" ];
   };
 
@@ -43,7 +47,7 @@
   };
 
   # Auto-login
-  services.getty.autologinUser = "jenc";
+  services.getty.autologinUser = username;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;

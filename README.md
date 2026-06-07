@@ -38,7 +38,7 @@ curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix 
 # Clone and apply
 git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-home-manager switch --flake .#fedora-mini
+home-manager switch --flake .#fedora
 ```
 
 ### Raspberry Pi (Debian aarch64)
@@ -75,7 +75,7 @@ sudo darwin-rebuild switch --flake .#mac-jenc
 sudo nixos-rebuild switch --flake .#nixos-box
 
 # Fedora/Ubuntu/Debian
-home-manager switch --flake .#fedora-mini
+home-manager switch --flake .#fedora
 ```
 
 ## Structure
@@ -85,7 +85,8 @@ home-manager switch --flake .#fedora-mini
 ├── hosts/
 │   ├── mac-jenc/          # macOS system config (nix-darwin)
 │   ├── nixos-box/         # NixOS system config
-│   ├── fedora-mini/       # Fedora/Ubuntu/Debian (standalone HM)
+│   ├── fedora/            # Fedora (standalone HM)
+│   ├── ubuntu/            # Ubuntu (standalone HM)
 │   └── pi-nas/            # Raspberry Pi 4B NAS (standalone HM)
 ├── home/                  # Shared Home Manager config (packages, programs)
 ├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux)
