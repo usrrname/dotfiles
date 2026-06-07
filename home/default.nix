@@ -46,6 +46,7 @@ in
       act # run GitHub Actions locally
       bruno # API client
       _1password-cli
+      opencode # AI coding agent
 
       # Build tools
       gnumake
@@ -57,7 +58,7 @@ in
       pnpm
       yarn
       bun
-      rustup # bring-your-own-toolchain rust
+      go
 
       # Shell
       zsh

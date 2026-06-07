@@ -3,15 +3,25 @@
 Reusable Home Manager modules — one per tool — composed by `home/default.nix`
 and per-host entries in `hosts/`.
 
-Planned (Phase 3, ordered low-risk-first):
+## Current modules
 
-1. `tmux.nix`     — absorbs `common/tmux/tmux.conf` (~59 bytes, trivial)
-2. `gh.nix`       — `programs.gh` + `common/gh/.config/gh/config.yml`
-3. `direnv.nix`   — `programs.direnv` settings + `common/direnv/.config/direnv/direnvrc`
-4. `git.nix`      — `programs.git` absorbing `common/git/.gitconfig` and platform overrides
-5. `starship.nix` — `programs.starship` (currently inline in `home/default.nix`)
-6. `zsh.nix`      — `programs.zsh` absorbing `.zshrc`, `.zshenv`, `.aliasrc-osx`
-7. `nvim.nix`     — `programs.neovim` with the LazyVim tree as `xdg.configFile.source`
-8. `wezterm.nix`  — `.wezterm.lua` via `xdg.configFile`
+| Module | Status | Description |
+|--------|--------|-------------|
+| `tmux.nix` | ✅ Done | Absorbs `common/tmux/tmux.conf` (~59 bytes) |
+| `gh.nix` | ✅ Done | `programs.gh` + `common/gh/.config/gh/config.yml` |
+| `direnv.nix` | ✅ Done | `programs.direnv` settings + `common/direnv/.config/direnv/direnvrc` |
+| `nvim.nix` | ✅ Done | `programs.neovim` with the LazyVim tree as `xdg.configFile.source` |
+| `opencode.nix` | ✅ Done | OpenCode config files + npm plugin deps |
+| `bash.nix` | ✅ Done | `programs.bash` with aliases and init scripts |
+| `claude.nix` | ✅ Done | Claude Code settings, skills, hooks, agents |
+| `git.nix` | 📋 Planned | `programs.git` absorbing `common/git/.gitconfig` and platform overrides |
+| `starship.nix` | 📋 Planned | `programs.starship` (currently inline in `home/default.nix`) |
+| `zsh.nix` | 📋 Planned | `programs.zsh` absorbing `.zshrc`, `.zshenv`, `.aliasrc-osx` |
+| `wezterm.nix` | 📋 Planned | `.wezterm.lua` via `xdg.configFile` |
 
-Currently empty.
+## Adding a new module
+
+1. Create `modules/<tool>.nix` with the Home Manager configuration
+2. Import it in `home/default.nix` under `imports = [ ... ];`
+3. Remove the corresponding stow package from `stow-dotfiles.sh`
+4. Update this README

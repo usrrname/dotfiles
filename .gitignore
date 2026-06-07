@@ -64,6 +64,9 @@ docs/plans/**
 result
 result-*
 
+# Host-specific hardware configuration (must be created locally on each NixOS host)
+hosts/*/hardware-configuration.nix
+
 # Ignore dotfiles at root level only (not nested)
 /.*
 !.gitignore

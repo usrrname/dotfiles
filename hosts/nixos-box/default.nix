@@ -7,8 +7,11 @@
   imports = [
     # Include hardware configuration (must exist on the actual host)
     ./hardware-configuration.nix
-    # VSCode server support
-    (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
+    # VSCode server support (uncomment when deploying to actual host)
+    # (fetchTarball {
+    #   url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
+    #   sha256 = "0000000000000000000000000000000000000000000000000000"; # Update with actual hash
+    # })
   ];
 
   # Bootloader
@@ -57,11 +60,11 @@
   # Enable OpenSSH
   services.openssh.enable = true;
 
-  # VSCode server
-  services.vscode-server = {
-    enable = true;
-    installPath = "/home/jenc/.cursor-server";
-  };
+  # VSCode server (uncomment when deploying to actual host)
+  # services.vscode-server = {
+  #   enable = true;
+  #   installPath = "/home/jenc/.cursor-server";
+  # };
 
   # Automatic garbage collection
   nix.gc.automatic = true;

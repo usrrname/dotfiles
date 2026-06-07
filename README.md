@@ -4,7 +4,9 @@ Dotfiles managed with [Nix flakes](https://nixos.wiki/wiki/Flakes), [Home Manage
 
 Legacy [stow](https://www.gnu.org/software/stow/) setup still available for Linux/non-Nix environments.
 
-## Quick Start (macOS)
+## Quick Start
+
+### macOS
 
 ```bash
 # Clone and rebuild
@@ -13,22 +15,57 @@ cd ~/.dotfiles
 sudo darwin-rebuild switch --flake .#mac-jenc
 ```
 
-This installs packages, links configs, and sets up the system declaratively.
+### NixOS
+
+```bash
+# Clone the repo
+git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+
+# Copy hardware configuration from existing install
+sudo cp /etc/nixos/hardware-configuration.nix hosts/nixos-box/
+
+# Rebuild
+sudo nixos-rebuild switch --flake .#nixos-box
+```
+
+### Fedora/Ubuntu/Debian (standalone Home Manager)
+
+```bash
+# Install Nix (if not already installed)
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
+# Clone and apply
+git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+home-manager switch --flake .#fedora-mini
+```
 
 ### Updating
 
 ```bash
 cd ~/.dotfiles
 git pull
+
+# macOS
 sudo darwin-rebuild switch --flake .#mac-jenc
+
+# NixOS
+sudo nixos-rebuild switch --flake .#nixos-box
+
+# Fedora/Ubuntu/Debian
+home-manager switch --flake .#fedora-mini
 ```
 
 ## Structure
 
 ```
 ├── flake.nix              # Nix flake entry point
-├── hosts/mac-jenc/        # macOS system config (nix-darwin)
-├── home/                  # Home Manager config (packages, programs)
+├── hosts/
+│   ├── mac-jenc/          # macOS system config (nix-darwin)
+│   ├── nixos-box/         # NixOS system config
+│   └── fedora-mini/       # Fedora/Ubuntu/Debian (standalone HM)
+├── home/                  # Shared Home Manager config (packages, programs)
 ├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux)
 ├── common/                # Stow packages (agents)
 └── macos/                 # macOS-specific stow packages (act)
@@ -36,8 +73,8 @@ sudo darwin-rebuild switch --flake .#mac-jenc
 
 ### What's managed by Nix
 
-- **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, fnm, nodejs, pnpm, yarn, bun, rustup, etc.
-- **Homebrew casks**: wezterm, obsidian, 1password, orbstack, slack, spotify, firefox, brave-browser, tailscale, gpg-suite
+- **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, nodejs, pnpm, yarn, bun, etc.
+- **Homebrew casks** (macOS only): wezterm, obsidian, 1password, orbstack, slack, spotify, firefox, brave-browser, tailscale, gpg-suite
 - **Programs**: git, ssh, bash, zsh, direnv, gh, tmux, starship, vim, nvim (LazyVim), opencode, claude
 - **Configs**: SSH config, Wezterm, nvim/LazyVim, bash aliases, shell aliases, environment variables, Claude Code settings/skills/hooks
 

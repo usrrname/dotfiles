@@ -30,6 +30,14 @@
           pkgs = import nixpkgs { inherit system; };
           modules = [ ./home ];
         };
+      
+      # Standalone Home Manager for non-NixOS Linux hosts (Fedora, Ubuntu, Debian)
+      mkStandaloneLinuxHome =
+        system: hostConfig:
+        home-manager.lib.homeManagerConfiguration {
+          pkgs = import nixpkgs { inherit system; };
+          modules = [ hostConfig ];
+        };
     in
     {
       # Phase 0 — throwaway targets so `nix flake check` and
@@ -39,8 +47,13 @@
       # architecture.
       #
       homeConfigurations = {
+        # Phase 0 — throwaway targets for validation
         test-x86_64-linux = mkLinuxHome "x86_64-linux";
         test-aarch64-linux = mkLinuxHome "aarch64-linux";
+        
+        # Phase 2 — Fedora mini PC (standalone Home Manager)
+        # Apply on Fedora host: home-manager switch --flake .#fedora-mini
+        fedora-mini = mkStandaloneLinuxHome "x86_64-linux" ./hosts/fedora-mini;
       };
 
       # Phase 1 — Apple Silicon Mac. After installing Nix on the Mac:
