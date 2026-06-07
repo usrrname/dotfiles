@@ -11,6 +11,7 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 | `mac-jenc/` | nix-darwin | ✅ Done | `sudo darwin-rebuild switch --flake .#mac-jenc` |
 | `nixos-box/` | NixOS | ✅ Done | `nixos-rebuild switch --flake .#nixos-box` |
 | `fedora-mini/` | standalone HM | ✅ Done | `home-manager switch --flake .#fedora-mini` |
+| `pi-nas/` | standalone HM | ✅ Done | `home-manager switch --flake .#pi-nas` |
 
 ## Host configuration
 
@@ -28,6 +29,14 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 - Standalone Home Manager (no nix-darwin/NixOS)
 - System packages managed via dnf
 - Nix only manages user environment
+
+### pi-nas (Raspberry Pi 4B NAS, Debian aarch64)
+- Standalone Home Manager on ARM Linux
+- System packages managed via apt
+- Nix only manages user environment
+- Pi-specific packages: ufw, fail2ban, hd-idle, tailscale
+- Docker managed at system level (not via Nix)
+- `xoff` alias for soft shutdown
 
 ## Adding a new host
 

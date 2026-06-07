@@ -54,6 +54,10 @@
         # Phase 2 — Fedora mini PC (standalone Home Manager)
         # Apply on Fedora host: home-manager switch --flake .#fedora-mini
         fedora-mini = mkStandaloneLinuxHome "x86_64-linux" ./hosts/fedora-mini;
+        
+        # Raspberry Pi 4B NAS (standalone Home Manager on Debian)
+        # Apply on Pi: home-manager switch --flake .#pi-nas
+        pi-nas = mkStandaloneLinuxHome "aarch64-linux" ./hosts/pi-nas;
       };
 
       # Phase 1 — Apple Silicon Mac. After installing Nix on the Mac:

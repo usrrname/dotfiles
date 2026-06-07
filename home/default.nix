@@ -163,9 +163,6 @@ in
       reload = "source ~/.zshrc";
       npm = "socket npm";
       npx = "socket npx";
-    } // lib.optionalAttrs isDarwin {
-      # macOS-specific aliases
-      xoff = "sudo /usr/local/bin/xSoft.sh 0 27";
     } // lib.optionalAttrs isLinux {
       # Linux-specific aliases
       update = "sudo apt update && sudo apt upgrade";
@@ -175,6 +172,7 @@ in
       search = "apt search";
       py = "python3";
       pip = "pip3";
+      xoff = "sudo /usr/local/bin/xSoft.sh 0 27"; # Pi NAS soft shutdown
     };
   };
 
