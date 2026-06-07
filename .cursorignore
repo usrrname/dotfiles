@@ -1,0 +1,5 @@
+# Sensitive SSH files - prevent AI tools from indexing
+.ssh/config
+.ssh/known_hosts
+.ssh/known_hosts.old
+.ssh/*.pub

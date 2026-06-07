@@ -73,6 +73,8 @@ hosts/*/hardware-configuration.nix
 !.gitmodules
 !.envrc
 !.sisyphus
+!.claudeignore
+!.cursorignore
 
 
 # Keep tracked directories
