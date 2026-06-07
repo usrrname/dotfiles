@@ -41,6 +41,27 @@ cd ~/.dotfiles
 home-manager switch --flake .#fedora-mini
 ```
 
+### Raspberry Pi (Debian aarch64)
+
+```bash
+# Check if Nix is already installed
+which nix && nix --version
+
+# If Nix is not installed:
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+
+# Source Nix profile (if home-manager command not found)
+. /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+
+# Install home-manager (if not available)
+nix profile add home-manager
+
+# Clone and apply
+git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
+cd ~/.dotfiles
+home-manager switch --flake .#pi-nas
+```
+
 ### Updating
 
 ```bash
@@ -64,7 +85,8 @@ home-manager switch --flake .#fedora-mini
 ├── hosts/
 │   ├── mac-jenc/          # macOS system config (nix-darwin)
 │   ├── nixos-box/         # NixOS system config
-│   └── fedora-mini/       # Fedora/Ubuntu/Debian (standalone HM)
+│   ├── fedora-mini/       # Fedora/Ubuntu/Debian (standalone HM)
+│   └── pi-nas/            # Raspberry Pi 4B NAS (standalone HM)
 ├── home/                  # Shared Home Manager config (packages, programs)
 ├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux)
 ├── common/                # Stow packages (agents)

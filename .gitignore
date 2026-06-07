@@ -1,6 +1,7 @@
 .DS_Store
 \.DS_Store
 node_modules/**
+common/opencode/.config/opencode/node_modules/
 Makefile
 *.pem
 *.key
@@ -87,3 +88,6 @@ hosts/*/hardware-configuration.nix
 !test/
 !.env.schema
 secure-fetch-*.jsonl
+
+# Always ignore node_modules (even in tracked directories)
+**/node_modules/
