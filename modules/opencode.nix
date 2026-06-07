@@ -22,10 +22,10 @@
   };
 
   # Install npm dependencies for opencode plugins
-  home.activation.installOpencodeDeps = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.installOpencodeDeps = lib.hm.dag.entryAfter [ "linkGeneration" ] ''
     export PATH="${pkgs.nodejs}/bin:$PATH"
-    $DRY_RUN_CMD cd ${config.xdg.configHome}/opencode
-    if [ -f package.json ]; then
+    if [ -d ${config.xdg.configHome}/opencode ] && [ -f ${config.xdg.configHome}/opencode/package.json ]; then
+      $DRY_RUN_CMD cd ${config.xdg.configHome}/opencode
       $DRY_RUN_CMD npm install --silent 2>/dev/null || true
     fi
   '';
