@@ -31,6 +31,7 @@
     nodejs
     pnpm
     go
+    opencode
 
     # Python
     python3
