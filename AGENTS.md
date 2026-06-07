@@ -1,22 +1,48 @@
 # Dotfiles
 
-Managed with stow. Structure: `common/` (all OS), `linux/`, `macos/`, `nix/`.
+Nix flakes (primary) + stow (fallback).
 
-## Stow
+## Setup
 
 ```bash
-./stow-dotfiles.sh
+./setup.sh        # Auto-detects Nix; falls back to stow
+./update.sh       # Git pull + submodule update + setup
 ```
 
-## Add Package
+### Nix Targets
 
-1. `mkdir -p common/[pkg]/.config/[pkg]`
-2. Copy config → `common/[pkg]/`
-3. Remove original, stow recreates as symlink
-4. Add to `COMMON` array in `stow-dotfiles.sh`
+| Host | Command |
+|------|---------|
+| macOS (Apple Silicon) | `darwin-rebuild switch --flake .#mac-jenc` |
+| NixOS | `nixos-rebuild switch --flake .#nixos-box` |
+| Fedora (standalone HM) | `home-manager switch --flake .#fedora-mini` |
+| Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |
 
-## Notes
+## Stow (fallback only)
 
-- `nix/` not stowed (NixOS-only)
-- OS-specific files (zsh, git) replace common versions
-- Add to `.stow-local-ignore` to exclude (e.g., `op`)
+```bash
+./stow-dotfiles.sh          # Default: --adopt flag
+./stow-dotfiles.sh ""       # No flags
+```
+
+**Stow arrays are intentionally minimal** — most `common/` configs are Nix-managed:
+- **COMMON**: `agents`
+- **MACOS**: `act`
+- **LINUX**: _(empty)_
+
+To add a stow package: add to appropriate array in `stow-dotfiles.sh`, then create `common/[pkg]/` or `macos/[pkg]/` directory.
+
+## Testing
+
+```bash
+bats test/stow-dotfiles.bats
+```
+
+**Note**: `package.json` references `test/setup.bats` but actual test file is `test/stow-dotfiles.bats`.
+
+## Critical Context
+
+- **Don't assume common/ packages are stowed** — only those in stow arrays get stowed
+- **Test expects `opencode` in COMMON array** but it's not currently there (test will fail)
+- `nix/` directory is never stowed (NixOS-only)
+- `.stow-local-ignore` excludes many files from stow (see file for details)
