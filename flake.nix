@@ -59,8 +59,25 @@
         ];
       };
 
-      # Phase 4 will populate this, folding in nix/etc/nixos/configuration.nix:
-      #   nixos-box = nixpkgs.lib.nixosSystem { ... };
-      nixosConfigurations = { };
+      # Phase 4 — NixOS box. Apply on the NixOS host:
+      #   nixos-rebuild switch --flake .#nixos-box
+      nixosConfigurations.nixos-box = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ./hosts/nixos-box
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.jenc = {
+              imports = [
+                ./home
+                ./home/linux.nix
+              ];
+            };
+          }
+        ];
+      };
     };
 }
