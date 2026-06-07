@@ -47,7 +47,4 @@
   '';
 
   programs.home-manager.enable = true;
-
-  # Backup existing files before overwriting (for standalone mode)
-  home-manager.backupFileExtension = "backup";
 }
