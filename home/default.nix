@@ -145,6 +145,37 @@ in
       ];
       theme = "robbyrussell";
     };
+    shellAliases = {
+      # Common aliases (all platforms)
+      ll = "ls -alF";
+      la = "ls -A";
+      l = "ls -CF";
+      g = "git";
+      vi = "nvim";
+      vim = "nvim";
+      sudov = "sudo -e";
+      "docker-compose" = "docker compose";
+      k = "kubectl";
+      copilot = "gh copilot";
+      gcs = "gh copilot suggest";
+      gce = "gh copilot explain";
+      cc = "claude code";
+      reload = "source ~/.zshrc";
+      npm = "socket npm";
+      npx = "socket npx";
+    } // lib.optionalAttrs isDarwin {
+      # macOS-specific aliases
+      xoff = "sudo /usr/local/bin/xSoft.sh 0 27";
+    } // lib.optionalAttrs isLinux {
+      # Linux-specific aliases
+      update = "sudo apt update && sudo apt upgrade";
+      install = "sudo apt install";
+      remove = "sudo apt remove";
+      autoremove = "sudo apt autoremove";
+      search = "apt search";
+      py = "python3";
+      pip = "pip3";
+    };
   };
 
   programs.direnv = {
