@@ -17,31 +17,12 @@
   home.stateVersion = "24.11";
 
   # Pi-specific packages (NAS setup)
+  # Note: Most packages come from ../../home/default.nix
+  # Only add Pi-specific extras here
   home.packages = with pkgs; [
-    # Core tools (minimal for NAS)
-    git
-    curl
-    wget
-    tree
-    vim
-    neovim
-    ripgrep
-    stow
+    # Pi-specific additions
     lsb-release
-
-    # Development tools
-    direnv
-    nodejs
-    pnpm
-    go
     opencode
-
-    # Python
-    python3
-    uv
-
-    # Networking
-    tailscale
   ];
 
   # System-level packages (install via apt on Debian):
