@@ -26,13 +26,6 @@
     stow
     lsb-release
 
-    # Security & firewall
-    ufw
-    fail2ban
-
-    # Disk management
-    hd-idle
-
     # Development tools
     direnv
     nodejs
@@ -46,6 +39,10 @@
     # Networking
     tailscale
   ];
+
+  # System-level packages (install via apt on Debian):
+  # sudo apt install ufw fail2ban hd-idle
+  # These require root and system-level configuration, so they're managed outside Nix
 
   # Docker is managed at system level on Pi (requires root)
   # Install via: curl -fsSL https://get.docker.com | sh
