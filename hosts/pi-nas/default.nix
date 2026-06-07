@@ -9,6 +9,9 @@
     ../../home/linux.nix
   ];
 
+  # Allow unfree packages (required for 1password-cli, etc.)
+  nixpkgs.config.allowUnfree = true;
+
   home.username = "jenc";
   home.homeDirectory = "/home/jenc";
   home.stateVersion = "24.11";
