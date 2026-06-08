@@ -28,7 +28,7 @@ Nix flakes (primary) + stow (fallback).
 
 **Stow arrays are intentionally minimal** — most `common/` configs are Nix-managed:
 - **COMMON**: `agents`
-- **MACOS**: `act`
+- **MACOS**: _(empty)_
 - **LINUX**: _(empty)_
 
 To add a stow package: add to appropriate array in `stow-dotfiles.sh`, then create `common/[pkg]/` or `macos/[pkg]/` directory.

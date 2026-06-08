@@ -33,7 +33,7 @@ COMMON=(
 LINUX=()
 
 MACOS=(
-  act
+
 )
 
 unstow_all() {

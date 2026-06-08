@@ -80,6 +80,13 @@ in
       # under hosts/mac-jenc/default.nix.
     ];
 
+  xdg.configFile."act/actrc".text = ''
+    -P ubuntu-latest=catthehacker/ubuntu:act-latest
+    -P ubuntu-22.04=catthehacker/ubuntu:act-latest
+    -P ubuntu-20.04=catthehacker/ubuntu:act-latest
+    -P ubuntu-18.04=catthehacker/ubuntu:act-latest
+  '';
+
   programs.home-manager.enable = true;
 
   # Use a user-writable npm global prefix (Nix store is read-only)
@@ -141,6 +148,7 @@ in
     oh-my-zsh = {
       enable = true;
       plugins = [
+        "autosuggestion"
         "git"
         "direnv"
         "gh"
@@ -158,13 +166,11 @@ in
       sudov = "sudo -e";
       "docker-compose" = "docker compose";
       k = "kubectl";
-      copilot = "gh copilot";
-      gcs = "gh copilot suggest";
-      gce = "gh copilot explain";
       cc = "claude code";
       reload = "source ~/.zshrc";
       npm = "socket npm";
       npx = "socket npx";
+      pnpm="socket pnpm";
     } // lib.optionalAttrs isLinux {
       # Linux-specific aliases
       update = "sudo apt update && sudo apt upgrade";
