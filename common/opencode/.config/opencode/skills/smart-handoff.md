@@ -1,11 +1,11 @@
 # Smart Handoff
 
-When the user requests a handoff (says "handoff" or "/handoff"), generate a comprehensive session summary and write it to `~/.cache/opencode/handoff-latest.txt` using this exact format:
+When the user requests a handoff (says "handoff" or "/handoff"), generate a comprehensive session summary and write it to `~/.cache/opencode/<timestamp>-handoff-latest.txt` using this exact format:
 
 ```
-╔════════════════════════════════════════════════════════════════╗
-║                    HANDOFF CONTEXT START                       ║
-╚════════════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════╗
+║               HANDOFF CONTEXT START                    ║
+╚════════════════════════════════════════════════════════╝
 
 ## Session Summary
 [1-2 sentence summary of what was accomplished]
@@ -32,9 +32,9 @@ When the user requests a handoff (says "handoff" or "/handoff"), generate a comp
 ## Next Steps
 [Clear next actions for continuing work]
 
-╔════════════════════════════════════════════════════════════════╗
-║                     HANDOFF CONTEXT END                        ║
-╚════════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════╗
+║              HANDOFF CONTEXT END                      ║
+╚═══════════════════════════════════════════════════════╝
 
 ---HANDOFF_COMPLETE---
 ```
