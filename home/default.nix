@@ -181,6 +181,9 @@ in
       py = "python3";
       pip = "pip3";
     };
+    initContent = ''
+      export PATH="$HOME/.npm-global/bin:$PATH"
+    '';
   };
 
   programs.direnv = {
