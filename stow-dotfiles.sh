@@ -26,9 +26,7 @@ else
   STOW_FLAGS="$1"
 fi
 
-COMMON=(
-  agents
-)
+COMMON=()
 
 LINUX=()
 
