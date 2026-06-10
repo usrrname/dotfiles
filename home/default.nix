@@ -48,7 +48,6 @@ in
       act # run GitHub Actions locally
       bruno # API client
       _1password-cli
-      opencode # AI coding agent
 
       # Build tools
       gnumake
@@ -74,6 +73,7 @@ in
     ]
     ++ lib.optionals isLinux [
       lsb-release
+      opencode # AI coding agent (Mac uses anomalyco/tap/opencode via brew)
     ]
     ++ lib.optionals isDarwin [
       # Mac-only nixpkgs additions go here; GUI apps live in homebrew.casks
