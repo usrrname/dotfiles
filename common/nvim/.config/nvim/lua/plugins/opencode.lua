@@ -260,17 +260,12 @@ return {
 			end,
 		})
 
-		-- Auto-enter insert mode when focusing editor while opencode is running
+		-- Auto-enter insert mode only when focusing the opencode terminal buffer
 		vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
-			pattern = "*",
+			pattern = "term://*opencode*",
 			callback = function()
-				local terminal = require("opencode.terminal")
-				if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
-					local buf = vim.api.nvim_get_current_buf()
-					local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
-					if buftype == "" and vim.api.nvim_get_mode().mode == "n" then
-						vim.cmd("startinsert")
-					end
+				if vim.api.nvim_get_mode().mode == "n" then
+					vim.cmd("startinsert")
 				end
 			end,
 		})
