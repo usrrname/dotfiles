@@ -1,127 +1,86 @@
-# Setup Scripts - Technical Reference
+# Setup Scripts — Technical Reference
 
-For usage instructions, see [README.md](README.md).
+For usage instructions, see [README.md](README.md). For macOS-specific or
+Pi-specific setup, see [setup-osx.md](setup-osx.md) and [setup-pi.md](setup-pi.md).
 
-## Files Structure
+## Current state
 
-```bash
-├── setup.sh              # Unified setup (auto-detects OS)
-├── stow-dotfiles.sh      # OS-aware stow (auto-detects OS)
-├── update.sh             # Update script
-└── scripts/
-    ├── setup/
-    │   ├── packages-osx.sh
-    │   ├── packages-pi.sh
-    │   └── packages-linux.sh
-    └── setup-pi.sh
-    ├── setup-osx.sh
-    └── setup-linux.sh
+The Nix migration replaced the per-OS package scripts (`scripts/setup/packages-*.sh`,
+`scripts/setup-osx.sh`, etc.) that this file used to document. Those files no
+longer exist. The scripts that remain are minimal wrappers around nix and stow.
+
+```
+├── setup.sh              # Thin wrapper: detects Nix → runs the right rebuild
+├── stow-dotfiles.sh      # Stow fallback (all arrays currently empty)
+├── update.sh             # git pull + submodule update + setup.sh
+└── nix/scripts/          # Misc nix helper scripts
 ```
 
-## Package Arrays
+## What `setup.sh` does
 
-### macOS (`packages-osx.sh`)
-- `BREW_PACKAGES` - CLI tools (installed via `brew install`)
-- `CASK_PACKAGES` - GUI applications (installed via `brew install --cask`)
-- `PACKAGES` - Auto-generated (DO NOT EDIT)
+```sh
+if nix is installed:
+  on macOS    → sudo darwin-rebuild switch --flake .#mac-jenc
+  on NixOS    → sudo nixos-rebuild switch --flake .#nixos-box
+  on Linux    → home-manager switch --flake .#fedora
+                (fedora target also serves Ubuntu/Debian via standalone HM)
+else:
+  → ./stow-dotfiles.sh    # legacy stow path
+```
 
-### Linux (`packages-linux.sh`)
-- `APT_PACKAGES_BASE` - Base CLI tools (installed via `apt install`)
-- `APT_PACKAGES` - Extended APT packages
-- `APT_PACKAGES_PI` - Raspberry Pi specific packages
-- `SPECIAL_PACKAGES_BASE` - Custom installation required (nvm, pyenv, tailscale, etc.)
-- `SPECIAL_PACKAGES` - Extended special packages
-- `GUI_PACKAGES` - GUI applications
-- `PACKAGES` - Auto-generated (DO NOT EDIT)
+The flake-aware path is the default everywhere; the stow fallback only
+activates when Nix is genuinely absent. On the Pi NAS host, prefer the explicit
+`home-manager switch --flake .#pi-nas` (per `setup-pi.md`).
 
-### Raspberry Pi (`packages-pi.sh`)
-- `APT_PACKAGES_BASE` - Base CLI tools (installed via `apt install`)
-- `APT_PACKAGES` - Extended APT packages
-- `APT_PACKAGES_PI` - Raspberry Pi specific packages
-- `SPECIAL_PACKAGES_BASE` - Custom installation required (nvm, pyenv, tailscale, etc.)
-- `SPECIAL_PACKAGES` - Extended special packages
-- `PACKAGES` - Auto-generated (DO NOT EDIT)
+## What `update.sh` does
 
-## Core Functions
+```sh
+git pull
+git submodule update --init --recursive
+./setup.sh
+```
 
-### macOS Functions
-- `is_brew_package_installed(package)` - Check if brew package installed
-- `is_cask_installed(package)` - Check if cask installed
-- `is_package_installed(package)` - Auto-detect and check
-- `get_package_info(package)` - Get detailed package info
-- `list_packages()` - List all packages with status
-- `validate_package_config()` - Validate configuration
+Use this for routine updates. To bump pinned package versions (separate from
+applying config changes):
 
-### Linux Functions
-- `is_apt_package_installed(package)` - Check if APT package installed
-- `is_command_available(command)` - Check if command available
-- `is_tailscale_installed()` - Check if Tailscale installed
-- `get_package_info(package)` - Get detailed package info
-- `list_packages()` - List all packages with status
-- `_detect_distribution()` - Auto-detect distro, version, codename, architecture
-- `_is_apt_available()` - Check APT availability
+```sh
+nix flake update nixpkgs
+./setup.sh
+brew upgrade --cask          # Mac only — bumps cask-installed apps like claude-code
+```
 
-## Adding New Packages
+## What `stow-dotfiles.sh` does
 
-### macOS
-1. Add to array in `scripts/setup/packages-osx.sh`:
-   ```bash
-   BREW_PACKAGES=("existing" "new-package")
-   # or
-   CASK_PACKAGES=("existing" "new-app")
-   ```
-2. Validate: `./setup.sh validate`
+OS-aware stow runner. All three package arrays (`COMMON`, `LINUX`, `MACOS`) are
+currently empty — there is nothing to stow. The script remains as a fallback
+mechanism. If a future config needs stow management:
 
-### Linux/Debian/Ubuntu
-1. Add to appropriate array in `scripts/setup/packages-linux.sh`:
-   ```bash
-   APT_PACKAGES_BASE=("existing" "new-package")
-   # or
-   SPECIAL_PACKAGES_BASE=("existing" "new-special")
-   # or
-   APT_PACKAGES_PI=("pi-package")  # Raspberry Pi only
-   ```
-2. If custom installation needed, add logic to `scripts/setup-linux.sh`
+1. Add the package name to the appropriate array in `stow-dotfiles.sh`.
+2. Create `common/<pkg>/` (or `macos/<pkg>/`, `linux/<pkg>/`) with the directory
+   structure that should land at `~/`.
+3. Run `./stow-dotfiles.sh ""` (empty arg = no `--adopt`).
 
-## Key Features
+**Don't use `--adopt` (the default with no args)** when other tools write into
+target directories — see the gotchas doc.
 
-**macOS:**
-- Auto array sync (`PACKAGES` from `BREW_PACKAGES` + `CASK_PACKAGES`)
-- Input validation & Homebrew checks
-- Configuration validation (duplicates, overlaps)
-- Type detection (brew vs cask)
+## Package management
 
-**Linux:**
-- Auto distribution detection (Debian/Ubuntu, version, codename, arch)
-- Cross-distribution support
-- Architecture-aware
-- Package type detection (APT, special, GUI)
+Packages are declared in Nix, not in shell arrays:
 
-## Error Prevention
+- **Cross-platform CLI**: `home/default.nix` → `home.packages = with pkgs; [ ... ]`
+- **OS-specific in nix**: same file, under `lib.optionals isLinux [ ... ]` /
+  `lib.optionals isDarwin [ ... ]` blocks
+- **macOS Homebrew (formulae + casks)**: `hosts/mac-jenc/default.nix` →
+  `homebrew.brews` / `homebrew.casks` (e.g., `claude-code` is a cask)
+- **Linux apt/dnf**: handled by the host OS (the Linux Nix configs don't try to
+  manage system packages outside the user environment)
 
-- Duplicate detection within arrays
-- Package overlap prevention
-- Auto-generated `PACKAGES` (no manual sync)
-- Package manager availability checks
-- Input validation
-- Distribution compatibility verification
+## Related docs
 
-## Special Package Installation
-
-**Tailscale:**
-- macOS: Homebrew cask
-- Linux: Official script (`curl -fsSL https://tailscale.com/install.sh | sh`)
-
-**Development Tools:**
-- `nvm` - Script-based
-- `pyenv` - Git-based
-- `rust` - rustup installer
-- `mise` - Script-based
-- `devbox` - Script-based
-
-## Notes
-
-- All scripts support `DRY_RUN=true`
-- Linux scripts require `sudo` for package installation
-- NixOS: `setup.sh` provides guidance, use `stow-dotfiles.sh` for dotfiles
-- Raspberry Pi: Uses standard Linux setup, Pi-specific packages in `APT_PACKAGES_PI`
+- [README.md](README.md) — Quick start per platform
+- [setup-osx.md](setup-osx.md) — macOS setup including 1Password SSH signing
+- [setup-pi.md](setup-pi.md) — Raspberry Pi setup
+- [docs/plans/migration-open-issues.md](docs/plans/migration-open-issues.md) —
+  Outstanding decisions and known gaps
+- [docs/plans/migration-to-nix-flakes-home-manager.md](docs/plans/migration-to-nix-flakes-home-manager.md) —
+  Original migration plan

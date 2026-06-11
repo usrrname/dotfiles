@@ -90,29 +90,33 @@ home-manager switch --flake .#fedora
 │   └── pi-nas/            # Raspberry Pi 4B NAS (standalone HM)
 ├── home/                  # Shared Home Manager config (packages, programs)
 ├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux)
-├── common/                # Stow packages (agents)
-└── macos/                 # macOS-specific stow packages (act)
+├── common/                # Stow / shared config sources (claude, nvim, opencode)
+├── macos/                 # macOS-specific (currently only docker)
+├── .claude/               # Project-local Claude Code config for THIS repo
+└── docs/plans/            # Migration plans + open issues
 ```
 
 ### What's managed by Nix
 
 - **System packages**: git, curl, wget, ripgrep, fzf, neovim, go, nodejs, pnpm, yarn, bun, etc.
-- **Homebrew casks** (macOS only): wezterm, obsidian, 1password, orbstack, slack, spotify, firefox, brave-browser, tailscale, gpg-suite
-- **Programs**: git, ssh, bash, zsh, direnv, gh, tmux, starship, vim, nvim (LazyVim), opencode, claude
-- **Configs**: SSH config, Wezterm, nvim/LazyVim, bash aliases, shell aliases, environment variables, Claude Code settings/skills/hooks
+- **Homebrew casks** (macOS only): wezterm, obsidian, 1password, orbstack, slack, spotify, firefox, brave-browser, tailscale, gpg-suite, **claude-code**
+- **Programs**: git, ssh, bash, zsh, direnv, gh, tmux, starship, vim, nvim (LazyVim)
+- **AI tools**: `opencode` (nix on Linux, brew tap on Mac), `claude-code` (brew cask on Mac)
+- **Configs**: SSH config, Wezterm, nvim/LazyVim, bash aliases, shell aliases, environment variables, Claude Code `settings.json` + `statusline-command.sh`
+
+### Claude Code skills are NOT nix-managed (intentional)
+
+`modules/claude.nix` is a hybrid: stable config files are nix-managed (rebuild required to change), but `~/.claude/skills` is a runtime symlink to `~/.agents/skills` so skill edits never need `darwin-rebuild`. See `docs/plans/agent-skills-symlink-deployment.md`.
 
 ### What's still stow-managed
 
-- `agents` (common) - Cloudflare reference docs and skills
-
-To stow:
-```bash
-./stow-dotfiles.sh
-```
+Nothing currently. All stow arrays in `stow-dotfiles.sh` are empty; everything is nix-managed. The stow script is kept for fallback on non-Nix systems.
 
 ### Removed (no longer needed)
 
 - `verdaccio`, `husky`, `zed`, `mc` (Midnight Commander), `iterm2`
+- Stow-managed `bash`, `direnv`, `gh`, `home-manager`, `op`, `ssh`, `tmux`, `vim`, `wezterm` (now nix-managed)
+- Stow-managed `agents` (replaced by `~/.agents/skills/` runtime tree)
 
 ## Adding a New Config
 
@@ -176,12 +180,14 @@ Then rebuild.
 ```bash
 nix profile list
 brew list
+brew list --cask
 ```
 
 **Verify configs:**
 ```bash
 ssh -G hostname  # Check SSH config
 nvim --version   # Check neovim
+git config --list --show-origin  # See all sources (git config lives at ~/.config/git/config under HM, not ~/.gitconfig)
 ```
 
 **Rollback:**
@@ -197,6 +203,11 @@ sudo darwin-rebuild switch --rollback
 ```bash
 nix build .#darwinConfigurations.mac-jenc.system --dry-run
 ```
+
+**Nix flakes only see git-tracked files.** New files (or untracked edits to renames) must be `git add`'d before `darwin-rebuild` will see them. The error reads:
+> Path 'foo.nix' in the repository "..." is not tracked by Git.
+
+**Common gotchas:** see `docs/plans/migration-open-issues.md` (open items) and `~/Documents/pkm/_sources/Home Lab/Dotfiles migration gotchas — nix + stow + Claude.md` (broader notes).
 
 ## Nvim/LazyVim
 

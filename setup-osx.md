@@ -1,110 +1,103 @@
 # Setting Up Dotfiles on macOS
 
+**Primary path: Nix + nix-darwin + Home Manager.** Stow is legacy and currently
+all stow arrays are empty.
+
 ## Prerequisites
 
-1. Clone the repository:
+### 1. Install Nix
+
+Use Determinate Nix (recommended — handles upgrades cleanly):
+
+```bash
+curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
+```
+
+After install, restart your shell so `nix` is on PATH.
+
+### 2. Clone the repository
+
+```bash
+cd ~
+git clone https://github.com/usrrname/dotfiles.git .dotfiles
+cd .dotfiles
+```
+
+### 3. Apply the configuration
+
+```bash
+sudo darwin-rebuild switch --flake .#mac-jenc
+```
+
+That single command:
+- Installs nix-darwin (bootstraps on first run)
+- Installs Home Manager
+- Installs all nix-managed packages (git, neovim, ripgrep, fzf, node, go, etc.)
+- Installs Homebrew if missing and syncs casks (1password, wezterm, claude-code, etc.)
+- Materializes `~/.claude/settings.json`, `~/.gitconfig` (at `~/.config/git/config`), nvim config, etc.
+
+## SSH signing (required for git commits)
+
+Git is configured to sign commits with SSH via 1Password's `op-ssh-sign`:
+
+```
+gpg.format = "ssh"
+gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+user.signingkey = "~/.ssh/id_ed25519.pub"
+commit.gpgsign = true
+```
+
+Required steps after a fresh setup:
+
+1. Install and unlock 1Password (it'll arrive via `homebrew.casks`).
+2. Enable the **SSH agent** in 1Password settings → Developer.
+3. Export your public key to disk (private key stays in 1Password):
    ```bash
-   cd ~
-   git clone <your-repo-url> .dotfiles
-   cd .dotfiles
+   op read "op://Private/<your-ssh-key-item>/public key" > ~/.ssh/id_ed25519.pub
+   chmod 644 ~/.ssh/id_ed25519.pub
    ```
+4. Test: `git -C ~/.dotfiles commit --allow-empty -m test --dry-run` should not error.
 
-2. Install `stow` (for symlinking dotfiles):
-   ```bash
-   brew install stow
-   ```
+If git complains about a missing pubkey, see `~/Documents/pkm/_sources/Home Lab/Dotfiles migration gotchas — nix + stow + Claude.md` for the recovery flow.
 
-## Setup Steps
-
-### 1. Install Packages
-
-Run the unified setup script (auto-detects macOS and runs the appropriate installer):
+## Day-to-day updates
 
 ```bash
-# Preview what will be installed (dry run)
-DRY_RUN=true ./setup.sh
-
-# Check current package status
-./setup.sh check
-
-# Validate package configuration
-./setup.sh validate
-
-# List all packages
-./setup.sh list
-
-# Run the installation
-./setup.sh
+cd ~/.dotfiles
+git pull
+sudo darwin-rebuild switch --flake .#mac-jenc
 ```
 
-`setup.sh` script automatically detects macOS and runs `scripts/setup-osx.sh`. You can also run the macOS script directly if needed.
-
-The script automatically installs Homebrew (if needed) and all required packages.
-
-### 2. Symlink Dotfiles
-
-Use the OS-aware stow script to create symlinks (automatically stows only relevant packages for macOS):
+To bump package versions (Claude Code, nvim, etc.):
 
 ```bash
-# Stow all dotfiles (auto-detects OS and only stows relevant packages)
-./stow-dotfiles.sh
-
-# Stow without adopting existing files (use if starting fresh)
-./stow-dotfiles.sh ""
+nix flake update nixpkgs        # bump pinned nixpkgs
+sudo darwin-rebuild switch --flake .#mac-jenc
+brew upgrade --cask              # bump cask-installed apps (Claude Code, 1Password, etc.)
 ```
 
-The script automatically stows common and macOS-specific packages. Note: The `nix/` folder is not stowed automatically.
-
-**Verify symlinks:**
-```bash
-ls -la ~ | grep "\->"
-```
-
-### 3. Configure Shell Environment
-
-Add to your `~/.zshrc`:
+## Rollback
 
 ```bash
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Pyenv
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Mise
-eval "$(mise activate zsh)"
-
-# Rust
-source "$HOME/.cargo/env"
+darwin-rebuild --list-generations
+sudo darwin-rebuild switch --rollback
 ```
 
-Reload your shell:
-```bash
-source ~/.zshrc
-```
-
-### 4. Post-Installation (Optional)
-
-**Neovim plugins** (if using LazyVim):
-```bash
-nvim --headless -c "Lazy sync" -c "qa"
-```
-
-**OrbStack** (Docker alternative):
-```bash
-# Set the default docker context to orbstack
-docker context use orbstack
-```
-
-## About `stow --adopt`
-
-The `--adopt` flag moves existing files into the package directory and replaces them with symlinks. Always use dry-run first:
+## Verify
 
 ```bash
-stow --adopt -n <package>
+ls -la ~/.claude/                        # settings.json, statusline-command.sh, skills -> ~/.agents/skills
+readlink ~/.claude/settings.json         # should resolve into /nix/store/.../home-manager-files/.claude/settings.json
+readlink ~/.config/nvim                  # should resolve into the same generation
+which claude                              # /opt/homebrew/bin/claude (brew cask)
+git config --list --show-origin | grep gpg.format  # should print gpg.format=ssh
 ```
+
+## Legacy stow path (not used on Mac currently)
+
+`./stow-dotfiles.sh` exists but its arrays are empty. Don't run it on Mac unless
+you're moving a specific config out of nix management; see `AGENTS.md` for the
+current state.
 
 ## Troubleshooting
 

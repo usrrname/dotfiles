@@ -159,23 +159,30 @@ lsmod | grep zram  # Should return nothing
 
 ## About `stow --adopt`
 
-The `--adopt` flag moves existing files into the package directory and replaces them with symlinks. This preserves your current configuration while bringing it under Stow management.
+The `--adopt` flag moves existing files into the package directory and replaces them with symlinks. **Avoid on populated home directories** — it pulls existing files into your dotfiles repo, which can pollute the repo with runtime artifacts (e.g. Claude Code session files).
 
-**Always use dry-run first:**
+**Use only on a fresh setup, and always dry-run first:**
 
 ```bash
 stow --adopt -n <package>
 ```
 
+To stow without adopting:
+
+```bash
+./stow-dotfiles.sh ""    # empty string = no flags
+```
+
 ## Available Dotfile Packages
 
-- `bash/` - Bash configuration
-- `zsh/` - Zsh configuration
-- `nvim/` - Neovim/LazyVim configuration
-- `git/` - Git configuration
-- `direnv/` - Direnv configuration
-- `ssh/` - SSH configuration
-- And more...
+Currently all stow arrays in `stow-dotfiles.sh` are empty — the Pi setup uses
+standalone Home Manager (`home-manager switch --flake .#pi-nas`) which manages
+everything via Nix modules instead. Stow is kept as a fallback mechanism.
+
+Previously-stowed configs now under Nix:
+- `bash`, `direnv`, `gh`, `tmux`, `vim`, `ssh` (moved to `modules/<name>.nix`)
+- `nvim`, `opencode`, `claude` (config sources under `common/<name>/`)
+- `agents` (replaced by `~/.agents/skills/` runtime tree; see `docs/plans/agent-skills-symlink-deployment.md`)
 
 ## Troubleshooting
 
