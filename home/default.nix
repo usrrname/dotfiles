@@ -148,7 +148,9 @@ in
     oh-my-zsh = {
       enable = true;
       plugins = [
-        "autosuggestion"
+        # autosuggestions are provided by programs.zsh.autosuggestion.enable above;
+        # there is no oh-my-zsh built-in plugin by that name, hence the noisy
+        # "plugin 'autosuggestion' not found" warning we used to see.
         "git"
         "direnv"
         "gh"
@@ -185,6 +187,10 @@ in
       export PATH="$HOME/.npm-global/bin:$PATH"
     '';
   };
+  programs.neovim = {
+      withPython3 = false;
+      withRuby = false;
+  };
 
   programs.direnv = {
     enable = true;
@@ -206,4 +212,8 @@ in
     EDITOR = "nvim";
     VISUAL = "nvim";
   };
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
 }
