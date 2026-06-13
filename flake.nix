@@ -24,18 +24,28 @@
       ...
     }@inputs:
     let
+      # allowUnfree must be set on the pkgs import here: standalone Home
+      # Manager ignores `nixpkgs.config.*` set inside host modules when
+      # `pkgs` is passed explicitly. Needed for unfree pkgs like
+      # _1password-cli.
       mkLinuxHome =
         system:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
           modules = [ ./home ];
         };
-      
+
       # Standalone Home Manager for non-NixOS Linux hosts (Fedora, Ubuntu, Debian)
       mkStandaloneLinuxHome =
         system: hostConfig:
         home-manager.lib.homeManagerConfiguration {
-          pkgs = import nixpkgs { inherit system; };
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
           modules = [ hostConfig ];
         };
     in
