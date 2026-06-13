@@ -11,6 +11,7 @@
     "opencode/package.json".source = ../common/opencode/.config/opencode/package.json;
 
     # Modes
+     "opencode/modes/ask.md".source = ../common/opencode/.config/opencode/modes/ask.md;
     "opencode/modes/implement.md".source = ../common/opencode/.config/opencode/modes/implement.md;
     "opencode/modes/review.md".source = ../common/opencode/.config/opencode/modes/review.md;
 

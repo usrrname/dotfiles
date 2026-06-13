@@ -149,8 +149,6 @@ in
       enable = true;
       plugins = [
         # autosuggestions are provided by programs.zsh.autosuggestion.enable above;
-        # there is no oh-my-zsh built-in plugin by that name, hence the noisy
-        # "plugin 'autosuggestion' not found" warning we used to see.
         "git"
         "direnv"
         "gh"
@@ -201,6 +199,10 @@ in
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
+    settings = {
+      gcloud.disabled = true;
+      directory.truncation_length = 3;
+    };
   };
 
   programs.fzf = {
