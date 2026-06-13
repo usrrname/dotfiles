@@ -1,10 +1,22 @@
 { config, lib, pkgs, ... }:
 
+let
+  homeDir = config.home.homeDirectory;
+in
 {
   # OpenCode AI assistant configuration
   xdg.configFile = {
-    # Main config files
-    "opencode/opencode.json".source = ../common/opencode/.config/opencode/opencode.json;
+    # Main config — built inline to avoid HM rewriting the path to $HOME
+    # (opencode doesn't expand $HOME in command arrays)
+    "opencode/opencode.json".text = builtins.toJSON {
+      "$schema" = "https://opencode.ai/config.json";
+      mcp = {
+        secure-llm = {
+          type = "local";
+          command = [ "node" "${homeDir}/code/secure-llm/packages/intercept-fetch/dist/index.js" ];
+        };
+      };
+    };
     "opencode/tui.json".source = ../common/opencode/.config/opencode/tui.json;
     "opencode/oh-my-openagent.json".source = ../common/opencode/.config/opencode/oh-my-openagent.json;
     "opencode/no-comment-hooks.md".source = ../common/opencode/.config/opencode/no-comment-hooks.md;

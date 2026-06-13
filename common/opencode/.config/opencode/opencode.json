@@ -1,4 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "mcp": {}
+  "mcp": {
+    "secure-llm": {
+      "type": "local",
+      "command": [
+        "node",
+        "/Users/jenc/code/secure-llm/packages/intercept-fetch/dist/index.js"
+      ]
+    }
+  }
 }
