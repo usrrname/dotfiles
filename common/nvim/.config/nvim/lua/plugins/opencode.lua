@@ -3,7 +3,6 @@ return {
 	version = "*",
 	dependencies = {
 		{
-			-- `snacks.nvim` integration is recommended, but optional
 			---@module "snacks"
 			"folke/snacks.nvim",
 			optional = true,
@@ -12,8 +11,19 @@ return {
 
 				picker = { -- Enhances `select()`
 					actions = {
-						opencode_send = function(...)
-							return require("opencode").snacks_picker_send(...)
+						---@param picker snacks.Picker
+						opencode_send = function(picker)
+							local items = vim.tbl_map(function(item) ---@param item snacks.picker.Item
+								return item.file
+										and require("opencode").format({
+											path = item.file,
+											from = item.pos,
+											to = item.end_pos,
+										})
+									or item.text
+							end, picker:selected({ fallback = true }))
+
+							require("opencode").prompt(table.concat(items, ", ") .. " ")
 						end,
 					},
 					win = {
@@ -28,11 +38,23 @@ return {
 		},
 	},
 	config = function()
-		---@type opencode.Opts
-		vim.g.opencode_opts = {
-			window = {
+		local opencode_cmd = "opencode --port"
+
+		---@type snacks.terminal.Opts
+		local snacks_terminal_opts = {
+			win = {
 				position = "right",
 				width = 0.4,
+				enter = false,
+			},
+		}
+
+		---@type opencode.Opts
+		vim.g.opencode_opts = {
+			server = {
+				start = function()
+					require("snacks.terminal").open(opencode_cmd, snacks_terminal_opts)
+				end,
 			},
 		}
 
@@ -42,13 +64,13 @@ return {
 
 		if vim.fs and vim.fs.watch then
 			local cwd = vim.fn.getcwd()
-			local watch = vim.fs.watch(cwd, function(path, name)
+			local watch = vim.fs.watch(cwd, function(_, name)
 				if name == "change" or name == "rename" then
 					vim.cmd("checktime")
 				end
 			end)
 			vim.api.nvim_create_autocmd("VimLeave", {
-				group = augroup("close_watch"),
+				group = augroup("close_watch", { clear = true }),
 				callback = function()
 					if watch then
 						watch:close()
@@ -57,29 +79,29 @@ return {
 			})
 		end
 
+		-- Prevent the opencode terminal buffer from being shown in a second window
 		vim.api.nvim_create_autocmd("BufWinEnter", {
 			pattern = "*",
 			callback = function(args)
 				vim.defer_fn(function()
-					local terminal = require("opencode.terminal")
-					if not terminal.winid or not vim.api.nvim_win_is_valid(terminal.winid) then
+					local term = require("snacks.terminal").get(opencode_cmd, { create = false })
+					if not term or not term.win or not vim.api.nvim_win_is_valid(term.win) then
 						return
 					end
 
 					local buf = args.buf
-					local buftype = vim.api.nvim_buf_get_option(buf, "buftype")
+					local buftype = vim.api.nvim_get_option_value("buftype", { buf = buf })
 
 					if buftype ~= "terminal" then
 						return
 					end
 
-					local term_buf = vim.api.nvim_win_get_buf(terminal.winid)
-					if buf ~= term_buf then
+					if buf ~= term.buf then
 						return
 					end
 
 					local current_win = vim.api.nvim_get_current_win()
-					if current_win == terminal.winid then
+					if current_win == term.win then
 						return
 					end
 
@@ -88,17 +110,17 @@ return {
 			end,
 		})
 
-		-- Guard to prevent toggle spam
 		local toggle_in_progress = false
 
 		-- keymaps
 		vim.keymap.set({ "n", "x" }, "<leader>oa", function()
-			require("opencode").ask("@this: ", { submit = true })
+			require("opencode").ask("@this: ")
 		end, { desc = "Ask opencode…" })
+
 		vim.keymap.set({ "n", "x" }, "<leader>oc", function()
-			local terminal = require("opencode.terminal")
-			if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
-				vim.api.nvim_set_current_win(terminal.winid)
+			local term = require("snacks.terminal").get(opencode_cmd, { create = false })
+			if term and term.win and vim.api.nvim_win_is_valid(term.win) then
+				vim.api.nvim_set_current_win(term.win)
 				vim.cmd("startinsert")
 			end
 			vim.defer_fn(function()
@@ -112,26 +134,27 @@ return {
 			end
 			toggle_in_progress = true
 
-			local terminal = require("opencode.terminal")
-			local is_visible = terminal.winid ~= nil and vim.api.nvim_win_is_valid(terminal.winid)
+			local term = require("snacks.terminal").get(opencode_cmd, { create = false })
+			local is_visible = term and term.win and vim.api.nvim_win_is_valid(term.win)
 
 			if is_visible then
 				local wins = vim.api.nvim_list_wins()
 				if #wins > 1 then
 					for _, win in ipairs(wins) do
-						if win ~= terminal.winid then
+						if win ~= term.win then
 							vim.api.nvim_win_close(win, false)
 						end
 					end
 				end
-				vim.api.nvim_set_current_win(terminal.winid)
+				vim.api.nvim_set_current_win(term.win)
 				vim.cmd("startinsert")
 				toggle_in_progress = false
 			else
-				require("opencode.terminal").toggle("opencode --port", { split = "right" })
+				require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
 				vim.defer_fn(function()
-					if terminal.winid and vim.api.nvim_win_is_valid(terminal.winid) then
-						vim.api.nvim_set_current_win(terminal.winid)
+					local t = require("snacks.terminal").get(opencode_cmd, { create = false })
+					if t and t.win and vim.api.nvim_win_is_valid(t.win) then
+						vim.api.nvim_set_current_win(t.win)
 						vim.cmd("startinsert")
 					end
 					toggle_in_progress = false
@@ -155,20 +178,12 @@ return {
 			require("opencode").command("session.half.page.down")
 		end, { desc = "Scroll opencode down" })
 
-		vim.keymap.set("v", "<leader>os", function()
-			local start_line = vim.fn.line("'<")
-			local end_line = vim.fn.line("'>")
-			local lines = vim.fn.getline(start_line, end_line)
-			local text = table.concat(lines, "\n")
-			require("opencode").ask("```\n" .. text .. "\n```", { submit = false })
-		end, { desc = "Send selection to OpenCode" })
-
 		vim.keymap.set("n", "<leader>oe", function()
-			require("opencode").ask("Explain this code:\n```\n@this\n```", { submit = true })
+			require("opencode").prompt("Explain this code:\n```\n@this\n```")
 		end, { desc = "Explain code" })
 
 		vim.keymap.set("n", "<leader>or", function()
-			require("opencode").ask("Review this code for issues:\n```\n@this\n```", { submit = true })
+			require("opencode").prompt("Review this code for issues:\n```\n@this\n```")
 		end, { desc = "Review code" })
 
 		vim.keymap.set("n", "<leader>oh", function()
@@ -182,7 +197,7 @@ return {
 				vim.fn.delete(handoff_file)
 			end
 
-			require("opencode").ask("handoff", { submit = true })
+			require("opencode").prompt("handoff")
 
 			local timer = vim.loop.new_timer()
 			timer:start(
