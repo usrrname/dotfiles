@@ -23,6 +23,40 @@ vim.opt.wrap = true
 vim.opt.linebreak = true
 vim.opt.breakindent = true
 
+-- Cap the number of listed buffers; close the least-recently-used hidden
+-- buffer(s) when a new one is opened past the limit.
+local MAX_BUFFERS = 10
+vim.api.nvim_create_autocmd("BufAdd", {
+	callback = function()
+		vim.schedule(function()
+			local listed = vim.tbl_filter(function(info)
+				return info.listed == 1 and info.name ~= "" and vim.bo[info.bufnr].buftype == ""
+			end, vim.fn.getbufinfo({ buflisted = 1 }))
+
+			if #listed <= MAX_BUFFERS then
+				return
+			end
+
+			-- Oldest-used first; skip buffers that are currently shown in a window
+			-- or have unsaved changes.
+			table.sort(listed, function(a, b)
+				return a.lastused < b.lastused
+			end)
+
+			local to_close = #listed - MAX_BUFFERS
+			for _, info in ipairs(listed) do
+				if to_close <= 0 then
+					break
+				end
+				if #info.windows == 0 and vim.bo[info.bufnr].modified == false then
+					pcall(vim.api.nvim_buf_delete, info.bufnr, { force = false })
+					to_close = to_close - 1
+				end
+			end
+		end)
+	end,
+})
+
 -- disable markdownlint noise --
 vim.g.render_markdown = {
 	lint = {
