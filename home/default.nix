@@ -86,14 +86,6 @@ in
     -P ubuntu-18.04=catthehacker/ubuntu:act-latest
   '';
 
-  programs.home-manager = {
-    enable = true;
-    gc = {
-        automatic = true;
-        frequency = "weekly";
-        options = "--delete-older-than 7d";
-    };
-  };
   # Use a user-writable npm global prefix (Nix store is read-only)
   home.sessionVariables.NPM_CONFIG_PREFIX = "$HOME/.npm-global";
 
