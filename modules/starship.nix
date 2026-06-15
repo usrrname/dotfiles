@@ -16,7 +16,6 @@
       disk_usage = {
         disabled = false;
         mount_points = ["/"];
-        show_always = true;
         format = "on [$used: $total]($style) ";
         style = "bold cyan";
       };
