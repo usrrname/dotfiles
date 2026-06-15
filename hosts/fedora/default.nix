@@ -20,7 +20,13 @@ in
   home.stateVersion = "24.11";
 
   # Additional packages specific to Fedora host
+  # Nix-managed — no dnf needed for these
   home.packages = with pkgs; [
+    # System tools (Nix provides the binary, systemd service enabled separately)
+    tailscale
+    # wezterm is installed via dnf — the Nix binary can't find system GPU libraries (libEGL)
+    input-remapper
+
     # Build tools
     gcc
     gnumake
@@ -46,6 +52,7 @@ in
     go
     
     # Additional tools
+    brave        # Web browser
     bruno        # API client
     _1password-cli
     
@@ -65,10 +72,6 @@ in
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
-
-  # Tailscale integration (optional - can be installed via dnf on Fedora)
-  # If you want Nix to manage it, uncomment:
-  # home.packages = [ pkgs.tailscale ];
 
   programs.home-manager.enable = true;
 }
