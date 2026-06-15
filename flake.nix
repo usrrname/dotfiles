@@ -90,6 +90,29 @@
         ];
       };
 
+      # Ephemeral sandbox shell — provides bubblewrap + browser
+      # Enter with: nix develop .#sandbox
+      devShells.x86_64-linux.sandbox =
+        let
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+        in
+        pkgs.mkShell {
+          name = "sandbox";
+          packages = with pkgs; [ bubblewrap chromium ];
+          shellHook = ''
+            echo "🧊 Sandbox shell — bwrap + chromium available"
+            echo ""
+            echo "Quick start:"
+            echo "  sandbox-browser              # run chromium sandboxed"
+            echo "  sandbox-browser firefox      # or another browser"
+            echo "  bwrap --ro-bind /nix /nix ... chromium  # manual"
+            echo ""
+          '';
+        };
+
       # Phase 4 — NixOS box. Apply on the NixOS host:
       #   nixos-rebuild switch --flake .#nixos-box
       nixosConfigurations.nixos-box = nixpkgs.lib.nixosSystem {
