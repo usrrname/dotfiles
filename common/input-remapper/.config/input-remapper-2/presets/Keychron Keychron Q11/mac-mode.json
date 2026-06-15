@@ -1,0 +1,53 @@
+[
+    {
+        "input_combination": [
+            {
+                "type": 1,
+                "code": 56,
+                "origin_hash": "9f990d7056d833c0a2629e34959ae173"
+            },
+            {
+                "type": 1,
+                "code": 46,
+                "origin_hash": "9f990d7056d833c0a2629e34959ae173"
+            }
+        ],
+        "target_uinput": "keyboard",
+        "output_symbol": "Control_L + Shift_L + c",
+        "mapping_type": "key_macro"
+    },
+    {
+        "input_combination": [
+            {
+                "type": 1,
+                "code": 56,
+                "origin_hash": "9f990d7056d833c0a2629e34959ae173"
+            },
+            {
+                "type": 1,
+                "code": 47,
+                "origin_hash": "9f990d7056d833c0a2629e34959ae173"
+            }
+        ],
+        "target_uinput": "keyboard",
+        "output_symbol": "Control_L + Shift_L + v",
+        "mapping_type": "key_macro"
+    },
+    {
+        "input_combination": [
+            {
+                "type": 1,
+                "code": 29,
+                "origin_hash": "9f990d7056d833c0a2629e34959ae173"
+            },
+            {
+                "type": 1,
+                "code": 20,
+                "origin_hash": "9f990d7056d833c0a2629e34959ae173"
+            }
+        ],
+        "target_uinput": "keyboard",
+        "output_symbol": "Control_L + Shift_L + t",
+        "mapping_type": "key_macro"
+    }
+]

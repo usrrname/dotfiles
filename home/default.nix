@@ -20,6 +20,7 @@ in
     ../modules/opencode.nix
     ../modules/bash.nix
     ../modules/claude.nix
+    ../modules/starship.nix
   ];
 
   home.username = username;
@@ -64,7 +65,6 @@ in
       # Shell
       zsh
       oh-my-zsh
-      starship
 
       # Misc
       gnupg
@@ -194,15 +194,6 @@ in
     enable = true;
     enableZshIntegration = true;
     nix-direnv.enable = true;
-  };
-
-  programs.starship = {
-    enable = true;
-    enableZshIntegration = true;
-    settings = {
-      gcloud.disabled = true;
-      directory.truncation_length = 3;
-    };
   };
 
   programs.fzf = {

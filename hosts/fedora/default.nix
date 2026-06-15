@@ -11,6 +11,8 @@ in
   imports = [
     ../../home
     ../../home/linux.nix
+    ../../modules/input-remapper
+    ../../modules/wezterm
   ];
 
   home.username = username;

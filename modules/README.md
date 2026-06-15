@@ -15,9 +15,9 @@ and per-host entries in `hosts/`.
 | `bash.nix` | ✅ Done | `programs.bash` with aliases and init scripts |
 | `claude.nix` | ✅ Done | Claude Code settings, skills, hooks, agents |
 | `git.nix` | 📋 Planned | `programs.git` absorbing `common/git/.gitconfig` and platform overrides |
-| `starship.nix` | 📋 Planned | `programs.starship` (currently inline in `home/default.nix`) |
+| `starship.nix` | ✅ Done | `programs.starship` config extracted from `home/default.nix` |
 | `zsh.nix` | 📋 Planned | `programs.zsh` absorbing `.zshrc`, `.zshenv`, `.aliasrc-osx` |
-| `wezterm.nix` | 📋 Planned | `.wezterm.lua` via `xdg.configFile` |
+| `wezterm.nix` | ✅ Done | `programs.wezterm` + `common/wezterm/.config/wezterm/wezterm.lua` |
 
 ## Adding a new module
 
