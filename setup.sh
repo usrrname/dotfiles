@@ -39,6 +39,7 @@ case "$(uname -s)" in
                 # wezterm needs system EGL/GPU libraries — Nix binary can't find them.
                 DNF_PACKAGES="
                     wezterm
+                    bubblewrap
                 "
                 if [ -n "$DNF_PACKAGES" ]; then
                     # shellcheck disable=SC2086
