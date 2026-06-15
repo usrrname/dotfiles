@@ -46,6 +46,14 @@ let
         set -- bash
       fi
 
+      # ---- resolve user Nix profile (follows ~/.nix-profile symlink) ----
+      NIX_USER_PROFILE="$(readlink -f "$HOME/.nix-profile" 2>/dev/null || true)"
+      if [ -n "$NIX_USER_PROFILE" ] && [ -d "$NIX_USER_PROFILE/bin" ]; then
+        SANDBOX_PATH="$NIX_USER_PROFILE/bin:/nix/var/nix/profiles/default/bin:$PATH"
+      else
+        SANDBOX_PATH="/nix/var/nix/profiles/default/bin:$PATH"
+      fi
+
       # ---- runtime info ----
       echo "🧊 Sandbox active"
       echo "   Workspace:  /workspace → $REPO_PATH (read-write)"
@@ -65,6 +73,7 @@ let
         --tmpfs /home \
         --setenv HOME /tmp \
         --setenv SANDBOXED 1 \
+        --setenv PATH "$SANDBOX_PATH" \
         --unshare-ipc \
         --chdir /workspace \
         --cap-drop ALL \

@@ -7,24 +7,17 @@ let
     text = ''
       set -euo pipefail
 
-      # Resolve Hermes paths before entering namespace
       HERMES_BIN="''${HERMES_BIN:-$HOME/.local/bin/hermes}"
-      HERMES_CONFIG="$HOME/.hermes"
 
       if [ ! -f "$HERMES_BIN" ]; then
         echo "❌ Hermes binary not found at $HERMES_BIN" >&2
         echo "   Install it first: curl -fsSL https://raw.githubusercontent.com/..." >&2
         exit 1
       fi
-
-      if [ ! -d "$HERMES_CONFIG" ]; then
-        echo "❌ Hermes config not found at $HERMES_CONFIG" >&2
+      if [ ! -d "$HOME/.hermes" ]; then
+        echo "❌ Hermes config not found at $HOME/.hermes" >&2
         exit 1
       fi
-
-      # Resolve real paths
-      HERMES_BIN="$(readlink -f "$HERMES_BIN")"
-      HERMES_CONFIG="$(readlink -f "$HERMES_CONFIG")"
 
       # Resolve user Nix profile for tool PATH
       NIX_USER_PROFILE="$(readlink -f "$HOME/.nix-profile" 2>/dev/null || true)"
@@ -35,8 +28,8 @@ let
       fi
 
       echo "🧊 Hermes sandbox active"
-      echo "   Config:  $HERMES_CONFIG"
-      echo "   Binary:  $HERMES_BIN"
+      echo "   Config:  $HOME/.hermes (writable)"
+      echo "   Home:    read-only except sealed paths"
       echo "   /nix:    available"
       echo "   Sealed:  ~/.ssh, ~/.aws, ~/.gnupg, ~/.config/gh"
       echo "   Network: shared (Telegram, web)"
@@ -48,8 +41,8 @@ let
         --dev /dev \
         --ro-bind /etc /etc \
         --bind /tmp /tmp \
-        --bind "$HERMES_BIN" "$HERMES_BIN" \
-        --bind "$HERMES_CONFIG" "$HERMES_CONFIG" \
+        --ro-bind "$HOME" "$HOME" \
+        --bind "$HOME/.hermes" "$HOME/.hermes" \
         --tmpfs "$HOME/.ssh" \
         --tmpfs "$HOME/.aws" \
         --tmpfs "$HOME/.gnupg" \
