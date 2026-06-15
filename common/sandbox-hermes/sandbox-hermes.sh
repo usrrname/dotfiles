@@ -48,10 +48,12 @@ exec bwrap \
   --proc /proc \
   --dev /dev \
   --ro-bind /etc /etc \
+  --ro-bind /run/systemd/resolve /run/systemd/resolve \
   --bind /tmp /tmp \
   --bind "$SANDBOX_HOME" "$HOME" \
   --bind "$HOME/.hermes" "$HOME/.hermes" \
   --ro-bind "$HOME/.local/bin" "$HOME/.local/bin" \
+  --ro-bind "$HOME/.local/share" "$HOME/.local/share" \
   --setenv HOME "$HOME" \
   --setenv PATH "$SANDBOX_PATH" \
   --unshare-ipc \

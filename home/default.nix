@@ -68,7 +68,6 @@ in
       # Misc
       gnupg
       cacert
-      ollama # local LLM server
     ]
     ++ lib.optionals isLinux [
       lsb-release
