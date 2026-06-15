@@ -30,9 +30,12 @@ else
   SANDBOX_PATH="/nix/var/nix/profiles/default/bin:/usr/bin:/usr/local/bin"
 fi
 
+# Create a temp directory to serve as an empty HOME
+SANDBOX_HOME="$(mktemp -d /tmp/sandbox-hermes-XXXXXX)"
+
 echo "🧊 Hermes sandbox active"
 echo "   Config:  $HOME/.hermes (writable)"
-echo "   HOME:    tmpfs (secrets don't exist)"
+echo "   HOME:    isolated tmp (secrets don't exist)"
 echo "   /usr:    read-only (system libs, bash)"
 echo "   /nix:    available (curl, git, node, etc.)"
 echo "   Network: shared (Telegram, web search)"
@@ -41,11 +44,12 @@ echo ""
 exec bwrap \
   --ro-bind /nix /nix \
   --ro-bind /usr /usr \
+  --ro-bind /lib64 /lib64 \
   --proc /proc \
   --dev /dev \
   --ro-bind /etc /etc \
   --bind /tmp /tmp \
-  --tmpfs "$HOME" \
+  --bind "$SANDBOX_HOME" "$HOME" \
   --bind "$HOME/.hermes" "$HOME/.hermes" \
   --ro-bind "$HOME/.local/bin" "$HOME/.local/bin" \
   --setenv HOME "$HOME" \
