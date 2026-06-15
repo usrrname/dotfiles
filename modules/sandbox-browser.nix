@@ -41,6 +41,8 @@ let
         --dev-bind /dev/shm /dev/shm \
         --ro-bind /etc /etc \
         --ro-bind /run /run \
+        --ro-bind /sys /sys \
+        --ro-bind /usr/share/fonts /usr/share/fonts \
         --bind /tmp /tmp \
         --bind "$SANDBOX_DIR/cache" "$HOME/.cache" \
         --bind "$SANDBOX_DIR/config" "$HOME/.config" \
