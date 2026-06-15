@@ -90,6 +90,28 @@
         ];
       };
 
+      # Ephemeral repo sandbox — run commands in an isolated workspace
+      # Enter with: nix develop .#sandbox-repo
+      devShells.x86_64-linux.sandbox-repo =
+        let
+          pkgs = import nixpkgs {
+            system = "x86_64-linux";
+            config.allowUnfree = true;
+          };
+        in
+        pkgs.mkShell {
+          name = "sandbox-repo";
+          packages = with pkgs; [ bubblewrap git ];
+          shellHook = ''
+            echo "🧊 Repo sandbox — bwrap + git available"
+            echo ""
+            echo "Quick start:"
+            echo "  sandbox-repo ~/project             # sandbox existing repo"
+            echo "  sandbox-repo ./new-thing make test  # create + run command"
+            echo ""
+          '';
+        };
+
       # Ephemeral sandbox shell — provides bubblewrap + browser
       # Enter with: nix develop .#sandbox
       devShells.x86_64-linux.sandbox =

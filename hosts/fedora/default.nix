@@ -14,6 +14,7 @@ in
     ../../modules/input-remapper.nix
     ../../modules/wezterm.nix
     ../../modules/sandbox-browser.nix
+    ../../modules/sandbox-repo.nix
   ];
 
   home.username = username;
