@@ -94,7 +94,7 @@ sudo nixos-rebuild switch --flake .#nixos-box
 │   ├── ubuntu/            # Ubuntu (standalone HM)
 │   └── pi-nas/            # Raspberry Pi 4B NAS (standalone HM)
 ├── home/                  # Shared Home Manager config (packages, programs)
-├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux, sandbox-browser, sandbox-repo)
+├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux, sandbox-repo)
 ├── common/                # Shared config sources (claude, nvim, opencode)
 ├── macos/                 # macOS-specific (currently only docker)
 ├── .claude/               # Project-local Claude Code config for THIS repo
@@ -107,7 +107,7 @@ sudo nixos-rebuild switch --flake .#nixos-box
 - **Homebrew casks** (macOS only): wezterm, obsidian, 1password, orbstack, slack, spotify, firefox, brave-browser, tailscale, gpg-suite, **claude-code**
 - **Programs**: git, ssh, bash, zsh, direnv, gh, tmux, starship, vim, nvim (LazyVim)
 - **AI tools**: `opencode` (nix on Linux, brew tap on Mac), `claude-code` (brew cask on Mac)
-- **Sandbox tools**: `sandbox-browser`, `sandbox-repo` (bubblewrap-isolated environments)
+- **Sandbox tools**: `sandbox-repo` (bubblewrap-isolated environments)
 - **Configs**: SSH config, Wezterm, nvim/LazyVim, bash aliases, shell aliases, environment variables, Claude Code `settings.json` + `statusline-command.sh`
 
 ### Claude Code skills are NOT nix-managed (intentional)
@@ -126,7 +126,6 @@ Sandboxed commands run programs in a [bubblewrap](https://github.com/containers/
 
 | Command | What it does | Threat model |
 |---|---|---|
-| `sandbox-browser` | Runs Chromium (or `$1`) with isolated profile, tmpfs'd secrets | Browse without leaking `~/.ssh`, `~/.aws`, `~/.gnupg` |
 | `sandbox-repo <path>` | Mounts a repo read-write at `/workspace`, drops into a shell | Agent can write to repo but can't touch home dir secrets |
 
 **Inside a sandbox:**
@@ -142,10 +141,6 @@ No permanent install needed — grab the tools and run:
 ```bash
 cd ~/.dotfiles
 
-# Browser sandbox
-nix develop .#sandbox
-sandbox-browser
-
 # Repo sandbox
 nix develop .#sandbox-repo
 sandbox-repo ~/projects/my-app make test
@@ -156,19 +151,9 @@ sandbox-repo ~/projects/my-app make test
 After `./setup.sh` or `home-manager switch`, the commands are on `PATH`:
 
 ```bash
-sandbox-browser                                     # default: chromium
-sandbox-browser firefox                             # any browser
-
 sandbox-repo ~/projects/my-app                      # interactive shell
 sandbox-repo ./new-project nix develop               # create + run
 sandbox-repo ~/projects/my-app npm test              # one-off command
-```
-
-### Multiple browser profiles
-
-```bash
-SANDBOX_DIR=~/.sandbox-personal sandbox-browser   # personal cookies/history
-SANDBOX_DIR=~/.sandbox-work sandbox-browser         # separate work profile
 ```
 
 ### Setup breakdown (Fedora)

@@ -13,7 +13,6 @@ in
     ../../home/linux.nix
     ../../modules/input-remapper.nix
     ../../modules/wezterm.nix
-    ../../modules/sandbox-browser.nix
     ../../modules/sandbox-repo.nix
   ];
 
