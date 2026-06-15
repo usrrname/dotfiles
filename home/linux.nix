@@ -4,6 +4,17 @@
 { config, pkgs, lib, ... }:
 
 {
+  imports = [
+    ../modules/home-manager-gc.nix
+  ];
+
+  # Auto-clean old Home Manager generations weekly (systemd user timer)
+  modules.home-manager-gc = {
+    enable = true;
+    keepDays = 7;
+    frequency = "weekly";
+  };
+
   # Linux-specific packages
   home.packages = with pkgs; [
     lsb-release
