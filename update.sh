@@ -1,6 +1,6 @@
 #!/bin/sh
 # Pull updates and sync dotfiles
-# Updates git repo, submodules, and applies Nix/stow configuration
+# Updates git repo, submodules, and applies Nix configuration
 
 set -e
 

@@ -7,11 +7,10 @@ Pi-specific setup, see [setup-osx.md](setup-osx.md) and [setup-pi.md](setup-pi.m
 
 The Nix migration replaced the per-OS package scripts (`scripts/setup/packages-*.sh`,
 `scripts/setup-osx.sh`, etc.) that this file used to document. Those files no
-longer exist. The scripts that remain are minimal wrappers around nix and stow.
+longer exist. The scripts that remain are nix wrappers.
 
 ```
-├── setup.sh              # Thin wrapper: detects Nix → runs the right rebuild
-├── stow-dotfiles.sh      # Stow fallback (all arrays currently empty)
+├── setup.sh              # Auto-detects platform and runs the right rebuild
 ├── update.sh             # git pull + submodule update + setup.sh
 └── nix/scripts/          # Misc nix helper scripts
 ```
@@ -19,18 +18,11 @@ longer exist. The scripts that remain are minimal wrappers around nix and stow.
 ## What `setup.sh` does
 
 ```sh
-if nix is installed:
-  on macOS    → sudo darwin-rebuild switch --flake .#mac-jenc
-  on NixOS    → sudo nixos-rebuild switch --flake .#nixos-box
-  on Linux    → home-manager switch --flake .#fedora
-                (fedora target also serves Ubuntu/Debian via standalone HM)
-else:
-  → ./stow-dotfiles.sh    # legacy stow path
+on macOS    → sudo darwin-rebuild switch --flake .#mac-jenc
+on NixOS    → sudo nixos-rebuild switch --flake .#nixos-box
+on Linux    → home-manager switch --flake .#fedora
+              (also detects Fedora and runs dnf + service bootstrap)
 ```
-
-The flake-aware path is the default everywhere; the stow fallback only
-activates when Nix is genuinely absent. On the Pi NAS host, prefer the explicit
-`home-manager switch --flake .#pi-nas` (per `setup-pi.md`).
 
 ## What `update.sh` does
 
@@ -48,20 +40,6 @@ nix flake update nixpkgs
 ./setup.sh
 brew upgrade --cask          # Mac only — bumps cask-installed apps like claude-code
 ```
-
-## What `stow-dotfiles.sh` does
-
-OS-aware stow runner. All three package arrays (`COMMON`, `LINUX`, `MACOS`) are
-currently empty — there is nothing to stow. The script remains as a fallback
-mechanism. If a future config needs stow management:
-
-1. Add the package name to the appropriate array in `stow-dotfiles.sh`.
-2. Create `common/<pkg>/` (or `macos/<pkg>/`, `linux/<pkg>/`) with the directory
-   structure that should land at `~/`.
-3. Run `./stow-dotfiles.sh ""` (empty arg = no `--adopt`).
-
-**Don't use `--adopt` (the default with no args)** when other tools write into
-target directories — see the gotchas doc.
 
 ## Package management
 

@@ -1,7 +1,6 @@
 # Setting Up Dotfiles on macOS
 
-**Primary path: Nix + nix-darwin + Home Manager.** Stow is legacy and currently
-all stow arrays are empty.
+**Primary path: Nix + nix-darwin + Home Manager.**
 
 ## Prerequisites
 
@@ -92,12 +91,6 @@ readlink ~/.config/nvim                  # should resolve into the same generati
 which claude                              # /opt/homebrew/bin/claude (brew cask)
 git config --list --show-origin | grep gpg.format  # should print gpg.format=ssh
 ```
-
-## Legacy stow path (not used on Mac currently)
-
-`./stow-dotfiles.sh` exists but its arrays are empty. Don't run it on Mac unless
-you're moving a specific config out of nix management; see `AGENTS.md` for the
-current state.
 
 ## Troubleshooting
 

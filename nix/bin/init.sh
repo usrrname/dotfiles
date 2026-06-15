@@ -50,8 +50,4 @@ echo "Detected $OS — configuring sparse-checkout for: $DIR"
 git sparse-checkout set $DIR
 
 echo ""
-echo "Stowing dotfiles..."
-./stow-dotfiles.sh
-
-echo ""
 echo "Done! Restart your shell or source ~/.zshrc (or ~/.bashrc)"

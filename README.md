@@ -2,8 +2,6 @@
 
 Dotfiles managed with [Nix flakes](https://nixos.wiki/wiki/Flakes), [Home Manager](https://nix-community.github.io/home-manager/), and [nix-darwin](https://github.com/LnL7/nix-darwin) for macOS.
 
-Legacy [stow](https://www.gnu.org/software/stow/) setup still available for Linux/non-Nix environments.
-
 ## Quick Start
 
 ### macOS
@@ -90,7 +88,7 @@ home-manager switch --flake .#fedora
 │   └── pi-nas/            # Raspberry Pi 4B NAS (standalone HM)
 ├── home/                  # Shared Home Manager config (packages, programs)
 ├── modules/               # Nix modules (bash, claude, direnv, gh, nvim, opencode, tmux)
-├── common/                # Stow / shared config sources (claude, nvim, opencode)
+├── common/                # Shared config sources (claude, nvim, opencode)
 ├── macos/                 # macOS-specific (currently only docker)
 ├── .claude/               # Project-local Claude Code config for THIS repo
 └── docs/plans/            # Migration plans + open issues
@@ -107,10 +105,6 @@ home-manager switch --flake .#fedora
 ### Claude Code skills are NOT nix-managed (intentional)
 
 `modules/claude.nix` is a hybrid: stable config files are nix-managed (rebuild required to change), but `~/.claude/skills` is a runtime symlink to `~/.agents/skills` so skill edits never need `darwin-rebuild`. See `docs/plans/agent-skills-symlink-deployment.md`.
-
-### What's still stow-managed
-
-Nothing currently. All stow arrays in `stow-dotfiles.sh` are empty; everything is nix-managed. The stow script is kept for fallback on non-Nix systems.
 
 ### Removed (no longer needed)
 
@@ -138,23 +132,6 @@ xdg.configFile."someapp/config.toml".source = ./someapp/config.toml;
 Then rebuild:
 ```bash
 sudo darwin-rebuild switch --flake .#mac-jenc
-```
-
-### Option 2: Stow (for Linux or unmigrated configs)
-
-```bash
-# 1. Create the directory structure
-mkdir -p common/someapp/.config/someapp
-
-# 2. Copy your config
-cp -r ~/.config/someapp/* common/someapp/.config/someapp/
-
-# 3. Remove the original
-rm -rf ~/.config/someapp
-
-# 4. Add to COMMON array in stow-dotfiles.sh
-# 5. Run stow
-./stow-dotfiles.sh
 ```
 
 ## Adding a Homebrew Package

@@ -23,5 +23,4 @@ and per-host entries in `hosts/`.
 
 1. Create `modules/<tool>.nix` with the Home Manager configuration
 2. Import it in `home/default.nix` under `imports = [ ... ];`
-3. Remove the corresponding stow package from `stow-dotfiles.sh`
-4. Update this README
+3. Update this README

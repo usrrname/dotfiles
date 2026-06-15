@@ -37,7 +37,6 @@ in
       tree
       ripgrep
       fzf
-      stow
       tmux
 
       # Editors

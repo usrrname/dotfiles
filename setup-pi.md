@@ -12,12 +12,7 @@ Quick guide for setting up this dotfiles repository on Debian Trixie running on 
    cd .dotfiles
    ```
 
-2. Install `stow` (for symlinking dotfiles):
-
-   ```bash
-   sudo apt update
-   sudo apt install -y stow
-   ```
+2. Install Nix (see [nixos.org/download](https://nixos.org/download)):
 
 ## Setup Steps
 
@@ -48,29 +43,13 @@ The script automatically:
 - Installs special packages (nvm, pyenv, mise, devbox, tailscale, rust, etc.)
 - Installs development tools (GitHub CLI, 1Password CLI, ripgrep, etc.)
 
-### 2. Symlink Dotfiles
-
-Use the OS-aware stow script to create symlinks (automatically stows only relevant packages for Debian):
+### 2. Apply Nix Configuration
 
 ```bash
-# Stow all dotfiles (auto-detects OS and only stows relevant packages)
-./stow-dotfiles.sh
-
-# Stow without adopting existing files (use if starting fresh)
-./stow-dotfiles.sh ""
+./setup.sh
 ```
 
-The script automatically:
-
-- **Stows common packages** (bash, zsh, nvim, git, direnv, etc.)
-- **Skips macOS-specific packages** (see `setup-osx.md` for macOS setup)
-- **Note**: The `nix/` folder is not stowed automatically - it should be managed manually or via NixOS `configuration.nix`
-
-**Verify symlinks:**
-
-```bash
-ls -la ~ | grep "\->"
-```
+This runs `home-manager switch --flake .#pi-nas`.
 
 ### 3. Configure Shell Environment
 
@@ -157,38 +136,8 @@ lsmod | grep zram  # Should return nothing
 
 **Note**: Adjust partition (`/dev/sda2`) and swap size (`2G`) as needed. Remaining space on partition can be used for other services.
 
-## About `stow --adopt`
-
-The `--adopt` flag moves existing files into the package directory and replaces them with symlinks. **Avoid on populated home directories** — it pulls existing files into your dotfiles repo, which can pollute the repo with runtime artifacts (e.g. Claude Code session files).
-
-**Use only on a fresh setup, and always dry-run first:**
-
-```bash
-stow --adopt -n <package>
-```
-
-To stow without adopting:
-
-```bash
-./stow-dotfiles.sh ""    # empty string = no flags
-```
-
-## Available Dotfile Packages
-
-Currently all stow arrays in `stow-dotfiles.sh` are empty — the Pi setup uses
-standalone Home Manager (`home-manager switch --flake .#pi-nas`) which manages
-everything via Nix modules instead. Stow is kept as a fallback mechanism.
-
-Previously-stowed configs now under Nix:
-- `bash`, `direnv`, `gh`, `tmux`, `vim`, `ssh` (moved to `modules/<name>.nix`)
-- `nvim`, `opencode`, `claude` (config sources under `common/<name>/`)
-- `agents` (replaced by `~/.agents/skills/` runtime tree; see `docs/plans/agent-skills-symlink-deployment.md`)
-
 ## Troubleshooting
 
-- **Check distribution detection**: `./setup.sh check`
-- **List packages**: `./setup.sh list`
-- **Dry run setup**: `DRY_RUN=true ./setup.sh`
 - **Verify symlinks**: `ls -la ~ | grep "\->"`
 
 ## Notes
@@ -196,6 +145,12 @@ Previously-stowed configs now under Nix:
 - The setup script requires `sudo` privileges for package installation
 - Some packages (like Tailscale) require manual configuration after installation
 - Raspberry Pi-specific packages are available in `APT_PACKAGES_PI` but may need explicit inclusion
+
+## Previously-stowed configs now under Nix
+
+- `bash`, `direnv`, `gh`, `tmux`, `vim`, `ssh` (moved to `modules/<name>.nix`)
+- `nvim`, `opencode`, `claude` (config sources under `common/<name>/`)
+- `agents` (replaced by `~/.agents/skills/` runtime tree; see `docs/plans/agent-skills-symlink-deployment.md`)
 
 ## Install Neovim from source
 
