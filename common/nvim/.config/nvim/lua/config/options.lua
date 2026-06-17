@@ -18,6 +18,14 @@ vim.api.nvim_create_autocmd("FileType", {
 -- Hide unnamed buffer from tabline
 vim.opt.shortmess:append("S")
 
+-- Don't auto-equalize window sizes when splits open/close.
+vim.opt.equalalways = false
+
+-- Side-panel layout (neo-tree + claude/opencode terminals) is managed by
+-- edgy.nvim via the `ui.edgy` LazyVim extra; see plugins/edgy.lua for the
+-- per-edge widths. (A hand-rolled winfixwidth autocmd used to live here, but
+-- it fought edgy, so it was removed once edgy took over.)
+
 -- Wrap text by default in buffers
 vim.opt.wrap = true
 vim.opt.linebreak = true
