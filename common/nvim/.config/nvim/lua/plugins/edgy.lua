@@ -6,8 +6,17 @@ return {
 	"folke/edgy.nvim",
 	opts = function(_, opts)
 		opts.options = opts.options or {}
-		opts.options.left = vim.tbl_extend("force", opts.options.left or {}, { size = 40 })
-		opts.options.right = vim.tbl_extend("force", opts.options.right or {}, { size = 0.4 })
+
+		-- Pin each side's width AND set winfixwidth so the center editor (and
+		-- transient splits) can't steal columns from the side panels — that was
+		-- letting the right claude/opencode panel shrink below its 0.4 share.
+		opts.options.left = opts.options.left or {}
+		opts.options.left.size = 40
+		opts.options.left.wo = vim.tbl_extend("force", opts.options.left.wo or {}, { winfixwidth = true })
+
+		opts.options.right = opts.options.right or {}
+		opts.options.right.size = 0.4
+		opts.options.right.wo = vim.tbl_extend("force", opts.options.right.wo or {}, { winfixwidth = true })
 
 		-- Disable edgy's resize animation. The default 30fps slide animates
 		-- every layout change, which shows up as the right terminal panel

@@ -7,6 +7,12 @@ return {
 	"coder/claudecode.nvim",
 	opts = {
 		terminal = {
+			-- Force the snacks provider (not "auto", which can fall back to a
+			-- NATIVE terminal). Only a snacks terminal sets snacks_win.position
+			-- /relative, which is what edgy's right-edge filter matches on — a
+			-- native fallback isn't edgy-managed, so neo-tree + the center
+			-- editor squeeze it below its share. edgy owns the final width.
+			provider = "snacks",
 			split_side = "right",
 			split_width_percentage = 0.40,
 		},
