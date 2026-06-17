@@ -10,10 +10,13 @@ in
     # (opencode doesn't expand $HOME in command arrays)
     "opencode/opencode.json".text = builtins.toJSON {
       "$schema" = "https://opencode.ai/config.json";
+      plugin = [
+        "${homeDir}/code/ponytail/.opencode/plugins/ponytail.mjs"
+      ];
       mcp = {
         secure-llm = {
           type = "local";
-          command = [ "node" "${homeDir}/code/secure-llm/packages/intercept-fetch/dist/index.js" ];
+          command = [ "node" "${homeDir}/code/furret/fetch/dist/index.js" ];
         };
       };
     };
