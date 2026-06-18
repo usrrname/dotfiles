@@ -11,6 +11,7 @@ in
     "opencode/opencode.json".text = builtins.toJSON {
       "$schema" = "https://opencode.ai/config.json";
       plugin = [
+        "oh-my-openagent"
         "${homeDir}/code/ponytail/.opencode/plugins/ponytail.mjs"
       ];
       mcp = {
@@ -29,6 +30,7 @@ in
      "opencode/modes/ask.md".source = ../common/opencode/.config/opencode/modes/ask.md;
     "opencode/modes/implement.md".source = ../common/opencode/.config/opencode/modes/implement.md;
     "opencode/modes/review.md".source = ../common/opencode/.config/opencode/modes/review.md;
+    "opencode/modes/teach.md".source = ../common/opencode/.config/opencode/modes/teach.md;
 
     # Skills
     "opencode/skills/agent-communication.md".source = ../common/opencode/.config/opencode/skills/agent-communication.md;
