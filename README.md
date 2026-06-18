@@ -166,7 +166,7 @@ On a fresh Fedora machine, `./setup.sh` handles the split automatically:
 | **bubblewrap** | `dnf` (via `setup.sh`) | Needs system-level namespace support |
 | **tailscale** | Nix (`pkgs.tailscale`) + `systemctl enable` | Binary via Nix, service via systemd |
 | **input-remapper** | Nix (`pkgs.input-remapper`) | Config via Nix module |
-| **brave, ollama, CLI tools** | Nix (`home.packages`) | Pure user-level, no system deps needed |
+| **brave, CLI tools** | Nix (`home.packages`) | Pure user-level, no system deps needed |
 
 ## Adding a New Config
 

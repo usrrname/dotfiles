@@ -46,9 +46,6 @@ in
     # Additional tools
     bruno        # API client
     _1password-cli
-    
-    # Local LLM server
-    ollama
   ];
 
   # Use a user-writable npm global prefix (Nix store is read-only)

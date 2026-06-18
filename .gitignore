@@ -56,7 +56,6 @@ zsh/custom/plugins/**
 *id_rsa
 *.bak*
 goose/**/*/githubcopilot/**
-ollama/**/*
 plans/**
 opencode/.config/opencode/plans/**
 docs/plans/**
