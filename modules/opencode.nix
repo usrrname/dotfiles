@@ -15,11 +15,7 @@ in
         "${homeDir}/code/ponytail/.opencode/plugins/ponytail.mjs"
       ];
       mcp = {
-        secure-llm = {
-          type = "local";
-          command = [ "node" "${homeDir}/code/furret/fetch/dist/index.js" ];
-        };
-      };
+       };
     };
     "opencode/tui.json".source = ../common/opencode/.config/opencode/tui.json;
     "opencode/oh-my-openagent.json".source = ../common/opencode/.config/opencode/oh-my-openagent.json;

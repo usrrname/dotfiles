@@ -44,7 +44,6 @@ in
     go
     
     # Additional tools
-    bruno        # API client
     _1password-cli
   ];
 

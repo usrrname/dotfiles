@@ -49,6 +49,7 @@ exec bwrap \
   --dev /dev \
   --ro-bind /etc /etc \
   --ro-bind /run/systemd/resolve /run/systemd/resolve \
+  --ro-bind "$HOME/models" "$HOME/models" \
   --bind /tmp /tmp \
   --bind "$SANDBOX_HOME" "$HOME" \
   --bind "$HOME/.hermes" "$HOME/.hermes" \

@@ -54,7 +54,6 @@ in
     
     # Additional tools
     brave        # Web browser
-    bruno        # API client
     _1password-cli
   ];
 

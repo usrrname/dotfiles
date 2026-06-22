@@ -46,7 +46,6 @@ in
       direnv
       gh
       act # run GitHub Actions locally
-      bruno # API client
       _1password-cli
 
       # Build tools

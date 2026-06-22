@@ -168,6 +168,8 @@ On a fresh Fedora machine, `./setup.sh` handles the split automatically:
 | **input-remapper** | Nix (`pkgs.input-remapper`) | Config via Nix module |
 | **brave, CLI tools** | Nix (`home.packages`) | Pure user-level, no system deps needed |
 
+For a full breakdown of Fedora-specific changes (system-level, Nix-managed packages, npm activation, installed modules, and architectural notes), see [`hosts/fedora/README.md`](hosts/fedora/README.md).
+
 ## Adding a New Config
 
 ### Option 1: Nix (preferred for macOS)

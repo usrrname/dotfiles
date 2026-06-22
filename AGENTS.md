@@ -19,7 +19,15 @@ Nix flakes (primary).
 | Ubuntu (standalone HM) | `home-manager switch --flake .#ubuntu` |
 | Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |
 
+### Fedora host (`hosts/fedora/`)
 
+All Fedora-specific details live in [`hosts/fedora/README.md`](hosts/fedora/README.md). Key facts an agent needs to know:
+
+- **dnf/Nix split**: `wezterm` and `bubblewrap` must come from dnf (system GPU/namespace libs). Everything else comes from Nix. Do NOT move these to Nix — the binaries will fail at runtime.
+- **Adding packages to the Fedora host**: edit `hosts/fedora/default.nix` under `home.packages`, not the shared `home/default.nix`, unless the package is common across all Linux hosts.
+- **npm workaround**: Nix store is read-only for `npm install -g`. `hosts/fedora/default.nix` sets `NPM_CONFIG_PREFIX=~/.npm-global` and runs a `home.activation` script to install globals (`socket`). If adding a new npm global, add it there.
+- **input-remapper preset**: lives at `common/input-remapper/.config/input-remapper-2/presets/Keychron Keychron Q11/mac-mode.json`, deployed by `modules/input-remapper.nix`. The Keychron Q11's physical Alt keys are mapped to Ctrl+Shift shortcuts (macOS muscle memory).
+- **Bootstrap**: `./setup.sh` handles the full Fedora bootstrap (dnf pkgs, systemd enable, passwordless sudo, zsh). Running `home-manager switch --flake .#fedora` alone only applies the Nix user config.
 
 ## Claude Code Configuration
 
