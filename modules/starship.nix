@@ -1,11 +1,13 @@
 {
+  # Configuration written to ~/.config/starship.toml
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
     settings = {
       gcloud.disabled = true;
-      directory.truncation_length = 3;
 
+      direnv.enable = true;
+      
       memory_usage = {
         disabled = false;
         threshold = 0;
@@ -13,12 +15,6 @@
         style = "bold yellow";
       };
 
-      disk_usage = {
-        disabled = false;
-        mount_points = ["/"];
-        format = "on [$used: $total]($style) ";
-        style = "bold cyan";
-      };
-    };
+     };
   };
 }
