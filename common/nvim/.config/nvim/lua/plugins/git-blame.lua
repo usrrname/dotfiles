@@ -1,7 +1,4 @@
 return {
-	"FabijanZulj/blame.nvim",
+	"APZelos/blamer.nvim",
 	lazy = false,
-	config = function()
-		require("blame").setup({})
-	end,
 }

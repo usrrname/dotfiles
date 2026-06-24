@@ -33,7 +33,7 @@ vim.opt.breakindent = true
 
 -- Cap the number of listed buffers; close the least-recently-used hidden
 -- buffer(s) when a new one is opened past the limit.
-local MAX_BUFFERS = 10
+local MAX_BUFFERS = 8
 vim.api.nvim_create_autocmd("BufAdd", {
 	callback = function()
 		vim.schedule(function()
