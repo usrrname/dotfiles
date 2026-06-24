@@ -1,5 +1,56 @@
 { config, lib, pkgs, ... }:
-
+let
+  # OS detection based on system hostname and home username
+  isFedora = pkgs.stdenv.isLinux && (
+    (config ? system.nixos.hostName && (
+      config.system.nixos.hostName == "fedora-mini" ||
+      config.system.nixos.hostName == "fedora" ||
+      config.system.nixos.hostName == "fedora-desktop"
+    )) ||
+    (config ? home && (
+      config.home.username == "jenc" ||
+      config.home.username == "user"
+    ))
+  );
+  isDebianLike = pkgs.stdenv.isLinux && !isFedora;
+  
+  # Base aliases that work everywhere
+  baseAliases = {
+    ll = "ls -alF";
+    la = "ls -A";
+    l = "ls -CF";
+    g = "git";
+    vi = "nvim";
+    nvim = "nvim";
+    sudov = "sudo -e";
+    py = "python3";
+    pip = "pip3";
+    "docker-compose" = "docker compose";
+    k = "kubectl";
+    copilot = "gh copilot";
+    cc = "claude code";
+    reload = "source ~/.bashrc";
+  };
+  
+  # OS-specific package manager aliases
+  osSpecificAliases = {
+    update = if isFedora 
+      then "sudo dnf update && sudo dnf upgrade" 
+      else "sudo apt update && sudo apt upgrade";
+    install = if isFedora 
+      then "sudo dnf install" 
+      else "sudo apt install";
+    remove = if isFedora 
+      then "sudo dnf remove" 
+      else "sudo apt remove";
+    autoremove = if isFedora 
+      then "sudo dnf autoremove" 
+      else "sudo apt autoremove";
+    search = if isFedora 
+      then "sudo dnf search" 
+      else "sudo apt search";
+  };
+in
 {
   programs.bash = {
     enable = true;
@@ -54,42 +105,7 @@
       }
     '';
     
-    shellAliases = {
-      # Directory listing
-      ll = "ls -alF";
-      la = "ls -A";
-      l = "ls -CF";
-      
-      # Git
-      g = "git";
-      
-      # Editors
-      vi = "nvim";
-      nvim = "nvim";
-      sudov = "sudo -e";
-      
-      # Package managers (Linux)
-      update = "sudo apt update && sudo apt upgrade";
-      install = "sudo apt install";
-      remove = "sudo apt remove";
-      autoremove = "sudo apt autoremove";
-      search = "apt search";
-      
-      # Python
-      py = "python3";
-      pip = "pip3";
-      
-      # Tools
-      "docker-compose" = "docker compose";
-      k = "kubectl";
-      copilot = "gh copilot";
-      gcs = "gh copilot suggest";
-      gce = "gh copilot explain";
-      cc = "claude code";
-      
-      # Reload
-      reload = "source ~/.bashrc";
-    };
+    shellAliases = baseAliases // osSpecificAliases;
     
     shellOptions = [
       "histappend"
