@@ -87,12 +87,17 @@ in
   # Use a user-writable npm global prefix (Nix store is read-only)
   home.sessionVariables.NPM_CONFIG_PREFIX = "$HOME/.npm-global";
 
-  # Install global npm packages that aren't in nixpkgs (Socket Security CLI).
+  # Install global npm packages that aren't in nixpkgs (Socket Security CLI, husky for git hooks).
   # Runs after Home Manager writes its files; idempotent.
   home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     export NPM_CONFIG_PREFIX="$HOME/.npm-global"
     export PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH"
     $DRY_RUN_CMD mkdir -p "$HOME/.npm-global"
+    # Install husky first (needed by socket's prepare script)
+    if ! "$HOME/.npm-global/bin/husky" --version >/dev/null 2>&1; then
+      $DRY_RUN_CMD npm install -g husky
+    fi
+    # Then install socket (its prepare script will work now)
     if ! "$HOME/.npm-global/bin/socket" --version >/dev/null 2>&1; then
       $DRY_RUN_CMD npm install -g socket
     fi
