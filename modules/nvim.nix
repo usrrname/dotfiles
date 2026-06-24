@@ -3,6 +3,11 @@
 {
   home.packages = [ pkgs.neovim ];
 
+  programs.neovim = {
+    withPython3 = false;
+    withRuby = false;
+  };
+
   home.sessionVariables = {
     EDITOR = "nvim";
     VISUAL = "nvim";

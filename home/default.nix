@@ -134,29 +134,11 @@ in
       npm = "socket npm";
       npx = "socket npx";
       pnpm="socket pnpm";
-    } // lib.optionalAttrs isLinux {
-      # Linux-specific aliases
-      update = "sudo apt update && sudo apt upgrade";
-      install = "sudo apt install";
-      remove = "sudo apt remove";
-      autoremove = "sudo apt autoremove";
-      search = "apt search";
-      py = "python3";
-      pip = "pip3";
     };
+
     initContent = ''
       export PATH="$HOME/.npm-global/bin:$PATH"
     '';
-  };
-  programs.neovim = {
-      withPython3 = false;
-      withRuby = false;
-  };
-
-  programs.direnv = {
-    enable = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
   };
 
   programs.fzf = {
