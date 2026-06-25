@@ -58,7 +58,10 @@ in
   ];
 
   # Use a user-writable npm global prefix (Nix store is read-only)
-  home.sessionVariables.NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+  home.sessionVariables = {
+    NPM_CONFIG_PREFIX = "$HOME/.npm-global";
+    DOCKER_HOST = "unix://$XDG_RUNTIME_DIR/podman/podman.sock";
+  };
 
   # Install global npm packages that aren't in nixpkgs
   home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
@@ -69,6 +72,5 @@ in
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
-
   programs.home-manager.enable = true;
 }

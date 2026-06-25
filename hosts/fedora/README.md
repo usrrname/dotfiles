@@ -11,6 +11,7 @@ See [main README](../../README.md#fedora) for quick start instructions.
 | **systemd services** | Enables `tailscaled` on boot | Tailscale binary is Nix-managed but needs systemd for auto-start |
 | **Passwordless sudo** | Writes `/etc/sudoers.d/10-<user>-nopasswd` | Avoids repeated password prompts during bootstrap/update |
 | **Default shell** | Sets zsh via `chsh` | Fish is the Fedora default; zsh is managed declaratively via Home Manager |
+| **podman socket** | Enables podman's Docker API socket so the real `docker compose` binary can use podman transparently | This lets `docker compose` work without the Docker daemon — podman translates the API, runs rootless |
 
 ## Nix-managed packages (`default.nix`)
 
