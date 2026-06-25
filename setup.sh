@@ -39,6 +39,7 @@ Linux*)
       # bubblewrap needs system namespace APIs — Nix binary can't provide them.
       DNF_PACKAGES="
                     bubblewrap
+                    podman-docker
                 "
 
       if [ -n "$DNF_PACKAGES" ]; then
