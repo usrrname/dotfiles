@@ -61,14 +61,5 @@ in
     DOCKER_HOST = "unix://$XDG_RUNTIME_DIR/podman/podman.sock";
   };
 
-  # Install global npm packages that aren't in nixpkgs
-  home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    export NPM_CONFIG_PREFIX="$HOME/.npm-global"
-    export PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH"
-    $DRY_RUN_CMD mkdir -p "$HOME/.npm-global"
-    if ! "$HOME/.npm-global/bin/socket" --version >/dev/null 2>&1; then
-      $DRY_RUN_CMD npm install -g socket
-    fi
-  '';
   programs.home-manager.enable = true;
 }
