@@ -12,7 +12,6 @@ in
     ../../home
     ../../home/linux.nix
     ../../modules/input-remapper.nix
-    ../../modules/wezterm.nix
     ../../modules/sandbox-repo.nix
   ];
 
@@ -25,7 +24,6 @@ in
   home.packages = with pkgs; [
     # System tools (Nix provides the binary, systemd service enabled separately)
     tailscale
-    # wezterm is installed via dnf — the Nix binary can't find system GPU libraries (libEGL)
     input-remapper
 
     # Build tools

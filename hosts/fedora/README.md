@@ -7,7 +7,7 @@ See [main README](../../README.md#fedora) for quick start instructions.
 
 | Change | What it does | Why |
 |---|---|---|
-| **dnf packages** | Installs `wezterm` and `bubblewrap` | These need system GPU/namespace libraries that Nix binaries can't provide |
+| **dnf packages** | Installs `bubblewrap` | bubblewrap needs system namespace APIs that Nix binaries can't provide |
 | **systemd services** | Enables `tailscaled` on boot | Tailscale binary is Nix-managed but needs systemd for auto-start |
 | **Passwordless sudo** | Writes `/etc/sudoers.d/10-<user>-nopasswd` | Avoids repeated password prompts during bootstrap/update |
 | **Default shell** | Sets zsh via `chsh` | Fish is the Fedora default; zsh is managed declaratively via Home Manager |
@@ -41,7 +41,6 @@ A `home.activation` script in `default.nix` runs after every `home-manager switc
 | Module | What it does |
 |---|---|
 | `../../modules/input-remapper.nix` | Deploys a Keychron Q11 preset (`mac-mode.json`) remapping Alt+ keys to Ctrl+Shift+ shortcuts — matches macOS muscle memory for copy/paste/terminal |
-| `../../modules/wezterm.nix` | Symlinks Wezterm config from `common/wezterm/`; binary is installed via dnf |
 | `../../modules/sandbox-repo.nix` | Provides `sandbox-repo` command — runs repos in a bubblewrap-isolated namespace with `/home` as tmpfs, network shared, all caps dropped |
 | `../../modules/home-manager-gc.nix` | Weekly auto-clean of old Home Manager generations (keeps 7 days) — included via `home/linux.nix` |
 

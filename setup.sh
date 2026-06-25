@@ -36,9 +36,8 @@ Linux*)
     if grep -qi fedora /etc/os-release 2>/dev/null; then
       echo "📦 Installing Fedora system packages (dnf-only)..."
       # Only packages that truly can't come from Nix go here.
-      # wezterm needs system EGL/GPU libraries — Nix binary can't find them.
+      # bubblewrap needs system namespace APIs — Nix binary can't provide them.
       DNF_PACKAGES="
-                    wezterm
                     bubblewrap
                 "
 
