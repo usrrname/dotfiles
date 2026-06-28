@@ -19,63 +19,60 @@ Nix flakes (primary).
 | Ubuntu (standalone HM) | `home-manager switch --flake .#ubuntu` |
 | Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |
 
+### Validation (no real host)
+
+```bash
+nix build .#homeConfigurations.test-x86_64-linux
+nix build .#homeConfigurations.test-aarch64-linux
+```
+
 ### Fedora host (`hosts/fedora/`)
 
-All Fedora-specific details live in [`hosts/fedora/README.md`](hosts/fedora/README.md). Key facts an agent needs to know:
+- **dnf/Nix split**: `bubblewrap` and `podman-docker` via dnf (system namespace APIs). Everything else from Nix.
+- **Fedora packages**: edit `hosts/fedora/default.nix` under `home.packages`. The shared `home/default.nix` is for packages common across all hosts.
+- **npm workaround**: Nix store is read-only for `npm install -g`. `hosts/fedora/default.nix` sets `NPM_CONFIG_PREFIX=~/.npm-global` with a `home.activation` script to install globals (`socket`). Add new globals there.
+- **Bootstrap**: `./setup.sh` handles the full Fedora bootstrap (dnf pkgs, systemd services, passwordless sudo, zsh). Running `home-manager switch --flake .#fedora` alone only applies Nix user config.
+- **input-remapper preset** at `common/input-remapper/.config/input-remapper-2/presets/Keychron Keychron Q11/mac-mode.json`, deployed by `modules/input-remapper.nix`.
 
-- **dnf/Nix split**: `wezterm` and `bubblewrap` must come from dnf (system GPU/namespace libs). Everything else comes from Nix. Do NOT move these to Nix — the binaries will fail at runtime.
-- **Adding packages to the Fedora host**: edit `hosts/fedora/default.nix` under `home.packages`, not the shared `home/default.nix`, unless the package is common across all Linux hosts.
-- **npm workaround**: Nix store is read-only for `npm install -g`. `hosts/fedora/default.nix` sets `NPM_CONFIG_PREFIX=~/.npm-global` and runs a `home.activation` script to install globals (`socket`). If adding a new npm global, add it there.
-- **input-remapper preset**: lives at `common/input-remapper/.config/input-remapper-2/presets/Keychron Keychron Q11/mac-mode.json`, deployed by `modules/input-remapper.nix`. The Keychron Q11's physical Alt keys are mapped to Ctrl+Shift shortcuts (macOS muscle memory).
-- **Bootstrap**: `./setup.sh` handles the full Fedora bootstrap (dnf pkgs, systemd enable, passwordless sudo, zsh). Running `home-manager switch --flake .#fedora` alone only applies the Nix user config.
+## Architecture
 
-## Claude Code Configuration
+- `flake.nix` defines all outputs; `home/default.nix` imports shared modules (`modules/`); per-host overrides in `hosts/<host>/default.nix`.
+- `home.stateVersion = "24.11"` (all hosts).
+- macOS: Determinate manages Nix itself → `nix.enable = false` in `hosts/mac-jenc/default.nix` to avoid conflicts.
+- Homebrew managed declaratively via nix-darwin (`hosts/mac-jenc/default.nix`). `cleanup = "none"` means stale cask metadata lingers.
+- `opencode` comes from nixpkgs on Linux, from `anomalyco/tap` brew tap on Mac. The `modules/opencode.nix` seeds config on first run (copy, not symlink) and runs `npm install` for plugins.
+- `claude-code` is a Homebrew cask on Mac (not nixpkgs), declared in `hosts/mac-jenc/default.nix`.
 
-Hybrid pattern (see `modules/claude.nix`):
-- **Nix-managed** (rebuild required): `~/.claude/settings.json`, `~/.claude/statusline-command.sh` — sourced from `common/claude/.claude/`
-- **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` so skill edits never require `darwin-rebuild`
-- **Binary install**: `claude-code` is a homebrew cask on Mac (`hosts/mac-jenc/default.nix`), not nixpkgs — brew's mutable path supports the binary's self-update
+## Claude Code (Hybrid Pattern)
 
-Project-local Claude config lives at repo root: `~/.dotfiles/.claude/` (skills + `settings.local.json` for this repo).
+- **Nix-managed** (rebuild needed): `~/.claude/settings.json`, `~/.claude/statusline-command.sh` — sourced from `common/claude/.claude/`
+- **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` via `home.activation` hook in `modules/claude.nix`
+- Project-local config: `~/.dotfiles/.claude/settings.local.json`
 
-## Testing
+## Neovim
 
-Stow is no longer used.
+- `~/.config/nvim` is an out-of-store symlink to `common/nvim/.config/nvim` via `home.activation` (not `mkOutOfStoreSymlink`, which Home Manager 26.11-pre+ rejects) — see `modules/nvim.nix` for the pattern.
+- LazyVim needs write access (lazy-lock.json), which fails with read-only Nix store symlinks.
+- Rebuild plugins: `nvim --headless -c "Lazy sync" -c "qa"`.
+
+## Shell
+
+- `npm`, `npx`, `pnpm` aliased through `socket npm`, `socket npx`, `socket pnpm` (see `home/default.nix` `programs.zsh.shellAliases`).
+- `act` configured to use `catthehacker/ubuntu:act-latest` images for running GHA locally (`home/default.nix` `xdg.configFile."act/actrc"`).
+
+## Important Constraints
+
+- **Nix flakes only see git-tracked files.** Stage new files before building: `git add path/to/file`.
+- On macOS, `./setup.sh` runs `sudo darwin-rebuild`. Homebrew changes require the same command.
+- `macos/docker/` is tracked but **not deployed** — see `docs/plans/migration-open-issues.md`.
 
 ## Troubleshooting
 
-### Home Manager Build Failures
+**"Error installing file outside $HOME"** — HM 26.11-pre+ rejects `mkOutOfStoreSymlink`. Use `home.activation` scripts instead (see `modules/nvim.nix`).
 
-**"Error installing file outside $HOME"**
-- Home Manager 26.11-pre (2026-06-02+) rejects `mkOutOfStoreSymlink` in the build sandbox
-- Use `home.activation` scripts instead to create symlinks after the build completes
-- See `modules/nvim.nix` for the pattern
+**"Existing file would be clobbered"** — old symlinks block activation. `rm ~/.config/nvim` (or whatever path), then re-run.
 
-**"Existing file would be clobbered"**
-- Old symlinks from previous builds can block activation
-- Remove them manually: `rm ~/.config/nvim` (or whatever path)
-- Then re-run `home-manager switch`
+**64B Homebrew cask stub** — `brew bundle` can write metadata before binary finishes downloading. `brew list --cask <name>` says installed but `/Applications/<Name>.app` is a 64-byte skeleton. Fix: `brew reinstall --cask <name>`.
 
-**"Path not tracked by Git"**
-- Nix flakes only see Git-tracked files
-- Stage new files before building: `git add path/to/file`
-
-### OpenCode Plugin Issues
-
-**oh-my-openagent not loading**
-- Must be in `plugin` array in `opencode.json`
-- Must be in `package.json` dependencies
-- Run `npm install` in `~/.config/opencode/` after adding
-- Restart opencode to pick up changes
-
-### Homebrew Cask Stubs (macOS)
-
-**Cask shows installed but app doesn't launch (64B stub)**
-- `brew bundle` can write cask metadata before the binary finishes downloading
-- `brew list --cask <name>` says installed, but `/Applications/<Name>.app` has a 64-byte skeleton with no real binary
-- `nix-darwin` has `cleanup = none` (in `hosts/mac-jenc/default.nix`), so stale metadata lingers
-- Fix: `brew reinstall --cask <name>`
-
-## Critical Context
-- `macos/docker/` is tracked but **not deployed** — see `docs/plans/migration-open-issues.md`
-
+**Rollback:** `sudo darwin-rebuild switch --rollback`.
+**Dry run:** `nix build .#darwinConfigurations.mac-jenc.system --dry-run`.

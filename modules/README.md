@@ -14,7 +14,7 @@ and per-host entries in `hosts/`.
 | `opencode.nix` | ✅ Done | OpenCode config files + npm plugin deps |
 | `bash.nix` | ✅ Done | `programs.bash` with aliases and init scripts |
 | `claude.nix` | ✅ Done | Claude Code settings, skills, hooks, agents |
-| `git.nix` | 📋 Planned | `programs.git` absorbing `common/git/.gitconfig` and platform overrides |
+| `git.nix` | ✅ Done | `programs.git` with SSH signing, 1Password op-ssh-sign on macOS |
 | `starship.nix` | ✅ Done | `programs.starship` config extracted from `home/default.nix` |
 | `zsh.nix` | 📋 Planned | `programs.zsh` absorbing `.zshrc`, `.zshenv`, `.aliasrc-osx` |
 | `wezterm.nix` | ✅ Done | `programs.wezterm` + `common/wezterm/.config/wezterm/wezterm.lua` |
