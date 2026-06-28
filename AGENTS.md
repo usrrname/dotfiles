@@ -68,5 +68,14 @@ Stow is no longer used.
 - Run `npm install` in `~/.config/opencode/` after adding
 - Restart opencode to pick up changes
 
+### Homebrew Cask Stubs (macOS)
+
+**Cask shows installed but app doesn't launch (64B stub)**
+- `brew bundle` can write cask metadata before the binary finishes downloading
+- `brew list --cask <name>` says installed, but `/Applications/<Name>.app` has a 64-byte skeleton with no real binary
+- `nix-darwin` has `cleanup = none` (in `hosts/mac-jenc/default.nix`), so stale metadata lingers
+- Fix: `brew reinstall --cask <name>`
+
 ## Critical Context
 - `macos/docker/` is tracked but **not deployed** — see `docs/plans/migration-open-issues.md`
+
