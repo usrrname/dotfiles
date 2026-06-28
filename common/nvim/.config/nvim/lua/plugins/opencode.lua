@@ -7,7 +7,7 @@ return {
 			"folke/snacks.nvim",
 			optional = true,
 			opts = {
-				input = { enabled = false }, -- Disable to prevent startup Telescope prompts
+				input = { enabled = true }, -- Enhances ask() with floating prompt + LSP completions
 
 				picker = { -- Enhances `select()`
 					actions = {
@@ -294,20 +294,34 @@ return {
 		})
 
 		-- Pre-warm: start OpenCode in the background after Neovim finishes loading.
-		-- The slowest part is Node.js + oh-my-openagent initialization; deferring
-		-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "VeryLazy",
-			callback = function()
-				local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
-				if term then
-					vim.defer_fn(function()
-						if term.win and vim.api.nvim_win_is_valid(term.win) then
-							term:hide()
+			-- The slowest part is Node.js + oh-my-openagent initialization; deferring
+			-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "VeryLazy",
+				callback = function()
+					local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
+					if term then
+						vim.defer_fn(function()
+							if term.win and vim.api.nvim_win_is_valid(term.win) then
+								term:hide()
+							end
+						end, 300)
+					end
+				end,
+			})
+
+			-- Auto-show float on prompt — no manual <leader>oo after asking.
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "OpencodeEvent:tui.command.execute",
+				callback = function(args)
+					local event = args.data.event
+					if event.properties and event.properties.command == "prompt.submit" then
+						local term = require("snacks.terminal").get(opencode_cmd, { create = false })
+						if term then
+							term:show()
 						end
-					end, 300)
-				end
-			end,
-		})
-	end,
-}
+					end
+				end,
+			})
+		end,
+	}
