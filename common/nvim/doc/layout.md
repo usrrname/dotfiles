@@ -1,25 +1,30 @@
-# LazyVim Layout Requirements
+# LazyVim Layout
 
 ## Overview
 
-Three-column Neovim layout with AI assistant on startup.
+Neo-tree on the left (LazyVim-managed split), OpenCode on the right (float).
 
 ## Layout
 
 ```
-┌──────────┬───────────────────┬────────────┐
-│ Neo-tree │    Center         │ OpenCode   │
-│ (left)   │ (edit/startup)    │ (right)    │
-└──────────┴───────────────────┴────────────┘
+┌──────────┬────────────────────┐
+│ Neo-tree │      Center        │
+│ (split)  │  (edit/startup)    │
+├──────────┤                    │  ┌──────────────┐
+│ Terminal │                    │  │   OpenCode   │
+│ (split)  │                    │  │   (float)    │
+└──────────┴────────────────────┘  └──────────────┘
 ```
+
+Not shown: OpenCode floats above the editor, anchored to the right edge. It never
+affects the window layout — immune to splits, panels, and resize glitches.
 
 ## Startup Sequence
 
-1. Open Neo-tree (left sidebar)
-2. Open OpenCode server (right split, `opencode --port`)
-3. Focus center window
-4. Open mini-starter (startup screen)
-5. Wipe unnamed buffers
+1. Open Neo-tree (left split, `winfixwidth`)
+2. Focus center window, open mini-starter
+3. Wipe unnamed buffers
+4. `VeryLazy`: pre-warm OpenCode in background (float opens briefly, then hides)
 
 ## Components
 
@@ -86,13 +91,16 @@ ASCII art header generated via `figlet -f big "CRAZY"`:
 
 | Key | Action |
 |-----|--------|
-| `<leader>ao` | Toggle OpenCode |
-| `<leader>ac` | Execute OpenCode action (focuses terminal first) |
-| `<leader>aa` | Ask OpenCode |
-| `<leader>ar` | Reload buffer from disk |
+| `<leader>oo` | Toggle OpenCode float |
+| `<leader>oc` | Execute OpenCode action |
+| `<leader>oa` | Ask OpenCode about file/selection |
+| `<leader>or` | Review code |
+| `<leader>oe` | Explain code |
+| `<leader>oh` | Smart handoff to clipboard |
+| `<leader>oy` | Copy last handoff to clipboard |
 | `<S-Up>` | Scroll OpenCode up |
 | `<S-Down>` | Scroll OpenCode down |
-| `<Ctrl+n>` | Leave OpenCode terminal mode |
+| `<C-n>` | Leave OpenCode terminal mode |
 
 ## Auto-Reload
 
@@ -100,7 +108,7 @@ File watching via `vim.fs.watch` on CWD triggers `checktime` on file changes, ke
 
 ## Notes
 
-- OpenCode starts on VimEnter via `opencode --port`
+- OpenCode pre-warms on `VeryLazy` (float opens briefly then hides)
 - Mini-starter displays custom CrazyVim logo (figlet `big` font)
-- Neo-tree and OpenCode excluded from buffer cleanup logic
-- `<leader>ac` focuses OpenCode terminal before opening picker
+- Terminal floats are immune to window layout changes — no SIGWINCH glitch
+- Edgy was removed — neo-tree is a plain split, not a sidebar
