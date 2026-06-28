@@ -5,12 +5,12 @@
 ```gherkin
 Feature: LazyVim Startup Sequence
 
-  Scenario: Neovim starts with three-column layout
+  Scenario: Neovim starts with neo-tree on the left
     Given Neovim is launched without arguments
     When the startup sequence completes
-    Then Neo-tree should be open in the left window
-    And OpenCode should be running in the right window
+    Then Neo-tree should be open in a left split (winfixwidth)
     And mini-starter should be displayed in the center
+    And OpenCode should have been pre-warmed in the background
 
   Scenario: Mini-starter shows CrazyVim logo
     Given Neovim is launched without arguments
@@ -32,19 +32,28 @@ Feature: LazyVim Startup Sequence
 
 ## Component Behavior
 
-  Scenario: OpenCode toggle guard prevents duplicates
-    Given OpenCode is already running
-    When a user selects the opencode buffer tab
-    Then only one OpenCode instance should exist
-    And no additional windows should be created
+  Scenario: OpenCode toggles as a float
+    Given OpenCode is running in the background
+    When the user presses <leader>oo
+    Then the OpenCode float should appear on the right edge
+    And focus should enter terminal mode
+    When the user presses <leader>oo again
+    Then the float should hide
+    And the editor layout should be unchanged
+
+  Scenario: OpenCode float is immune to layout changes
+    Given OpenCode float is visible
+    When the user opens neo-tree or a terminal split
+    Then the float should not move or resize
+    And the TUI should not glitch
 
   Scenario: Neo-tree persists during normal editing
     Given Neo-tree is open
     When the user opens a file
-    Then Neo-tree should remain in the left sidebar
+    Then Neo-tree should remain in the left split
 
   Scenario: Buffer cleanup excludes special buffers
-    Given the three-column layout is active
+    Given Neovim is running with the normal startup layout
     When buffer cleanup runs
     Then neo-tree buffers should be preserved
     And OpenCode buffers should be preserved
@@ -52,15 +61,15 @@ Feature: LazyVim Startup Sequence
 
 ## Keymap Functionality
 
-  Scenario: <leader>aa opens OpenCode ask prompt
+  Scenario: <leader>oa opens OpenCode ask prompt
     Given OpenCode is running
-    When the user presses <leader>aa
-    Then an input prompt should appear
+    When the user presses <leader>oa
+    Then an ask prompt should appear
     And submitted text should be sent to OpenCode
 
-  Scenario: <leader>ac executes OpenCode action
+  Scenario: <leader>oc executes OpenCode action
     Given text is selected in visual mode
-    When the user presses <leader>ac
+    When the user presses <leader>oc
     Then OpenCode should process the selection
     And results should be displayed
 
@@ -80,14 +89,13 @@ Feature: LazyVim Startup Sequence
   Scenario: <leader>e toggles Neotree
     Given that Neotree is closed
     When the user presses <leader>e
-    Then Neotree will open
-    And the remaining windows will resize evenly
+    Then Neotree will open as a left split with winfixwidth
+    And the editor window will fill the remaining space
 
     Given that Neotree is open
     When the user presses <leader>e
     Then Neotree will close
-    And the remaining buffers will still be open
-    And split the windows evenly
+    And the editor window will fill the full width
 ```
 
 ## Validation Commands
