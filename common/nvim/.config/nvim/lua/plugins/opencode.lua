@@ -43,8 +43,15 @@ return {
 		---@type snacks.terminal.Opts
 		local snacks_terminal_opts = {
 			win = {
-				position = "right",
+				-- Float, not sidebar split — floats are immune to layout changes
+				-- (Trouble, quickfix, :term, etc.) so the TUI never gets resized
+				-- and never corrupts its display via libvterm's reflow-on-resize.
+				position = "float",
 				width = 0.4,
+				height = 0.99,
+				row = 1,
+				col = -1,
+				border = "rounded",
 				enter = false,
 			},
 		}
@@ -135,19 +142,9 @@ return {
 			toggle_in_progress = true
 
 			local term = require("snacks.terminal").get(opencode_cmd, { create = false })
-			local is_visible = term and term.win and vim.api.nvim_win_is_valid(term.win)
-
-			if is_visible then
-				local wins = vim.api.nvim_list_wins()
-				if #wins > 1 then
-					for _, win in ipairs(wins) do
-						if win ~= term.win then
-							vim.api.nvim_win_close(win, false)
-						end
-					end
-				end
-				vim.api.nvim_set_current_win(term.win)
-				vim.cmd("startinsert")
+			if term and term.win and vim.api.nvim_win_is_valid(term.win) then
+				-- Hide the float, keep buffer + process alive
+				term:hide()
 				toggle_in_progress = false
 			else
 				require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
@@ -268,6 +265,27 @@ return {
 			vim.notify("Handoff copied to clipboard!", vim.log.levels.INFO)
 		end, { desc = "Copy last handoff to clipboard" })
 
+		-- Scroll any terminal buffer to bottom on focus so latest output is visible.
+		vim.api.nvim_create_autocmd({ "WinEnter", "FocusGained" }, {
+			callback = function()
+				local buf = vim.api.nvim_get_current_buf()
+				if vim.bo[buf].buftype == "terminal" then
+					local last = vim.api.nvim_buf_line_count(buf)
+					pcall(vim.api.nvim_win_set_cursor, 0, { last, 0 })
+				end
+			end,
+		})
+
+		-- Auto-enter insert mode when focusing the opencode float
+		vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+			pattern = "term://*opencode*",
+			callback = function()
+				if vim.api.nvim_get_mode().mode == "n" then
+					vim.cmd("startinsert")
+				end
+			end,
+		})
+
 		vim.api.nvim_create_autocmd("TermOpen", {
 			pattern = "term://*opencode*",
 			callback = function(args)
@@ -275,12 +293,19 @@ return {
 			end,
 		})
 
-		-- Auto-enter insert mode only when focusing the opencode terminal buffer
-		vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
-			pattern = "term://*opencode*",
+		-- Pre-warm: start OpenCode in the background after Neovim finishes loading.
+		-- The slowest part is Node.js + oh-my-openagent initialization; deferring
+		-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "VeryLazy",
 			callback = function()
-				if vim.api.nvim_get_mode().mode == "n" then
-					vim.cmd("startinsert")
+				local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
+				if term then
+					vim.defer_fn(function()
+						if term.win and vim.api.nvim_win_is_valid(term.win) then
+							term:hide()
+						end
+					end, 300)
 				end
 			end,
 		})

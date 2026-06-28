@@ -52,8 +52,7 @@ vim.keymap.set("n", "<leader>rl", function()
 	vim.cmd("Lazy sync")
 end, { desc = "Reload Config" })
 
-vim.keymap.set("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-vim.keymap.set("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Previous buffer" })
+
 
 -- Move line up/down with Alt+Arrow
 vim.keymap.set("n", "<M-Up>", function()
@@ -68,19 +67,12 @@ end, { desc = "Move line down" })
 vim.keymap.set("i", "<M-Up>", "<Cmd>m .-2<CR>==gi", { desc = "Move line up" })
 vim.keymap.set("i", "<M-Down>", "<Cmd>m .+1<CR>==gi", { desc = "Move line down" })
 
--- Delete the current buffer but KEEP its window (and edgy's sidebar layout).
--- Snacks.bufdelete swaps in an alternate/empty buffer instead of closing the
--- window, so the center editor never collapses and neo-tree / the right
--- terminal don't grab the freed horizontal space. Use this instead of :bd /
--- :q / <C-w>c on the center buffer. (Re-pin edgy afterwards as a safety net.)
+-- Delete the current buffer but KEEP its window. Snacks.bufdelete swaps
+-- in an alternate buffer instead of closing the window, so the center
+-- editor never collapses and neo-tree doesn't grab the freed space.
 vim.keymap.set("n", "<leader>bd", function()
 	Snacks.bufdelete()
-	vim.schedule(function()
-		pcall(function()
-			require("edgy.layout").update()
-		end)
-	end)
-end, { desc = "Delete buffer (keep window + layout)" })
+end, { desc = "Delete buffer (keep window)" })
 
 vim.keymap.set("n", "<leader>mp", "<Plug>(md-render-preview)", { desc = "Markdown preview (toggle)" })
 vim.keymap.set("n", "<leader>mt", "<Plug>(md-render-preview-tab)", { desc = "Markdown preview in tab (toggle)" })
