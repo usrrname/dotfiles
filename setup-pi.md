@@ -1,86 +1,42 @@
-# Setting Up Dotfiles on Debian Trixie & Raspberry Pi 4
+# Pi NAS Setup (Raspberry Pi / Debian)
 
-Quick guide for setting up this dotfiles repository on Debian Trixie running on Raspberry Pi 4.
+Quick guide for setting up this dotfiles repository on a Raspberry Pi
+running Debian (e.g., a Pi 4 NAS).
 
 ## Prerequisites
 
-1. Clone the repository:
+- Raspberry Pi with Debian installed
+- `git` — `sudo apt install git`
+- Nix installed via [Determinate Nix Installer](https://nixos.org/download)
 
-   ```bash
-   cd ~
-   git clone <your-repo-url> .dotfiles
-   cd .dotfiles
-   ```
-
-2. Install Nix (see [nixos.org/download](https://nixos.org/download)):
-
-## Setup Steps
-
-### 1. Install Packages
-
-Run the unified setup script (auto-detects Linux and runs the appropriate installer):
+## Setup
 
 ```bash
-# Preview what will be installed (dry run)
-DRY_RUN=true ./setup.sh
+# Clone
+cd ~ && git clone <your-repo-url> .dotfiles && cd .dotfiles
 
-# Check current package status
-./setup.sh check
-
-# List all packages
-./setup.sh list
-
-# Run the installation
+# Bootstrap — installs apt packages, enables system services, applies Nix config
 ./setup.sh
 ```
 
-The unified `setup.sh` script automatically detects Raspberry Pi and runs `scripts/setup-pi.sh`.
+This auto-detects Debian, installs system packages (tailscale, syncthing,
+docker.io, nginx, ufw, fail2ban, etc.), enables `tailscaled`, and runs
+`home-manager switch --flake .#pi-nas`.
 
-The script automatically:
+## One-Time Manual Steps
 
-- Detects Debian Trixie and architecture
-- Installs base packages (git, curl, neovim, build tools, etc.)
-- Installs special packages (nvm, pyenv, mise, devbox, tailscale, rust, etc.)
-- Installs development tools (GitHub CLI, 1Password CLI, ripgrep, etc.)
-
-### 2. Apply Nix Configuration
-
-```bash
-./setup.sh
-```
-
-This runs `home-manager switch --flake .#pi-nas`.
-
-### 3. Configure Shell Environment
-
-Add to your `~/.bashrc` or `~/.zshrc`:
-
-```bash
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
-# Pyenv
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-
-# Rust
-source "$HOME/.cargo/env"
-```
-
-Reload your shell:
-
-```bash
-source ~/.bashrc  # or source ~/.zshrc
-```
-
-### 4. Post-Installation (Optional)
-
-**Tailscale** (if installed):
+**Tailscale auth** (needed once — persists across reboots):
 
 ```bash
 sudo tailscale up
-sudo systemctl enable --now tailscaled
+sudo tailscale set --operator=$USER   # allows user-level serve config
+```
+
+**Enable managed services**:
+
+```bash
+systemctl --user enable --now syncthing.service
+systemctl --user start tailscale-serve.service
 ```
 
 **Neovim plugins** (if using LazyVim):
@@ -89,83 +45,46 @@ sudo systemctl enable --now tailscaled
 nvim --headless -c "Lazy sync" -c "qa"
 ```
 
-### 5. Migrate Swap from zram to HDD (Recommended)
+## Login Banner
 
-Move swap from zram to a dedicated HDD partition to prevent SD card wear and improve reliability.
+SSHing in will show a cowsay dragon with rainbow IPs for
+`eth0`, `docker0`, and `tailscale0`. Managed by
+`home.file.".bash_login"` in `hosts/pi-nas/default.nix`.
 
-**Prerequisites**: A dedicated HDD partition (e.g., `/dev/sda2`)
+## Migrate Swap from zram to HDD (Recommended)
 
 ```bash
-# 1. Format HDD partition as ext4
+# Format HDD partition
 sudo mkfs.ext4 /dev/sda2
 sudo mkdir -p /mnt/storage
 sudo mount /dev/sda2 /mnt/storage
 
-# 2. Create 2GB swap file
+# Create 2GB swap file
 sudo fallocate -l 2G /mnt/storage/swapfile
 sudo chmod 600 /mnt/storage/swapfile
 sudo mkswap /mnt/storage/swapfile
 sudo swapon /mnt/storage/swapfile
 
-The following is only for NAS setup:
-
-# 3. Disable zram (Raspberry Pi specific)
+# Disable zram (Raspberry Pi specific)
 sudo mkdir -p /etc/rpi/swap.conf.d
 echo -e "[Main]\nMechanism=none" | sudo tee /etc/rpi/swap.conf.d/90-disable-swap.conf > /dev/null
 sudo systemctl mask systemd-zram-setup@zram0.service
 sudo systemctl mask systemd-zram-setup@.service
 sudo systemctl stop rpi-zram-writeback.timer
 sudo systemctl disable rpi-zram-writeback.timer
-
-# 4. Blacklist zram module
 echo "blacklist zram" | sudo tee /etc/modprobe.d/blacklist-zram.conf
 sudo update-initramfs -u
 
-# 5. Make persistent in /etc/fstab
-sudo vi /etc/fstab
-# Add:
+# Persist in /etc/fstab — add:
 # /dev/sda2 /mnt/storage ext4 defaults 0 2
 # /mnt/storage/swapfile none swap sw 0 0
 
-# 6. Reboot and verify
 sudo reboot
-# After reboot:
-swapon --show  # Should show only /mnt/storage/swapfile
-lsmod | grep zram  # Should return nothing
 ```
 
-**Note**: Adjust partition (`/dev/sda2`) and swap size (`2G`) as needed. Remaining space on partition can be used for other services.
-
-## Troubleshooting
-
-- **Verify symlinks**: `ls -la ~ | grep "\->"`
-
-## Notes
-
-- The setup script requires `sudo` privileges for package installation
-- Some packages (like Tailscale) require manual configuration after installation
-- Raspberry Pi-specific packages are available in `APT_PACKAGES_PI` but may need explicit inclusion
-
-## Previously-stowed configs now under Nix
-
-- `bash`, `direnv`, `gh`, `tmux`, `vim`, `ssh` (moved to `modules/<name>.nix`)
-- `nvim`, `opencode`, `claude` (config sources under `common/<name>/`)
-- `agents` (replaced by `~/.agents/skills/` runtime tree; see `docs/plans/agent-skills-symlink-deployment.md`)
-
-## Install Neovim from source
+## Updating
 
 ```bash
-wget https://github.com/neovim/neovim/releases/download/v0.11.5/nvim-linux-arm64.tar.gz
-tar -xzf nvim-linux-arm64.tar.gz
-# remove the tar.gz file after extraction
-rm -rf nvim-linux-arm64.tar.gz 
-
-# To run Neovim from anywhere (instead of the full path), add it to your PATH. 
-
-sudo mv ~/nvim-linux-arm64 /opt/nvim
-echo 'export PATH="/opt/nvim/bin:$PATH"' >> ~/.bashrc
-source ~/.bashrc
-
-# Create a symlink to the nvim binary in /usr/local/bin to make it available globally
-sudo ln -sf /opt/nvim-linux64/bin/nvim /usr/local/bin/nvim
+cd ~/.dotfiles && git pull && ./setup.sh
+```
 ```

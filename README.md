@@ -37,8 +37,15 @@ cd ~/.dotfiles
 ```bash
 git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-home-manager switch --flake .#pi-nas
+./setup.sh                                  # installs apt pkgs + HM config
+
+# One-time manual steps:
+sudo tailscale up && sudo tailscale set --operator=$USER   # auth + delegate
+systemctl --user enable --now syncthing.service            # start syncthing
+systemctl --user start tailscale-serve.service             # start tailscale serve
 ```
+
+See [`setup-pi.md`](setup-pi.md) for full details.
 
 ### Updating
 

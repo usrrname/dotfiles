@@ -40,6 +40,15 @@ Linux*)
                     tailscale
                     ufw
                     fail2ban
+                    hd-idle
+                    docker.io
+                    nginx
+                    certbot
+                    restic
+                    btrfs-progs
+                    cifs-utils
+                    cloudflared
+                    avahi-daemon
                 "
 
       # Only install what isn't already installed
