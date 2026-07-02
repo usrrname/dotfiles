@@ -29,6 +29,7 @@ in
     opencode
     cowsay
     lolcat
+    syncthing
   ];
 
   # System-level packages (install via apt on Debian):
@@ -56,6 +57,40 @@ in
   # Pi-specific shell aliases
   programs.zsh.shellAliases = {
     xoff = "sudo /usr/local/bin/xSoft.sh 0 27"; # Pi NAS soft shutdown
+  };
+
+  # Managed services
+
+  services.syncthing = {
+    enable = true;
+    dataDir = "/mnt/nas/syncthing";
+    configDir = "/mnt/nas/syncthing";
+  };
+
+  systemd.user.services.tailscale-serve = {
+    Unit = {
+      Description = "Tailscale Serve for local services";
+      After = [ "network-online.target" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = [
+        "/usr/bin/tailscale serve --bg --https=9090 localhost:9090"
+        "/usr/bin/tailscale serve --bg --https=3000 localhost:3000"
+        "/usr/bin/tailscale serve --bg --https=2283 localhost:2283"
+        "/usr/bin/tailscale serve --bg --https=8384 https+insecure://localhost:8384"
+      ];
+      ExecStop = [
+        "/usr/bin/tailscale serve --https=9090 off"
+        "/usr/bin/tailscale serve --https=3000 off"
+        "/usr/bin/tailscale serve --https=2283 off"
+        "/usr/bin/tailscale serve --https=8384 off"
+      ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
   };
 
   programs.home-manager.enable = true;
