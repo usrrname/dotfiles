@@ -29,7 +29,6 @@ in
     opencode
     cowsay
     lolcat
-    syncthing
   ];
 
   # System-level packages (install via apt on Debian):
@@ -61,10 +60,22 @@ in
 
   # Managed services
 
-  services.syncthing = {
-    enable = true;
-    dataDir = "/mnt/nas/syncthing";
-    configDir = "/mnt/nas/syncthing";
+  systemd.user.services.syncthing = {
+    Unit = {
+      Description = "Syncthing - Open Source Continuous File Synchronization";
+      After = [ "mnt-nas.mount" ];
+      Requires = [ "mnt-nas.mount" ];
+    };
+    Service = {
+      ExecStart = "/usr/bin/syncthing serve --home=/mnt/nas/syncthing --no-browser --no-restart";
+      Restart = "on-failure";
+      RestartSec = "1";
+      SuccessExitStatus = [ "3" "4" ];
+      RestartForceExitStatus = [ "3" "4" ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
   };
 
   systemd.user.services.tailscale-serve = {
