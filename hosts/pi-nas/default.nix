@@ -37,19 +37,6 @@ in
   # Install via: curl -fsSL https://get.docker.com | sh
   # Then add user to docker group: sudo usermod -aG docker $USER
 
-  # Use a user-writable npm global prefix
-  home.sessionVariables.NPM_CONFIG_PREFIX = "$HOME/.npm-global";
-
-  # Install global npm packages
-  home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    export NPM_CONFIG_PREFIX="$HOME/.npm-global"
-    export PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH"
-    $DRY_RUN_CMD mkdir -p "$HOME/.npm-global"
-    if ! "$HOME/.npm-global/bin/socket" --version >/dev/null 2>&1; then
-      $DRY_RUN_CMD npm install -g socket
-    fi
-  '';
-
   # Pi-specific shell aliases
   programs.zsh.shellAliases = {
     xoff = "sudo /usr/local/bin/xSoft.sh 0 27"; # Pi NAS soft shutdown
