@@ -27,6 +27,8 @@ in
     # Pi-specific additions
     lsb-release
     opencode
+    cowsay
+    lolcat
   ];
 
   # System-level packages (install via apt on Debian):
@@ -36,6 +38,20 @@ in
   # Docker is managed at system level on Pi (requires root)
   # Install via: curl -fsSL https://get.docker.com | sh
   # Then add user to docker group: sudo usermod -aG docker $USER
+
+  # Pi login banner — IPs via dragon cowsay
+  home.file.".bash_login".text = ''
+    # Pi-NAS network info — shown on SSH login
+    for iface in eth0 docker0 tailscale0; do
+      ip=$(ip -4 addr show "$iface" 2>/dev/null | sed -n 's/.*inet \([0-9.]*\).*/\1/p')
+      [ -n "$ip" ] && echo "$iface: $ip"
+    done | ${pkgs.cowsay}/bin/cowsay -f dragon | ${pkgs.lolcat}/bin/lolcat
+  '';
+
+  # Ensure .bash_login is sourced from the Home Manager-managed .bash_profile
+  programs.bash.profileExtra = ''
+    [[ -f ~/.bash_login ]] && . ~/.bash_login
+  '';
 
   # Pi-specific shell aliases
   programs.zsh.shellAliases = {
