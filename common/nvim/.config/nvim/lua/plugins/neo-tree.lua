@@ -35,6 +35,8 @@ return {
 				visible = true,
 				hide_dotfiles = false,
 				hide_by_name = {
+					"**/node_modules/**",
+					"**/.cargo/**",
 					-- '.git',
 					-- '.DS_Store',
 					-- 'thumbs.db',
