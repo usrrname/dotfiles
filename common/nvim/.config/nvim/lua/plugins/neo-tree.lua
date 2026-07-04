@@ -27,7 +27,9 @@ return {
 		})
 	end,
 	opts = {
-		width = 30,
+		window = {
+			width = 30,
+		},
 		filesystem = {
 			bind_to_cwd = true,
 			follow_current_file = { enabled = false },
