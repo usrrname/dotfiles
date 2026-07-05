@@ -20,7 +20,6 @@ in
   # Additional packages specific to Ubuntu host
   home.packages = with pkgs; [
     # Build tools
-    gcc
     gnumake
     openssl
     

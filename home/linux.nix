@@ -18,6 +18,7 @@
   # Linux-specific packages
   home.packages = with pkgs; [
     lsb-release
+    gcc
   ];
 
   # Linux-specific environment variables

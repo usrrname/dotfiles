@@ -27,7 +27,6 @@ in
     input-remapper
 
     # Build tools
-    gcc
     gnumake
     openssl
     
