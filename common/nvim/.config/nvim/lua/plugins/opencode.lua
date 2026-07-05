@@ -71,8 +71,8 @@ return {
 
 		if vim.fs and vim.fs.watch then
 			local cwd = vim.fn.getcwd()
-			local watch = vim.fs.watch(cwd, function(_, name)
-				if name == "change" or name == "rename" then
+			local watch = vim.fs.watch(cwd, function(_, events)
+				if vim.tbl_contains(events, "change") or vim.tbl_contains(events, "rename") then
 					vim.cmd("checktime")
 				end
 			end)
@@ -129,10 +129,16 @@ return {
 			if term and term.win and vim.api.nvim_win_is_valid(term.win) then
 				vim.api.nvim_set_current_win(term.win)
 				vim.cmd("startinsert")
+				if term.buf then
+					vim.api.nvim_create_autocmd("BufEnter", {
+						once = true,
+						buffer = term.buf,
+						callback = function()
+							require("opencode").select()
+						end,
+					})
+				end
 			end
-			vim.defer_fn(function()
-				require("opencode").select()
-			end, 50)
 		end, { desc = "Execute opencode action…" })
 
 		vim.keymap.set({ "n", "t" }, "<leader>oo", function()
@@ -294,34 +300,34 @@ return {
 		})
 
 		-- Pre-warm: start OpenCode in the background after Neovim finishes loading.
-			-- The slowest part is Node.js + oh-my-openagent initialization; deferring
-			-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "VeryLazy",
-				callback = function()
-					local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
-					if term then
-						vim.defer_fn(function()
-							if term.win and vim.api.nvim_win_is_valid(term.win) then
-								term:hide()
-							end
-						end, 300)
-					end
-				end,
-			})
-
-			-- Auto-show float on prompt — no manual <leader>oo after asking.
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "OpencodeEvent:tui.command.execute",
-				callback = function(args)
-					local event = args.data.event
-					if event.properties and event.properties.command == "prompt.submit" then
-						local term = require("snacks.terminal").get(opencode_cmd, { create = false })
-						if term then
-							term:show()
+		-- The slowest part is Node.js + oh-my-openagent initialization; deferring
+		-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "VeryLazy",
+			callback = function()
+				local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
+				if term then
+					vim.defer_fn(function()
+						if term.win and vim.api.nvim_win_is_valid(term.win) then
+							term:hide()
 						end
+					end, 300)
+				end
+			end,
+		})
+
+		-- Auto-show float on prompt — no manual <leader>oo after asking.
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "OpencodeEvent:tui.command.execute",
+			callback = function(args)
+				local event = args.data.event
+				if event.properties and event.properties.command == "prompt.submit" then
+					local term = require("snacks.terminal").get(opencode_cmd, { create = false })
+					if term then
+						term:show()
 					end
-				end,
-			})
+				end
+			end,
+		})
 		end,
 	}
