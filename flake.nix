@@ -15,14 +15,13 @@
     };
   };
 
-  outputs =
-    {
+  outputs = inputs @ {
       self,
       nixpkgs,
       home-manager,
       nix-darwin,
       ...
-    }@inputs:
+    }:
     let
       # allowUnfree must be set on the pkgs import here: standalone Home
       # Manager ignores `nixpkgs.config.*` set inside host modules when
@@ -30,7 +29,7 @@
       # _1password-cli.
       mkLinuxHome =
         system:
-        home-manager.lib.homeManagerConfiguration {
+       inputs.home-manager.lib.homeManagerConfiguration {
           pkgs = import nixpkgs {
             inherit system;
             config.allowUnfree = true;
@@ -48,9 +47,34 @@
           };
           modules = [ hostConfig ];
         };
-    in
+
+      # nix fmt invokes the formatter with the flake root as argv[1]; the
+      # wrapper walks the tree and formats every .nix file it finds.
+      mkFormatter =
+        system:
+        let
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        in
+        pkgs.writeShellApplication {
+          name = "dotfiles-fmt";
+          runtimeInputs = [ pkgs.alejandra ];
+          text = ''
+            root="''${1:-.}"
+            find "$root" \
+              -name '*.nix' \
+              -not -path '*/node_modules/*' \
+              -not -path '*/.git/*' \
+              -not -path '*/result*' \
+              -print0 \
+              | xargs -0 alejandra --quiet
+          '';
+        };
+      in
     {
-      # Phase 0 — throwaway targets so `nix flake check` and
+      # throwaway targets so `nix flake check` and
       # `home-manager build --flake .#test-<arch>` validate the skeleton
       # without touching any real host. Both x86 and ARM Linux are
       # generated so this works in any OrbStack VM regardless of Mac
@@ -74,7 +98,7 @@
         pi-nas = mkStandaloneLinuxHome "aarch64-linux" ./hosts/pi-nas;
       };
 
-      # Phase 1 — Apple Silicon Mac. After installing Nix on the Mac:
+      # Apple Silicon Mac. After installing Nix on the Mac:
       #   nix run nix-darwin -- switch --flake .#mac-jenc
       darwinConfigurations.mac-jenc = nix-darwin.lib.darwinSystem {
         system = "aarch64-darwin";
@@ -89,6 +113,10 @@
           }
         ];
       };
+
+      # Format Nix files: `nix fmt`
+      formatter.aarch64-darwin = mkFormatter "aarch64-darwin";
+      formatter.x86_64-linux = mkFormatter "x86_64-linux";
 
       # Ephemeral repo sandbox — run commands in an isolated workspace
       # Enter with: nix develop .#sandbox-repo
@@ -112,7 +140,7 @@
           '';
         };
 
-      # Phase 4 — NixOS box. Apply on the NixOS host:
+      # NixOS box. Apply on the NixOS host:
       #   nixos-rebuild switch --flake .#nixos-box
       nixosConfigurations.nixos-box = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";

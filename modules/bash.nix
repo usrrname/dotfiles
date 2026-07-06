@@ -1,60 +1,75 @@
-{ config, lib, pkgs, ... }:
-let
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
   # OS detection based on system hostname and home username
-  isFedora = pkgs.stdenv.isLinux && (
-    (config ? system.nixos.hostName && (
-      config.system.nixos.hostName == "fedora-mini" ||
-      config.system.nixos.hostName == "fedora" ||
-      config.system.nixos.hostName == "fedora-desktop"
-    )) ||
-    (config ? home && (
-      config.home.username == "jenc" ||
-      config.home.username == "user"
-    ))
-  );
+  isFedora =
+    pkgs.stdenv.isLinux
+    && (
+      (config ? system.nixos.hostName
+        && (
+          config.system.nixos.hostName
+          == "fedora-mini"
+          || config.system.nixos.hostName == "fedora"
+          || config.system.nixos.hostName == "fedora-desktop"
+        ))
+      || (config ? home
+        && (
+          config.home.username
+          == "jenc"
+          || config.home.username == "user"
+        ))
+    );
   isDebianLike = pkgs.stdenv.isLinux && !isFedora;
-  
-  # Base aliases that work everywhere
-  baseAliases = {
-    ll = "ls -alF";
-    la = "ls -A";
-    l = "ls -CF";
-    g = "git";
-    vi = "nvim";
-    nvim = "nvim";
-    sudov = "sudo -e";
+
+  aliases = import ./aliases.nix {inherit config lib pkgs;};
+
+  # Base aliases that work everywhere (shared with zsh.nix)
+  baseAliases = aliases.base;
+
+  # Bash-only aliases
+  bashAliases = {
     py = "python3";
     pip = "pip3";
-    "docker-compose" = "docker compose";
-    k = "kubectl";
     cc = "claude code";
     reload = "source ~/.bashrc";
+    # Direnv helpers
+    da = "direnv allow";
+    dr = "direnv reload";
+    # Run Nix garbage collection
+    ngc = "nix-env --delete-generations old && nix-store --gc";
   };
-  
+
   # OS-specific package manager aliases
   osSpecificAliases = {
-    update = if isFedora 
-      then "sudo dnf update && sudo dnf upgrade" 
+    update =
+      if isFedora
+      then "sudo dnf update && sudo dnf upgrade"
       else "sudo apt update && sudo apt upgrade";
-    install = if isFedora 
-      then "sudo dnf install" 
+    install =
+      if isFedora
+      then "sudo dnf install"
       else "sudo apt install";
-    remove = if isFedora 
-      then "sudo dnf remove" 
+    remove =
+      if isFedora
+      then "sudo dnf remove"
       else "sudo apt remove";
-    autoremove = if isFedora 
-      then "sudo dnf autoremove" 
+    autoremove =
+      if isFedora
+      then "sudo dnf autoremove"
       else "sudo apt autoremove";
-    search = if isFedora 
-      then "sudo dnf search" 
+    search =
+      if isFedora
+      then "sudo dnf search"
       else "sudo apt search";
   };
-in
-{
+in {
   programs.bash = {
     enable = true;
     enableCompletion = true;
-    
+
     bashrcExtra = ''
       # If not running interactively, don't do anything
       case $- in
@@ -62,7 +77,7 @@ in
         *) return ;;
       esac
     '';
-    
+
     initExtra = ''
       # History settings
       HISTCONTROL=ignoreboth
@@ -70,18 +85,18 @@ in
       HISTSIZE=1000
       HISTFILESIZE=2000
       shopt -s checkwinsize
-      
+
       # Colored output
       export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-      
+
       # PATH additions
       export PATH="$HOME/.local/bin:$PATH"
-      
+
       # Functions
       mkcd() {
         mkdir -p "$1" && cd "$1"
       }
-      
+
       extract() {
         if [ -f "$1" ]; then
           case "$1" in
@@ -103,9 +118,9 @@ in
         fi
       }
     '';
-    
-    shellAliases = baseAliases // osSpecificAliases;
-    
+
+    shellAliases = baseAliases // bashAliases // osSpecificAliases;
+
     shellOptions = [
       "histappend"
       "checkwinsize"

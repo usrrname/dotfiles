@@ -1,25 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  aliases = import ./aliases.nix {inherit config lib pkgs;};
 
-let
-  # Base aliases that work everywhere
-  baseAliases = {
-    ll = "ls -alF";
-    la = "ls -A";
-    l = "ls -CF";
-    g = "git";
-    vi = "nvim";
-    vim = "nvim";
-    sudov = "sudo -e";
-    "docker-compose" = "docker compose";
-    k = "kubectl";
+  # Base aliases that work everywhere (shared with bash.nix)
+  baseAliases = aliases.base;
+
+  # Zsh-only aliases
+  zshAliases = {
     reload = "source ~/.zshrc";
     # Socket Security wraps npm/npx/pnpm for supply-chain checks
     npm = "socket npm";
     npx = "socket npx";
     pnpm = "socket pnpm";
   };
-in
-{
+in {
   programs.zsh = {
     enable = true;
     enableCompletion = true;
@@ -37,7 +35,7 @@ in
       theme = "robbyrussell";
     };
 
-    shellAliases = baseAliases;
+    shellAliases = baseAliases // zshAliases;
 
     initContent = ''
       export PATH="$HOME/.npm-global/bin:$PATH"
