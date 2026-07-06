@@ -65,9 +65,6 @@ in {
       bun
       go
 
-      # Shell
-      # zsh + oh-my-zsh are pulled in by modules/zsh.nix via programs.zsh.*
-
       # Misc
       gnupg
       cacert
@@ -106,8 +103,6 @@ in {
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
-
-  # programs.zsh is configured in modules/zsh.nix
 
   programs.fzf = {
     enable = true;
