@@ -13,8 +13,8 @@ Nix flakes (primary).
 
 | Host | Command |
 |------|---------|
-| macOS (Apple Silicon) | `darwin-rebuild switch --flake .#mac-jenc` |
-| NixOS | `nixos-rebuild switch --flake .#nixos-box` |
+| macOS (Apple Silicon) | `sudo darwin-rebuild switch --flake .#mac-jenc` |
+| NixOS                 | `sudo nixos-rebuild switch --flake .#nixos-box` |
 | Fedora (standalone HM) | `home-manager switch --flake .#fedora` |
 | Ubuntu (standalone HM) | `home-manager switch --flake .#ubuntu` |
 | Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |
