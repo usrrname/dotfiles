@@ -72,7 +72,7 @@ hosts/*/hardware-configuration.nix
 !.gitignore
 !.gitmodules
 !.envrc
-!.sisyphus
+.sisyphus/**
 !.claudeignore
 !.cursorignore
 
