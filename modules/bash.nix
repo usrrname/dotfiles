@@ -27,7 +27,6 @@ let
     pip = "pip3";
     "docker-compose" = "docker compose";
     k = "kubectl";
-    copilot = "gh copilot";
     cc = "claude code";
     reload = "source ~/.bashrc";
   };
