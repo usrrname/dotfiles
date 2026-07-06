@@ -1,5 +1,5 @@
 {
-  description = "jenc's dotfiles — Nix flakes + Home Manager (+ nix-darwin) migration target";
+  description = "jenc's dotfiles — Nix flakes + Home Manager";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
