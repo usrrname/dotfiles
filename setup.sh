@@ -7,8 +7,10 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
 command -v nix >/dev/null 2>&1 || {
-  echo "❌ Nix is not installed. Please install Nix first: https://nixos.org/download"
-  exit 1
+  echo "❌ Nix is not installed."
+  echo "Installing determinate.systems/nix..."
+  curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+  exit 0
 }
 
 case "$(uname -s)" in
