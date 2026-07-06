@@ -22,6 +22,7 @@ in
       push.autoSetupRemote = true;
       init.defaultBranch = "main";
       pull.rebase = true;
+      fetch.prune = true;
       alias = {
         g = "git";
         gco = "checkout";
