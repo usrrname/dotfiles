@@ -1,9 +1,11 @@
-{ config, lib, pkgs, ... }:
-
-let
-  claudeDir = ../common/claude/.claude;
-in
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}: let
+  claudeDir = ../common/claude/.claude;
+in {
   # Claude Code configuration
   #
   # Hybrid layout:
@@ -19,7 +21,7 @@ in
     };
   };
 
-  home.activation.linkClaudeSkills = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.linkClaudeSkills = lib.hm.dag.entryAfter ["writeBoundary"] ''
     $DRY_RUN_CMD mkdir -p $HOME/.agents/skills
     if [ -L $HOME/.claude/skills ] || [ ! -e $HOME/.claude/skills ]; then
       $DRY_RUN_CMD ln -sfn $HOME/.agents/skills $HOME/.claude/skills

@@ -1,13 +1,13 @@
 # NixOS box system configuration
 # This file contains system-level config; user-level config is in home/default.nix
-
-{ config, pkgs, ... }:
-
-let
+{
+  config,
+  pkgs,
+  ...
+}: let
   # Username for this host - change if deploying to a different user
   username = "jenc";
-in
-{
+in {
   imports = [
     # Include hardware configuration (must exist on the actual host)
     ./hardware-configuration.nix
@@ -37,7 +37,7 @@ in
   users.users.${username} = {
     isNormalUser = true;
     description = username;
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = ["networkmanager" "wheel"];
   };
 
   # X11 keymap

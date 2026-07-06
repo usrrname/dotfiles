@@ -1,13 +1,19 @@
 # Raspberry Pi 4B NAS host configuration
 # Standalone Home Manager configuration for Debian on Raspberry Pi
-
-{ config, pkgs, lib, ... }:
-
-let
-  username = let user = builtins.getEnv "USER"; in if user == "" then "jenc" else user;
-  homeDir = "/home/${username}";
-in
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: let
+  username = let
+    user = builtins.getEnv "USER";
+  in
+    if user == ""
+    then "jenc"
+    else user;
+  homeDir = "/home/${username}";
+in {
   imports = [
     ../../home
     ../../home/linux.nix
@@ -63,18 +69,18 @@ in
   systemd.user.services.syncthing = {
     Unit = {
       Description = "Syncthing - Open Source Continuous File Synchronization";
-      After = [ "mnt-nas.mount" ];
-      Requires = [ "mnt-nas.mount" ];
+      After = ["mnt-nas.mount"];
+      Requires = ["mnt-nas.mount"];
     };
     Service = {
       ExecStart = "/usr/bin/syncthing serve --home=/mnt/nas/syncthing --no-browser --no-restart";
       Restart = "on-failure";
       RestartSec = "1";
-      SuccessExitStatus = [ "3" "4" ];
-      RestartForceExitStatus = [ "3" "4" ];
+      SuccessExitStatus = ["3" "4"];
+      RestartForceExitStatus = ["3" "4"];
     };
     Install = {
-      WantedBy = [ "default.target" ];
+      WantedBy = ["default.target"];
     };
   };
 

@@ -1,6 +1,9 @@
-{ pkgs, config, lib, ... }:
-
-let
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}: let
   cfg = config.modules.home-manager-gc;
 in {
   options.modules.home-manager-gc = {
@@ -21,7 +24,7 @@ in {
     systemd.user.services.home-manager-gc = {
       Unit = {
         Description = "Home Manager generation garbage collector";
-        After = [ "network.target" ];
+        After = ["network.target"];
       };
       Service = {
         Type = "oneshot";
@@ -33,10 +36,10 @@ in {
       Unit.Description = "Home Manager generation GC timer";
       Timer = {
         OnCalendar = cfg.frequency;
-        Persistent = true;          # catch up after boot if missed
-        RandomizedDelaySec = 3600;   # don't hit exactly on the hour
+        Persistent = true; # catch up after boot if missed
+        RandomizedDelaySec = 3600; # don't hit exactly on the hour
       };
-      Install.WantedBy = [ "timers.target" ];
+      Install.WantedBy = ["timers.target"];
     };
   };
 }

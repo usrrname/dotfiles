@@ -3,15 +3,20 @@
   pkgs,
   lib,
   ...
-}:
-
-let
+}: let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
-  username = let user = builtins.getEnv "USER"; in if user == "" then "jenc" else user;
-  homeDir = if isDarwin then "/Users/${username}" else "/home/${username}";
-in
-{
+  username = let
+    user = builtins.getEnv "USER";
+  in
+    if user == ""
+    then "jenc"
+    else user;
+  homeDir =
+    if isDarwin
+    then "/Users/${username}"
+    else "/home/${username}";
+in {
   imports = [
     ../modules/tmux.nix
     ../modules/gh.nix
@@ -29,8 +34,7 @@ in
   home.homeDirectory = homeDir;
   home.stateVersion = "24.11";
 
-  home.packages =
-    with pkgs;
+  home.packages = with pkgs;
     [
       # Core CLI
       git
@@ -89,7 +93,7 @@ in
 
   # Install global npm packages that aren't in nixpkgs (Socket Security CLI, husky for git hooks).
   # Runs after Home Manager writes its files; idempotent.
-  home.activation.installNpmGlobals = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.installNpmGlobals = lib.hm.dag.entryAfter ["writeBoundary"] ''
     export NPM_CONFIG_PREFIX="$HOME/.npm-global"
     export PATH="${pkgs.nodejs}/bin:$HOME/.npm-global/bin:$PATH"
     $DRY_RUN_CMD mkdir -p "$HOME/.npm-global"

@@ -2,13 +2,10 @@
   pkgs,
   lib,
   ...
-}:
-
-let
+}: let
   # Username for this host - change if deploying to a different user
   username = "jenc";
-in
-{
+in {
   # System-level identity
   networking.hostName = "m2";
   networking.computerName = "mac";
@@ -44,7 +41,7 @@ in
       "oven-sh/bun"
     ];
 
-    # Formulae that have no nixpkgs equivalent 
+    # Formulae that have no nixpkgs equivalent
     brews = [
       "peonping/tap/peon-ping"
       "anomalyco/tap/opencode"
@@ -67,7 +64,7 @@ in
   };
 
   # Add Homebrew to system PATH
-  environment.systemPath = [ "/opt/homebrew/bin" ];
+  environment.systemPath = ["/opt/homebrew/bin"];
 
   # Sanity: pin the nix-darwin schema version so we don't accidentally
   # adopt breaking changes when bumping inputs.

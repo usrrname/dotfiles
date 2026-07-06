@@ -1,9 +1,11 @@
 # Linux-specific home-manager configuration
 # Shared between NixOS and Fedora hosts
-
-{ config, pkgs, lib, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   imports = [
     ../modules/home-manager-gc.nix
   ];

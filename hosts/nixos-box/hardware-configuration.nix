@@ -4,19 +4,22 @@
 #
 # To generate: nixos-generate-config --dir /tmp/nixos-config
 # Then copy hardware-configuration.nix to this location.
-
-{ config, lib, pkgs, modulesPath, ... }:
-
 {
+  config,
+  lib,
+  pkgs,
+  modulesPath,
+  ...
+}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
   # Placeholder values - must be replaced with actual hardware config
-  boot.initrd.availableKernelModules = [ ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ ];
-  boot.extraModulePackages = [ ];
+  boot.initrd.availableKernelModules = [];
+  boot.initrd.kernelModules = [];
+  boot.kernelModules = [];
+  boot.extraModulePackages = [];
 
   # Placeholder file systems - must be replaced
   fileSystems."/" = {
@@ -29,7 +32,7 @@
     fsType = "vfat";
   };
 
-  swapDevices = [ ];
+  swapDevices = [];
 
   # Networking
   networking.useDHCP = lib.mkDefault true;

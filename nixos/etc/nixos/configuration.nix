@@ -1,18 +1,18 @@
 # Global system config
 # Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-
-{ config, pkgs, ... }:
-
 {
-imports = [
-      # Include the results of the hardware scan.
-     #  ./hardware-configuration.nix
-     (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
-];
+  config,
+  pkgs,
+  ...
+}: {
+  imports = [
+    # Include the results of the hardware scan.
+    #  ./hardware-configuration.nix
+    (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
+  ];
 
-
- # Bootloader.
+  # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
@@ -32,36 +32,36 @@ imports = [
   # Select internationalisation properties.
   i18n.defaultLocale = "en_CA.UTF-8";
 
-users.users.jenc = {
-  isNormalUser = true;
-  description = "jenc";
-  extraGroups = [ "networkmanager" "wheel" ];
-  packages = with pkgs; [];
-};
+  users.users.jenc = {
+    isNormalUser = true;
+    description = "jenc";
+    extraGroups = ["networkmanager" "wheel"];
+    packages = with pkgs; [];
+  };
 
- programs.neovim = {
-  enable = true;
-  defaultEditor = true;
-  viAlias = true;
-  vimAlias = true;
-	configure = {
-	    customRC = ''
-          let mapleader = "\<Space>"
-          lua << EOF
-            ${builtins.readFile /home/jenc/.config/nvim/init.lua}
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+    vimAlias = true;
+    configure = {
+      customRC = ''
+        let mapleader = "\<Space>"
+        lua << EOF
+          ${builtins.readFile /home/jenc/.config/nvim/init.lua}
 
-            ${builtins.readFile /home/jenc/.config/nvim/lua/config/lazy.lua}
+          ${builtins.readFile /home/jenc/.config/nvim/lua/config/lazy.lua}
 
-            ${builtins.readFile /home/jenc/.config/nvim/lua/config/keymaps.lua}
+          ${builtins.readFile /home/jenc/.config/nvim/lua/config/keymaps.lua}
 
-            ${builtins.readFile /home/jenc/.config/nvim/lua/config/autocmds.lua}
-          EOF
+          ${builtins.readFile /home/jenc/.config/nvim/lua/config/autocmds.lua}
+        EOF
 
-        '';
-	};
- };
+      '';
+    };
+  };
 
- # Configure keymap in X11
+  # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
     variant = "";
@@ -71,18 +71,17 @@ users.users.jenc = {
 
   programs.direnv.enable = true;
 
- # Enable Zsh with Oh My Zsh
+  # Enable Zsh with Oh My Zsh
   programs.zsh = {
     enable = true;
     ohMyZsh = {
       enable = true;
-      plugins = [ "git" "zsh-autosuggestions" "zsh-autocomplete" "1password" "gh" "direnv" ];
+      plugins = ["git" "zsh-autosuggestions" "zsh-autocomplete" "1password" "gh" "direnv"];
       theme = "robbyrussell";
     };
   };
 
-
- # Enable automatic login for the user.
+  # Enable automatic login for the user.
   services.getty.autologinUser = "jenc";
 
   # Allow unfree packages
@@ -104,7 +103,7 @@ users.users.jenc = {
     fzf
     vimPlugins.nvim-cmp
     vimPlugins.LazyVim
-];
+  ];
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -128,7 +127,7 @@ users.users.jenc = {
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-   networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions

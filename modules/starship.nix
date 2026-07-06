@@ -11,6 +11,6 @@
         format = "RAM: [$ram_pct]($style) | SWAP: [$swap_pct]($style) ";
         style = "bold yellow";
       };
-     };
+    };
   };
 }

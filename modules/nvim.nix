@@ -1,7 +1,10 @@
-{ config, lib, pkgs, ... }:
-
 {
-  home.packages = [ pkgs.neovim ];
+  config,
+  lib,
+  pkgs,
+  ...
+}: {
+  home.packages = [pkgs.neovim];
 
   programs.neovim = {
     withPython3 = false;
@@ -22,10 +25,10 @@
   # Using home.activation instead of mkOutOfStoreSymlink because recent
   # Home Manager versions (26.11-pre) reject out-of-store symlinks in the
   # build sandbox with "Error installing file outside $HOME".
-  home.activation.linkNvimConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+  home.activation.linkNvimConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
     target="${config.xdg.configHome}/nvim"
     source="${config.home.homeDirectory}/.dotfiles/common/nvim/.config/nvim"
-    
+
     if [ -L "$target" ]; then
       rm "$target"
     elif [ -d "$target" ]; then
@@ -38,7 +41,7 @@
         exit 0
       fi
     fi
-    
+
     ln -s "$source" "$target"
   '';
 }
