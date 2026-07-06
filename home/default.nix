@@ -22,6 +22,7 @@ in
     ../modules/claude.nix
     ../modules/starship.nix
     ../modules/git.nix
+    ../modules/zsh.nix
   ];
 
   home.username = username;
@@ -61,8 +62,7 @@ in
       go
 
       # Shell
-      zsh
-      oh-my-zsh
+      # zsh + oh-my-zsh are pulled in by modules/zsh.nix via programs.zsh.*
 
       # Misc
       gnupg
@@ -103,55 +103,7 @@ in
     fi
   '';
 
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestion.enable = true;
-    syntaxHighlighting.enable = true;
-    oh-my-zsh = {
-      enable = true;
-      plugins = [
-        # autosuggestions are provided by programs.zsh.autosuggestion.enable above;
-        "git"
-        "direnv"
-        "gh"
-      ];
-      theme = "robbyrussell";
-    };
-    shellAliases = {
-      # Common aliases (all platforms)
-      ll = "ls -alF";
-      la = "ls -A";
-      l = "ls -CF";
-      g = "git";
-      vi = "nvim";
-      vim = "nvim";
-      sudov = "sudo -e";
-      "docker-compose" = "docker compose";
-      k = "kubectl";
-      reload = "source ~/.zshrc";
-      npm = "socket npm";
-      npx = "socket npx";
-      pnpm="socket pnpm";
-    };
-
-    initContent = ''
-      export PATH="$HOME/.npm-global/bin:$PATH"
-
-      # Update opencode CLI + all plugins pinned in the opencode config dir's package.json.
-      update-opencode() {
-        local dir="$HOME/.opencode"
-        [ -d "''${XDG_CONFIG_HOME:-$HOME/.config}/opencode" ] && dir="''${XDG_CONFIG_HOME:-$HOME/.config}/opencode"
-        opencode upgrade
-        [ -f "$dir/package.json" ] || return 0
-        local deps
-        deps=$(node -e "const p=JSON.parse(require('fs').readFileSync(0));console.log(Object.keys(p.dependencies||{}).join('\n'))" < "$dir/package.json")
-        for dep in $deps; do
-          opencode plugin "$dep" --force --global
-        done
-      }
-    '';
-  };
+  # programs.zsh is configured in modules/zsh.nix
 
   programs.fzf = {
     enable = true;
