@@ -107,12 +107,26 @@ return {
 						return
 					end
 
-					local current_win = vim.api.nvim_get_current_win()
-					if current_win == term.win then
-						return
-					end
+local current_win = vim.api.nvim_get_current_win()
+				if current_win == term.win then
+					return
+				end
 
-					vim.api.nvim_win_close(current_win, true)
+				-- Only close if current_win is an unwanted duplicate showing
+				-- the term buf (the actual misuse this autocmd guards against).
+				if vim.api.nvim_win_get_buf(current_win) ~= buf then
+					return
+				end
+
+				-- Never close the last regular window — E444.
+				local regular_wins = vim.tbl_filter(function(w)
+					return vim.api.nvim_win_get_config(w).relative == ""
+				end, vim.api.nvim_list_wins())
+				if #regular_wins <= 1 then
+					return
+				end
+
+				vim.api.nvim_win_close(current_win, true)
 				end, 10)
 			end,
 		})
