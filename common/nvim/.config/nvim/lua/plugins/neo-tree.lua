@@ -14,15 +14,17 @@ return {
 		vim.api.nvim_create_autocmd("WinClosed", {
 			group = augroup,
 			callback = function()
-				local wins = vim.api.nvim_tabpage_list_wins(0)
-				if #wins ~= 1 then
-					return
-				end
-				local buf = vim.api.nvim_win_get_buf(wins[1])
-				if vim.bo[buf].filetype ~= "neo-tree" then
-					return
-				end
-				vim.cmd("rightbelow vsplit | enew")
+				vim.schedule(function()
+					local wins = vim.api.nvim_tabpage_list_wins(0)
+					if #wins ~= 1 then
+						return
+					end
+					local buf = vim.api.nvim_win_get_buf(wins[1])
+					if vim.bo[buf].filetype ~= "neo-tree" then
+						return
+					end
+					vim.cmd("rightbelow vsplit | enew")
+				end)
 			end,
 		})
 	end,
@@ -39,9 +41,9 @@ return {
 				hide_by_name = {
 					"**/node_modules/**",
 					"**/.cargo/**",
-					-- '.git',
-					-- '.DS_Store',
-					-- 'thumbs.db',
+					".git",
+					".DS_Store",
+					"thumbs.db",
 				},
 			},
 		},
