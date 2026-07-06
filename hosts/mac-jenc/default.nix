@@ -44,8 +44,7 @@ in
       "oven-sh/bun"
     ];
 
-    # Formulae that have no nixpkgs equivalent (or that we deliberately
-    # keep on Homebrew during the Phase 1 transition).
+    # Formulae that have no nixpkgs equivalent 
     brews = [
       "peonping/tap/peon-ping"
       "anomalyco/tap/opencode"
@@ -66,10 +65,6 @@ in
       "obsidian"
     ];
   };
-
-  # Let nix-darwin manage /etc/zshrc bits (Apple's defaults + nix paths).
-  # User-level zsh config lives in Home Manager.
-  programs.zsh.enable = true;
 
   # Add Homebrew to system PATH
   environment.systemPath = [ "/opt/homebrew/bin" ];
