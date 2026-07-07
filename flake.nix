@@ -2,6 +2,7 @@
   description = "jenc's dotfiles — Nix flakes + Home Manager";
 
   inputs = {
+    # Standard GitHub URLs that older Nix versions can parse natively
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     home-manager = {
@@ -13,6 +14,8 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    determinate.url = "github:DeterminateSystems/determinate";
   };
 
   outputs = inputs @ {
@@ -37,7 +40,7 @@
 
     # Standalone Home Manager for non-NixOS Linux hosts (Fedora, Ubuntu, Debian)
     mkStandaloneLinuxHome = system: hostConfig:
-      home-manager.lib.homeManagerConfiguration {
+      inputs.home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
           inherit system;
           config.allowUnfree = true;
@@ -45,7 +48,7 @@
         modules = [hostConfig];
       };
 
-    # nix fmt invokes the formatter with the flake root as argv[1]; the
+    # nix fmt invokes the formatter with the flake root as argv; the
     # wrapper walks the tree and formats every .nix file it finds.
     mkFormatter = system: let
       pkgs = import nixpkgs {
@@ -73,7 +76,6 @@
     # without touching any real host. Both x86 and ARM Linux are
     # generated so this works in any OrbStack VM regardless of Mac
     # architecture.
-    #
     homeConfigurations = {
       # Phase 0 — throwaway targets for validation
       test-x86_64-linux = mkLinuxHome "x86_64-linux";
@@ -93,20 +95,30 @@
     };
 
     # Apple Silicon Mac. After installing Nix on the Mac:
-    #   nix run nix-darwin -- switch --flake .#mac-jenc
+    #   nix run github:LnL7/nix-darwin -- switch --flake .#mac-jenc
     darwinConfigurations.mac-jenc = nix-darwin.lib.darwinSystem {
       system = "aarch64-darwin";
       modules = [
+        inputs.determinate.darwinModules.default
         ./hosts/mac-jenc
-        home-manager.darwinModules.home-manager
+        inputs.home-manager.darwinModules.home-manager
         {
+          # Let Determinate Nix handle Nix configuration rather than nix-darwin
+          determinateNix.enable = true;
+          
+          # Fix for system backward-compatibility tracking
+          system.stateVersion = 7;
+
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.users.jenc = {
+          home-manager.users.jenc = { pkgs, ... }: {
             imports = [
               ./home/default.nix
             ];
+            
+            # Workaround: Force compliant package resolution to pass the nushell assertion check
+            programs.fzf.package = pkgs.fzf;
           };
         }
       ];
@@ -159,3 +171,4 @@
     };
   };
 }
+
