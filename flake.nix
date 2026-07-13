@@ -105,18 +105,17 @@
         {
           # Let Determinate Nix handle Nix configuration rather than nix-darwin
           determinateNix.enable = true;
-          
+
           # Fix for system backward-compatibility tracking
           system.stateVersion = 7;
 
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.users.jenc = { pkgs, ... }: {
+          home-manager.users.jenc = {pkgs, ...}: {
             imports = [
               ./home/default.nix
             ];
-            
             # Workaround: Force compliant package resolution to pass the nushell assertion check
             programs.fzf.package = pkgs.fzf;
           };
@@ -171,4 +170,3 @@
     };
   };
 }
-

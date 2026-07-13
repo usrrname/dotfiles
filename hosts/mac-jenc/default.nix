@@ -16,7 +16,7 @@ in {
   nix.enable = false;
 
   nixpkgs = {
-    hostPlatform= "aarch64-darwin";
+    hostPlatform = "aarch64-darwin";
     config = {
       inherit system;
       allowUnfree = true;

@@ -103,7 +103,6 @@ in {
       $DRY_RUN_CMD npm install -g socket
     fi
   '';
-
   programs.fzf = {
     enable = true;
     enableZshIntegration = true;
