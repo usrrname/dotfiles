@@ -87,7 +87,7 @@ in {
       "gpg-suite"
       "1password"
       "obsidian"
-      "claude-code"
+      "claude-code@latest"
     ];
   };
 

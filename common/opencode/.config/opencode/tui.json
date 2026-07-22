@@ -5,5 +5,15 @@
     "enabled": true
   },
   "theme": "catppuccin-macchiato",
-  "diff_style": "auto"
+  "diff_style": "auto",
+  "attention": {
+    "enabled": true,
+    "notifications": true,
+    "sound": true,
+    "volume": 0.4,
+    "sound_pack": "opencode.default",
+    "sounds": {
+      "error": "./sounds/error.mp3"
+    }
+  }
 }

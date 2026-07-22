@@ -148,6 +148,25 @@
         '';
       };
 
+    devShells.aarch64-darwin.sandbox-repo = let
+      pkgs = import nixpkgs {
+        system = "aarch64-darwin";
+        config.allowUnfree = true;
+      };
+    in
+      pkgs.mkShell {
+        name = "sandbox-repo";
+        packages = with pkgs; [git];
+        shellHook = ''
+          echo "🧊 Repo sandbox — git available (bubblewrap not on macOS)"
+          echo ""
+          echo "Quick start:"
+          echo "  sandbox-repo ~/project             # work in existing repo"
+          echo "  sandbox-repo ./new-thing make test  # create + run command"
+          echo ""
+        '';
+      };
+
     # NixOS box. Apply on the NixOS host:
     #   nixos-rebuild switch --flake .#nixos-box
     nixosConfigurations.nixos-box = nixpkgs.lib.nixosSystem {

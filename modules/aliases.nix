@@ -12,5 +12,7 @@
     sudov = "sudo -e";
     "docker-compose" = "docker compose";
     k = "kubectl";
+    py = "python3";
+    pip = "pip3";
   };
 }

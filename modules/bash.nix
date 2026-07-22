@@ -31,8 +31,6 @@
 
   # Bash-only aliases
   bashAliases = {
-    py = "python3";
-    pip = "pip3";
     cc = "claude code";
     reload = "source ~/.bashrc";
     # Direnv helpers
