@@ -68,6 +68,7 @@ in {
       # Misc
       gnupg
       cacert
+      asciinema
     ]
     ++ lib.optionals isLinux [
       lsb-release
