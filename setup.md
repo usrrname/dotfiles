@@ -11,7 +11,6 @@ longer exist. The scripts that remain are nix wrappers.
 
 ```
 ├── setup.sh              # Auto-detects platform and runs the right rebuild
-├── update.sh             # git pull + submodule update + setup.sh
 └── nix/scripts/          # Misc nix helper scripts
 ```
 
@@ -24,16 +23,7 @@ on Linux    → home-manager switch --flake .#fedora
               (also detects Fedora and runs dnf + service bootstrap)
 ```
 
-## What `update.sh` does
-
-```sh
-git pull
-git submodule update --init --recursive
-./setup.sh
-```
-
-Use this for routine updates. To bump pinned package versions (separate from
-applying config changes):
+To bump pinned package versions (separate from applying config changes):
 
 ```sh
 nix flake update nixpkgs

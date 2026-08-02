@@ -51,7 +51,8 @@ See [`setup-pi.md`](setup-pi.md) for full details.
 
 ```bash
 cd ~/.dotfiles
-./update.sh    # git pull + submodule update + setup (auto-detects platform)
+git pull
+./setup.sh    # auto-detects platform and runs the right rebuild
 ```
 
 ## Structure

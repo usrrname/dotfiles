@@ -6,7 +6,6 @@ Nix flakes (primary).
 
 ```bash
 ./setup.sh        # Auto-detects platform and runs the right rebuild
-./update.sh       # Git pull + submodule update + setup
 ```
 
 ### Nix Targets
