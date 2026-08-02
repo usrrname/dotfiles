@@ -1,3 +1,8 @@
+---
+name: smart-handoff
+description: Generate a structured session handoff file. Use when user says "handoff" or "/handoff".
+---
+
 # Smart Handoff
 
 When the user requests a handoff (says "handoff" or "/handoff"), generate a comprehensive session summary and write it to `~/.cache/opencode/<timestamp>-handoff-latest.txt` using this exact format:

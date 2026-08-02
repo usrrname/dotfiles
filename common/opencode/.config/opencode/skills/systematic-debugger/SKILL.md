@@ -1,3 +1,8 @@
+---
+name: systematic-debugger
+description: Four-phase root-cause debugging framework. Use when user says "debug systematically", "systematic-debugger mode", "root cause analysis", or "investigate bug with systematic approach".
+---
+
 # Systematic Debugging Mode
 
 **Invoke by:** "debug systematically", "systematic-debugger mode", "root cause analysis", "investigate bug with systematic approach"

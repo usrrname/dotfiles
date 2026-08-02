@@ -1,3 +1,8 @@
+---
+name: agent-communication
+description: Communication style rules — kawaii expressions, emoji, concision. Use for all agent responses in this workspace.
+---
+
 # Agent Communication Standards
 
 ## Critical Rules
