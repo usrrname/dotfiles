@@ -1,20 +1,23 @@
 return {
-	-- Extend the coder/claudecode.nvim plugin that the `ai.claudecode` LazyVim
-	-- extra already provides. This file previously pulled in a SECOND plugin
-	-- (greggh/claude-code.nvim) while configuring coder's module — removed to
-	-- dedupe. lazy.nvim deep-merges these opts into the extra's, so the panel
-	-- still opens on the right; edgy owns its width (see plugins/edgy.lua).
 	"coder/claudecode.nvim",
 	opts = {
 		terminal = {
 			-- Force the snacks provider (not "auto", which can fall back to a
-			-- NATIVE terminal). Only a snacks terminal sets snacks_win.position
-			-- /relative, which is what edgy's right-edge filter matches on — a
-			-- native fallback isn't edgy-managed, so neo-tree + the center
-			-- editor squeeze it below its share. edgy owns the final width.
+			-- NATIVE terminal that ignores snacks_win_opts).
 			provider = "snacks",
 			split_side = "right",
 			split_width_percentage = 0.40,
+			-- Float pinned to the right edge, claudecode's snacks provider
+			-- vim.tbl_deep_extend("force", ...) merges these over the split
+			-- defaults in claudecode.terminal.snacks.build_opts.
+			snacks_win_opts = {
+				position = "float",
+				width = 0.4,
+				height = 0.99,
+				row = 1,
+				col = -1,
+				border = "rounded",
+			},
 		},
 	},
 	-- Keep the claude terminal in insert mode while it's focused.
