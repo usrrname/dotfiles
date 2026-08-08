@@ -26,6 +26,8 @@ jobs:
 
       - name: Cache Nix store
         uses: DeterminateSystems/magic-nix-cache-action@908b263ff629f4cc17666315b7fd3ec127c6244d # v14
+        with:
+          use-flakehub: false
 
       - name: Build test home configuration
         run: nix build .#homeConfigurations.test-${{ matrix.system }}
