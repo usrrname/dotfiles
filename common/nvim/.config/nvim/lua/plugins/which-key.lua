@@ -4,7 +4,6 @@ return {
 		spec = {
 			-- Open Code --
 			{ "<leader>o", group = "opencode" },
-			{ "<leader>oo", desc = "Toggle opencode" },
 			{ "<leader>oa", desc = "Ask opencode", mode = { "n", "x" } },
 			{ "<leader>oc", desc = "Execute opencode action" },
 			{ "<leader>oe", desc = "Explain code" },
