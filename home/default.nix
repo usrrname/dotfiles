@@ -76,6 +76,8 @@ in {
     ++ lib.optionals isDarwin [
       # Mac-only nixpkgs additions go here; GUI apps live in homebrew.casks
       # under hosts/mac-jenc/default.nix.
+      rustc # >= 1.94.1 for sdist builds that need a modern toolchain (e.g. litellm)
+      cargo
     ];
 
   xdg.configFile."act/actrc".text = ''

@@ -1,14 +1,21 @@
 {
   "permissions": {
     "allow": [],
-    "deny": [
-      "WebFetch",
-      "WebSearch"
-    ],
+    "deny": [],
     "defaultMode": "acceptEdits"
   },
   "model": "haiku",
   "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR/.claude/hooks/worktree.sh\""
+          }
+        ]
+      }
+    ],
     "PermissionRequest": [
       {
         "matcher": "",
@@ -53,19 +60,9 @@
     "command": "sh /Users/jenc/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "gopls-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": false,
     "vercel@claude-plugins-official": true
   },
-  "extraKnownMarketplaces": {
-    "marketing-skills": {
-      "source": {
-        "source": "github",
-        "repo": "vltpkg/marketing-skills"
-      },
-      "autoUpdate": true
-    }
-  },
+  "extraKnownMarketplaces": {},
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "stable",

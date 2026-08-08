@@ -35,6 +35,8 @@ in {
     # Build tools
     gnumake
     openssl
+    rustc # >= 1.94.1 for sdist builds that need a modern toolchain (e.g. litellm)
+    cargo
 
     # Development libraries
     libyaml
@@ -65,6 +67,15 @@ in {
     NPM_CONFIG_PREFIX = "$HOME/.npm-global";
     DOCKER_HOST = "unix://$XDG_RUNTIME_DIR/podman/podman.sock";
   };
+
+  # headroom CLI ships only via PyPI (not in nixpkgs); install with uv tool.
+  # Idempotent — runs after Home Manager writes its files.
+  home.activation.installUvToolHeadroom = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
+    if ! command -v headroom >/dev/null 2>&1; then
+      $DRY_RUN_CMD uv tool install --python 3.13 headroom-ai
+    fi
+  '';
 
   programs.home-manager.enable = true;
 }
