@@ -10,12 +10,15 @@ Manage the dotfiles flake on macOS. Repo root is `~/.dotfiles`.
 ## Bootstrap (first-time Nix install)
 
 1. Install Nix:
+
    ```
    curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
    ```
+
 2. Open a new shell or `source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh`
 3. Verify: `nix --version`
 4. Bootstrap nix-darwin:
+
    ```
    cd ~/.dotfiles
    nix run nix-darwin -- switch --flake .#mac-jenc
@@ -34,6 +37,7 @@ Manage the dotfiles flake on macOS. Repo root is `~/.dotfiles`.
 ## Add a Package
 
 **nixpkgs CLI tool** → `home/default.nix` `home.packages`:
+
 ```nix
 home.packages = with pkgs; [
   # existing...
@@ -42,16 +46,19 @@ home.packages = with pkgs; [
 ```
 
 **macOS GUI app (cask)** → `hosts/mac-jenc/default.nix` `homebrew.casks`:
+
 ```nix
 homebrew.casks = [ "firefox" "new-app" ];
 ```
 
 **Homebrew-only formula** → `hosts/mac-jenc/default.nix` `homebrew.brews`:
+
 ```nix
 homebrew.brews = [ "peonping/tap/peon-ping" "tap/formula" ];
 ```
 
 **New Homebrew tap** → `hosts/mac-jenc/default.nix` `homebrew.taps`:
+
 ```nix
 homebrew.taps = [ "owner/repo" ];
 ```
@@ -95,7 +102,3 @@ darwin-rebuild --rollback
 - **Protocol "http" disabled** — Transient DNS. Retry or use `sh <(curl -L https://nixos.org/nix/install) --daemon`
 - **Home Manager vs nix-darwin conflict** — nix-darwin owns system-level (`/etc/`, `/Applications`), Home Manager owns `~/`. Don't declare the same path in both.
 - **Cask not installing** — Check `homebrew.enable = true` in `hosts/mac-jenc/default.nix`. nix-darwin must manage Homebrew for declarative casks.
-
-## Migration Context
-
-Phase 1 (macOS host scaffolded, not yet bootstrapped). Bash setup scripts still work as fallback. See `docs/plans/migration-to-nix-flakes-home-manager.md` for full plan.

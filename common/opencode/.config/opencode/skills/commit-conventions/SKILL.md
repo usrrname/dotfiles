@@ -46,7 +46,6 @@ Use one of:
 - Body: max 20 words, wrap at 72 chars — only for essential context
 - Prefer single-line descriptions when possible
 - Reference issue with `#` in subject or footer
-- Add agent name as footer attribution
 
 ## Breaking Changes
 
