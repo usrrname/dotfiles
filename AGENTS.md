@@ -21,8 +21,8 @@ Nix flakes (primary).
 ### Validation (no real host)
 
 ```bash
-nix build .#homeConfigurations.test-x86_64-linux
-nix build .#homeConfigurations.test-aarch64-linux
+nix build .#homeConfigurations.test-x86_64-linux.activationPackage
+nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ```
 
 ### Fedora host (`hosts/fedora/`)

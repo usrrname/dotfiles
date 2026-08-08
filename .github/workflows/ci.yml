@@ -30,4 +30,4 @@ jobs:
           use-flakehub: false
 
       - name: Build test home configuration
-        run: nix build .#homeConfigurations.test-${{ matrix.system }}
+        run: nix build .#homeConfigurations.test-${{ matrix.system }}.activationPackage
