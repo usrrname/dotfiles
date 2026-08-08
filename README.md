@@ -55,6 +55,16 @@ git pull
 ./setup.sh    # auto-detects platform and runs the right rebuild
 ```
 
+## Sandbox (`sandbox-repo`)
+
+Run commands in an isolated workspace via `bwrap` (Linux) / `git` (all platforms). Load it on demand — direnv does **not** auto-load it:
+
+```bash
+nix develop .#sandbox-repo
+sandbox-repo ~/project              # sandbox existing repo
+sandbox-repo ./new-thing make test  # create + run command
+```
+
 ## Structure
 
 ```
@@ -93,8 +103,8 @@ home-manager switch --flake .#<host>             # Linux standalone HM
 Validation (no real host needed):
 
 ```bash
-nix build .#homeConfigurations.test-x86_64-linux
-nix build .#homeConfigurations.test-aarch64-linux
+nix build .#homeConfigurations.test-x86_64-linux.activationPackage
+nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ```
 
 ## Neovim (LazyVim)
