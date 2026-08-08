@@ -72,6 +72,7 @@ hosts/*/hardware-configuration.nix
 
 # Ignore dotfiles at root level only (not nested)
 /.*
+!.github/
 !.gitignore
 !.gitmodules
 !.envrc
