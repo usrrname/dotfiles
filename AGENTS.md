@@ -61,8 +61,9 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 - `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.34.0` (version pinned)
 - **macOS:** `hosts/mac-jenc/default.nix` creates `launchd.user.agents` services:
   - `org.nixos.headroom-proxy` (port 8787, Anthropic backend)
-  - `org.nixos.headroom-proxy-deepseek` (port 8788, OpenCode Zen gateway)
-  - Logs: `~/.headroom/proxy-anthropic.log`, `proxy-deepseek.log`
+  - `org.nixos.headroom-proxy-deepseek` (port 8788, OpenCode Zen gateway — free + pay-as-you-go models)
+  - `org.nixos.headroom-proxy-go` (port 8789, OpenCode Go subscription gateway — kimi-k3 etc. against monthly Go quota)
+  - Logs: `~/.headroom/proxy-anthropic.log`, `proxy-deepseek.log`, `proxy-go.log`
   - Check: `launchctl list | grep headroom` or `lsof -i :8787`
 
 - **Linux (Fedora/Ubuntu):** `modules/headroom.nix` creates `systemd.user.services`:
@@ -75,7 +76,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ### OpenCode Integration
 
 - `modules/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
-- **Provider:** `headroom` provider routes to `http://127.0.0.1:8788/v1` (via OpenCode Zen gateway). Anthropic/Claude models are not used through opencode.
+- **Providers:** `headroom-zen` routes to `http://127.0.0.1:8788/v1` (Zen gateway: free + pay-as-you-go models). `headroom-go` routes to `http://127.0.0.1:8789/v1` (Go subscription endpoint `https://opencode.ai/zen/go/v1`: kimi-k3 and other subscription models; the free `*-free` models are not served there). Anthropic/Claude models are not used through opencode.
 - Requires same Headroom proxy running as Claude Code
 
 ### Troubleshooting
@@ -100,7 +101,7 @@ curl http://127.0.0.1:8787/health
 4. Check proxy logs for incoming requests
 
 **OpenCode not routing through Headroom:**
-- Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8788/v1` (with `/v1`) and the provider is named `headroom`
+- Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8788/v1` (with `/v1`) and the provider is named `headroom-zen`
 
 **Token savings not accumulating:**
 ```bash

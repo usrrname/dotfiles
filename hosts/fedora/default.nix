@@ -83,6 +83,12 @@ in {
       port = 8788;
       args = "--port 8788 --mode token --openai-api-url https://opencode.ai/zen/v1 --provider-name OpenCode";
     };
+    # OpenCode Go subscription gateway (kimi-k3 etc. against monthly Go quota,
+    # not Zen credits). Free models stay on the Zen proxy (8788).
+    go = {
+      port = 8789;
+      args = "--port 8789 --mode token --openai-api-url https://opencode.ai/zen/go/v1 --provider-name OpenCodeGo";
+    };
   };
 
   programs.home-manager.enable = true;

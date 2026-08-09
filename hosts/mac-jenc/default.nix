@@ -133,15 +133,22 @@ in {
       name = "anthropic";
       args = "--port 8787 --budget 200";
     };
-    # DeepSeek via OpenCode Go — the proxy relays to opencode's Zen gateway
-    # (https://opencode.ai/zen/v1), so the DeepSeek models in opencode's
-    # "headroom" provider resolve through the OpenCode Go subscription. The
-    # client's bearer token is forwarded to the Zen API, so no key lives in
-    # the launchd env. --mode token compresses frozen/prefix-cached messages
-    # for ~25-35% more session length.
+    # OpenCode Zen gateway — the free and pay-as-you-go models in opencode's
+    # "headroom-zen" provider resolve here. The client's bearer token is
+    # forwarded to the Zen API, so no key lives in the launchd env.
+    # --mode token compresses frozen/prefix-cached messages for ~25-35% more
+    # session length.
     headroom-proxy-deepseek = proxyAgent {
       name = "deepseek";
       args = "--port 8788 --mode token --openai-api-url https://opencode.ai/zen/v1 --provider-name OpenCode";
+    };
+    # OpenCode Go subscription gateway — kimi-k3 and other Go subscription
+    # models resolve against the monthly Go quota instead of Zen pay-as-you-go
+    # credits. Same endpoint family, extra /go path segment. Free models are
+    # NOT served here — they stay on the Zen proxy (8788).
+    headroom-proxy-go = proxyAgent {
+      name = "go";
+      args = "--port 8789 --mode token --openai-api-url https://opencode.ai/zen/go/v1 --provider-name OpenCodeGo";
     };
   };
 
