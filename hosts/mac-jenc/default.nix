@@ -2,6 +2,7 @@
   pkgs,
   lib,
   system,
+  config,
   ...
 }: let
   # Username for this host - change if deploying to a different user
@@ -104,6 +105,10 @@ in {
   # installs the CLI on first start.
   launchd.user.agents = let
     headroomVersion = "0.34.0";
+    # Compute anthropic proxy args with conditional code-aware flag
+    enableCodeAware = config.headroom.enableCodeAware or false;
+    anthropicProxyArgs = "--port 8787 --mode token --budget 200 --budget-period monthly"
+      + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.
     headroomProxy = name: args: pkgs.writeShellScript "headroom-proxy-${name}" ''
@@ -129,9 +134,10 @@ in {
   in {
     # Default (Anthropic) backend — shared by claude, opencode, sandboxes
     # routed at 127.0.0.1. Budget: $200/month (tracks usage, stops at limit).
-    headroom-proxy = proxyAgent {
+    # Code-aware flag toggled via headroom.enableCodeAware option.
+    headroom-proxy-anthropic = proxyAgent {
       name = "anthropic";
-      args = "--port 8787 --budget 200";
+      args = anthropicProxyArgs;
     };
     # OpenCode Zen gateway — the free and pay-as-you-go models in opencode's
     # "headroom-zen" provider resolve here. The client's bearer token is

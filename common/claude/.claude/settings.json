@@ -60,7 +60,8 @@
     "command": "sh /Users/jenc/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "vercel@claude-plugins-official": true
+    "vercel@claude-plugins-official": true,
+    "lua-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
     "headroom-marketplace": {
