@@ -91,6 +91,36 @@ sandbox-repo ./new-thing make test  # create + run command
 - **Sandbox tools**: sandbox-repo (bubblewrap-isolated environments)
 - **Configs**: git, SSH, Wezterm, nvim/LazyVim, bash/zsh aliases, environment variables, Claude Code settings + statusline, actrc, starship
 
+## Headroom Proxies
+
+Three persistent proxy services run locally for token caching and compression:
+
+| Port | Backend | Purpose |
+|------|---------|---------|
+| 8787 | Anthropic/OpenAI | Claude Code, Codex |
+| 8788 | OpenCode Zen | Pay-as-you-go + free models |
+| 8789 | OpenCode Go | $5/mo subscription (open-source models) |
+
+Check status: `headroom doctor` · individual health: `curl http://127.0.0.1:{port}/health`
+
+**macOS (launchd):**
+
+```bash
+launchctl list | grep headroom                          # check all loaded
+launchctl unload ~/Library/LaunchAgents/org.nixos.headroom-proxy-<name>.plist   # disable
+launchctl load   ~/Library/LaunchAgents/org.nixos.headroom-proxy-<name>.plist   # re-enable
+```
+
+If a plist is missing after a rebuild, run `sudo darwin-rebuild switch --flake .#mac-jenc`.
+
+**Linux (systemd):**
+
+```bash
+systemctl --user status headroom-proxy-<name>            # status
+systemctl --user stop headroom-proxy-<name>              # stop
+systemctl --user start headroom-proxy-<name>             # start
+```
+
 ## Adding a Config or Homebrew Package
 
 Edit `home/default.nix` or `modules/` for Nix-managed programs. For macOS Homebrew casks/brews, edit `hosts/mac-jenc/default.nix` under `homebrew`. Rebuild:
