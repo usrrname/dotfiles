@@ -316,31 +316,6 @@ return {
 			end,
 		})
 
-		-- Pre-warm: start OpenCode in the background after Neovim finishes loading.
-		-- The slowest part is Node.js + oh-my-openagent initialization; deferring
-		-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
-		-- Only pre-warm when 1Password is unlocked: varlock reads OPENCODE_API_KEY from
-		-- it, and a locked vault would kill the process and leave a dead terminal behind.
-		-- Use `op read` (not `op whoami`): the desktop app session satisfies read even
-		-- when the CLI reports "not signed in".
-		vim.api.nvim_create_autocmd("User", {
-			pattern = "VeryLazy",
-			callback = function()
-				local vault_unlocked = vim.fn.system("op read 'op://Private/opencode/API key' >/dev/null 2>&1 && echo ok || echo fail") == "ok\n"
-				if not vault_unlocked then
-					return
-				end
-				local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
-				if term then
-					vim.defer_fn(function()
-						if term.win and vim.api.nvim_win_is_valid(term.win) then
-							term:hide()
-						end
-					end, 300)
-				end
-			end,
-		})
-
 		-- Auto-show float on prompt — no manual <leader>oo after asking.
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "OpencodeEvent:tui.command.execute",
