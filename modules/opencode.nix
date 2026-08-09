@@ -20,6 +20,19 @@ in {
     fi
   '';
 
+  # Sync peon-ping config from dotfiles to the XDG runtime path. peon-ping-setup
+  # creates its own config on first run; this activation ensures the dotfiles
+  # version is the source of truth on every rebuild.
+  home.activation.syncOpencodePeonPingConfig = lib.hm.dag.entryAfter ["seedOpencodeConfig"] ''
+    local peonPingDir="$HOME/.config/opencode/peon-ping"
+    if [ -d "$peonPingDir" ] || [ -d "${../common/opencode/.config/opencode/peon-ping}" ]; then
+      $VERBOSE_ECHO "Syncing peon-ping config from dotfiles..."
+      $DRY_RUN_CMD mkdir -p "$peonPingDir"
+      $DRY_RUN_CMD cp -f ${../common/opencode/.config/opencode/peon-ping/config.json} "$peonPingDir/config.json"
+      $DRY_RUN_CMD cp -f ${../common/opencode/.config/opencode/peon-ping/peon-icon.png} "$peonPingDir/peon-icon.png"
+    fi
+  '';
+
   # Install npm dependencies for opencode plugins
   home.activation.installOpencodeDeps = lib.hm.dag.entryAfter ["linkGeneration"] ''
     export PATH="${pkgs.nodejs}/bin:$PATH"
