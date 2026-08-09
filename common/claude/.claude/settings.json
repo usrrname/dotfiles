@@ -62,7 +62,14 @@
   "enabledPlugins": {
     "vercel@claude-plugins-official": true
   },
-  "extraKnownMarketplaces": {},
+  "extraKnownMarketplaces": {
+    "headroom-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "chopratejas/headroom"
+      }
+    }
+  },
   "effortLevel": "high",
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "stable",

@@ -91,6 +91,32 @@ in {
     ];
   };
 
+  # Headroom context-compression proxy — one shared instance on port 8787 for
+  # every agent (claude, opencode, sandboxes routed at 127.0.0.1). Declarative
+  # replacement for `headroom install apply --preset persistent-service`. The
+  # CLI is installed (version-pinned) by modules/headroom.nix; this agent
+  # self-bootstraps in case that activation hasn't run yet.
+  home-manager.users.${username}.headroom.enable = true;
+  launchd.user.agents.headroom-proxy = let
+    headroomVersion = "0.34.0";
+    proxy = pkgs.writeShellScript "headroom-proxy" ''
+      export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
+      if ! command -v headroom >/dev/null 2>&1; then
+        uv tool install --force --python 3.13 "headroom-ai[proxy]==${headroomVersion}"
+      fi
+      exec headroom proxy --port 8787
+    '';
+  in {
+    serviceConfig = {
+      ProgramArguments = ["${proxy}"];
+      RunAtLoad = true;
+      KeepAlive = true;
+      ProcessType = "Background";
+      StandardOutPath = "/Users/jenc/.headroom/proxy.log";
+      StandardErrorPath = "/Users/jenc/.headroom/proxy.err.log";
+    };
+  };
+
   # Add Homebrew to system PATH
   environment.systemPath = ["/opt/homebrew/bin"];
 

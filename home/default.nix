@@ -27,6 +27,7 @@ in {
     ../modules/claude.nix
     ../modules/starship.nix
     ../modules/git.nix
+    ../modules/headroom.nix
     ../modules/zsh.nix
   ];
 

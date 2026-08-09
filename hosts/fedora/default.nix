@@ -52,7 +52,6 @@ in {
 
     # Python tools
     python3
-    uv
 
     # Go
     go
@@ -68,14 +67,8 @@ in {
     DOCKER_HOST = "unix://$XDG_RUNTIME_DIR/podman/podman.sock";
   };
 
-  # headroom CLI ships only via PyPI (not in nixpkgs); install with uv tool.
-  # Idempotent — runs after Home Manager writes its files.
-  home.activation.installUvToolHeadroom = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
-    if ! command -v headroom >/dev/null 2>&1; then
-      $DRY_RUN_CMD uv tool install --python 3.13 headroom-ai
-    fi
-  '';
+  # headroom CLI + agent MCP config come from modules/headroom.nix.
+  headroom.enable = true;
 
   programs.home-manager.enable = true;
 }
