@@ -62,21 +62,22 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 - **macOS:** `hosts/mac-jenc/default.nix` creates `launchd.user.agents` services:
   - `org.nixos.headroom-proxy` (port 8787, Anthropic backend)
   - `org.nixos.headroom-proxy-deepseek` (port 8788, OpenCode Zen gateway — free + pay-as-you-go models)
-  - `org.nixos.headroom-proxy-go` (port 8789, OpenCode Go subscription gateway — kimi-k3 etc. against monthly Go quota)
+  - `org.nixos.headroom-proxy-go` (port 8789, OpenCode Go subscription gateway — draws from monthly Go quota, not Zen credits)
   - Logs: `~/.headroom/proxy-anthropic.log`, `proxy-deepseek.log`, `proxy-go.log`
   - Check: `launchctl list | grep headroom` or `lsof -i :8787`
 
-- **Linux (Fedora/Ubuntu):** `modules/headroom.nix` creates `systemd.user.services`:
-  - `headroom-proxy-anthropic` (port 8787)
-  - Logs: `journalctl --user -u headroom-proxy-anthropic -f`
-  - Check: `systemctl --user status headroom-proxy-anthropic` or `lsof -i :8787`
+- **Linux:** `modules/headroom.nix` creates `systemd.user.services` from `headroom.proxies`:
+  - Fedora (`hosts/fedora/default.nix`): `headroom-proxy-anthropic` (8787), `headroom-proxy-deepseek` (8788), `headroom-proxy-go` (8789)
+  - Ubuntu: `headroom-proxy-anthropic` (8787) only (module default)
+  - Logs: `journalctl --user -u headroom-proxy-<name> -f`
+  - Check: `systemctl --user status headroom-proxy-<name>` or `lsof -i :<port>`
 
 **Self-bootstrap:** If Nix activation hasn't run, the proxy wrapper automatically installs the CLI on first start.
 
 ### OpenCode Integration
 
 - `modules/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
-- **Providers:** `headroom-zen` routes to `http://127.0.0.1:8788/v1` (Zen gateway: free + pay-as-you-go models). `headroom-go` routes to `http://127.0.0.1:8789/v1` (Go subscription endpoint `https://opencode.ai/zen/go/v1`: kimi-k3 and other subscription models; the free `*-free` models are not served there). Anthropic/Claude models are not used through opencode.
+- **Providers:** `headroom-zen` routes to `http://127.0.0.1:8788/v1` (Zen gateway: free + pay-as-you-go models). `headroom-go` routes to `http://127.0.0.1:8789/v1` (Go subscription endpoint `https://opencode.ai/zen/go/v1`: the free `*-free` models are not served there). The `headroom-go` model list mirrors `https://opencode.ai/zen/go/v1/models` with limits from models.dev. Anthropic/Claude models are not used through opencode.
 - Requires same Headroom proxy running as Claude Code
 
 ### Troubleshooting
@@ -99,6 +100,8 @@ curl http://127.0.0.1:8787/health
 2. Check `ANTHROPIC_BASE_URL` is set (visible in `headroom doctor`)
 3. Rebuild to ensure launchd/systemd service is registered
 4. Check proxy logs for incoming requests
+
+**"'claude' not found in PATH" during activation:** — HM activation scripts don't inherit the Homebrew prefix, and a non-zero exit aborts the remaining activation steps. `modules/headroom.nix` exports `/opt/homebrew/bin` on Darwin and guards `headroom init claude` on the CLI being present; use the same pattern for any activation script calling brew-installed CLIs.
 
 **OpenCode not routing through Headroom:**
 - Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8788/v1` (with `/v1`) and the provider is named `headroom-zen`
