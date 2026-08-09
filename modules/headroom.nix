@@ -77,8 +77,16 @@ in {
     # own $HOME and a local proxy on the same port.
     home.activation.headroom = lib.hm.dag.entryAfter ["writeBoundary"] ''
       ${ensureHeadroom}
+      ${lib.optionalString isDarwin ''
+        # claude-code is a Homebrew cask; activation PATH lacks the brew prefix.
+        export PATH="/opt/homebrew/bin:$PATH"
+      ''}
       $DRY_RUN_CMD headroom mcp install --force
-      $DRY_RUN_CMD headroom init claude
+      # Skip gracefully where claude isn't installed, mirroring `mcp install`'s
+      # own "not detected on this system, skipped" behavior.
+      if command -v claude >/dev/null 2>&1; then
+        $DRY_RUN_CMD headroom init claude
+      fi
     '';
 
     home.packages = [pkgs.uv];
