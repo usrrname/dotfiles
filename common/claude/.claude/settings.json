@@ -52,6 +52,94 @@
             "timeout": 300
           }
         ]
+      },
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
       }
     ]
   },

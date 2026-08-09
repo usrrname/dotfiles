@@ -6,7 +6,7 @@
 }: let
   sandbox-repo = pkgs.writeShellApplication {
     name = "sandbox-repo";
-    runtimeInputs = with pkgs; [bubblewrap git];
+    runtimeInputs = with pkgs; [bubblewrap git opencode];
     text = ''
         set -euo pipefail
 
@@ -21,11 +21,12 @@
 
       If <path> doesn't exist, it's created and git-initialised.
 
-      Examples:
+Examples:
         sandbox-repo ~/projects/my-app            # interactive shell in existing repo
         sandbox-repo ./fresh-project               # creates, git inits, drops in
         sandbox-repo . nix build                   # runs nix build in sandbox
-      EOF
+        sandbox-repo . opencode                    # runs opencode (config seeded from host)
+EOF
           exit 1
         }
 
