@@ -42,11 +42,75 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 - `opencode` comes from nixpkgs on Linux, from `anomalyco/tap` brew tap on Mac. The `modules/opencode.nix` seeds config on first run (copy, not symlink) and runs `npm install` for plugins.
 - `claude-code` is a Homebrew cask on Mac (not nixpkgs), declared in `hosts/mac-jenc/default.nix`.
 
-## Claude Code (Hybrid Pattern)
+## Claude Code + Headroom Integration
+
+### Claude Code Setup (Hybrid Pattern)
 
 - **Nix-managed** (rebuild needed): `~/.claude/settings.json`, `~/.claude/statusline-command.sh` — sourced from `common/claude/.claude/`
 - **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` via `home.activation` hook in `modules/claude.nix`
-- Project-local config: `~/.dotfiles/.claude/settings.local.json`
+- **LazyVim plugin** (`common/nvim/.config/nvim/lua/plugins/claudecode.lua`):
+  - Routes Claude API calls through Headroom proxy: `ANTHROPIC_BASE_URL=http://127.0.0.1:8787`
+  - Terminal stays in insert mode for better UX
+  - Requires Headroom proxy running on port 8787
+
+### Headroom Proxy (Token Caching + Compression)
+
+**Purpose:** Token caching (reuses context) and compression (~40% cost savings) for all downstream clients.
+
+**Installation & Service:**
+- `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.34.0` (version pinned)
+- **macOS:** `hosts/mac-jenc/default.nix` creates `launchd.user.agents` services:
+  - `org.nixos.headroom-proxy` (port 8787, Anthropic backend)
+  - `org.nixos.headroom-proxy-deepseek` (port 8788, OpenCode Zen gateway)
+  - Logs: `~/.headroom/proxy-anthropic.log`, `proxy-deepseek.log`
+  - Check: `launchctl list | grep headroom` or `lsof -i :8787`
+
+- **Linux (Fedora/Ubuntu):** `modules/headroom.nix` creates `systemd.user.services`:
+  - `headroom-proxy-anthropic` (port 8787)
+  - Logs: `journalctl --user -u headroom-proxy-anthropic -f`
+  - Check: `systemctl --user status headroom-proxy-anthropic` or `lsof -i :8787`
+
+**Self-bootstrap:** If Nix activation hasn't run, the proxy wrapper automatically installs the CLI on first start.
+
+### OpenCode Integration
+
+- `modules/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
+- **Provider:** `headroom` provider routes to `http://127.0.0.1:8787/v1`
+- **DeepSeek provider:** `headroom-deepseek` routes to `http://127.0.0.1:8788/v1` (via OpenCode Zen gateway)
+- Requires same Headroom proxy running as Claude Code
+
+### Troubleshooting
+
+**Proxy not running:**
+```bash
+# macOS
+launchctl list | grep headroom           # Check if loaded
+curl http://127.0.0.1:8787/health       # Test health endpoint
+tail -f ~/.headroom/proxy-anthropic.log  # View logs
+
+# Linux
+systemctl --user status headroom-proxy-anthropic
+journalctl --user -u headroom-proxy-anthropic -f
+curl http://127.0.0.1:8787/health
+```
+
+**Claude Code can't reach proxy:**
+1. Verify proxy is listening: `lsof -i :8787`
+2. Check `ANTHROPIC_BASE_URL` is set (visible in `headroom doctor`)
+3. Rebuild to ensure launchd/systemd service is registered
+4. Check proxy logs for incoming requests
+
+**OpenCode not routing through Headroom:**
+- Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8787/v1` (with `/v1`)
+
+**Token savings not accumulating:**
+```bash
+headroom stats                          # Compression history
+curl http://127.0.0.1:8787/stats       # Detailed proxy stats
+```
+
+### Project-local config
+- `~/.dotfiles/.claude/settings.local.json` — for .dotfiles-specific overrides
 
 ## Neovim
 
