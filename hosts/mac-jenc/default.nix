@@ -66,12 +66,17 @@ in {
       "peonping/tap"
       "anomalyco/tap"
       "oven-sh/bun"
+      "dmno-dev/tap"
     ];
 
     # Formulae that have no nixpkgs equivalent
     brews = [
       "peonping/tap/peon-ping"
       "anomalyco/tap/opencode"
+      # varlock loads .env.schema (resolves OPENCODE_API_KEY from 1Password) and is
+      # the single source — no npm varlock dep in package.json. Formula ≥ 1.15 for
+      # the plugin schema (0.6.x fails); bumped 0.6.4 → 1.16.1 via `brew upgrade`.
+      "dmno-dev/tap/varlock"
     ];
 
     # GUI apps. Casks always stay on Homebrew — nixpkgs doesn't ship
@@ -91,29 +96,50 @@ in {
     ];
   };
 
-  # Headroom context-compression proxy — one shared instance on port 8787 for
-  # every agent (claude, opencode, sandboxes routed at 127.0.0.1). Declarative
+  # Headroom context-compression proxy instances, one per upstream. Declarative
   # replacement for `headroom install apply --preset persistent-service`. The
-  # CLI is installed (version-pinned) by modules/headroom.nix; this agent
-  # self-bootstraps in case that activation hasn't run yet.
+  # CLI is installed (version-pinned) by modules/headroom.nix; these agents
+  # self-bootstrap in case that activation hasn't run yet.
   home-manager.users.${username}.headroom.enable = true;
-  launchd.user.agents.headroom-proxy = let
+  launchd.user.agents = let
     headroomVersion = "0.34.0";
-    proxy = pkgs.writeShellScript "headroom-proxy" ''
+    # Shared bootstrap: make sure the pinned headroom CLI is installed, then
+    # exec the proxy with the given args.
+    headroomProxy = name: args: pkgs.writeShellScript "headroom-proxy-${name}" ''
       export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
       if ! command -v headroom >/dev/null 2>&1; then
         uv tool install --force --python 3.13 "headroom-ai[proxy]==${headroomVersion}"
       fi
-      exec headroom proxy --port 8787
+      exec headroom proxy ${args}
     '';
+    proxyAgent = {
+      name,
+      args,
+    }: {
+      serviceConfig = {
+        ProgramArguments = ["${headroomProxy name args}"];
+        RunAtLoad = true;
+        KeepAlive = true;
+        ProcessType = "Background";
+        StandardOutPath = "/Users/jenc/.headroom/proxy-${name}.log";
+        StandardErrorPath = "/Users/jenc/.headroom/proxy-${name}.err.log";
+      };
+    };
   in {
-    serviceConfig = {
-      ProgramArguments = ["${proxy}"];
-      RunAtLoad = true;
-      KeepAlive = true;
-      ProcessType = "Background";
-      StandardOutPath = "/Users/jenc/.headroom/proxy.log";
-      StandardErrorPath = "/Users/jenc/.headroom/proxy.err.log";
+    # Default (Anthropic) backend — shared by claude, opencode, sandboxes
+    # routed at 127.0.0.1.
+    headroom-proxy = proxyAgent {
+      name = "anthropic";
+      args = "--port 8787";
+    };
+    # DeepSeek via OpenCode Go — the proxy relays to opencode's Zen gateway
+    # (https://opencode.ai/zen/v1), so the DeepSeek models in opencode's
+    # "headroom-deepseek" provider resolve through the OpenCode Go
+    # subscription. The client's bearer token is forwarded to the Zen API, so
+    # no key lives in the launchd env.
+    headroom-proxy-deepseek = proxyAgent {
+      name = "deepseek";
+      args = "--port 8788 --openai-api-url https://opencode.ai/zen/v1 --provider-name OpenCode";
     };
   };
 

@@ -38,7 +38,10 @@ return {
 		},
 	},
 	config = function()
-		local opencode_cmd = "opencode --port"
+		-- Wrap through varlock so OPENCODE_API_KEY is injected into the proxy-spawned
+		-- opencode from 1Password (see ~/.dotfiles/.env.schema). -p points at the schema
+		-- so this works from any cwd; nvim may be opened outside ~/.dotfiles.
+		local opencode_cmd = "varlock run -p ~/.dotfiles -- opencode --port"
 
 		---@type snacks.terminal.Opts
 		local snacks_terminal_opts = {
@@ -316,9 +319,15 @@ return {
 		-- Pre-warm: start OpenCode in the background after Neovim finishes loading.
 		-- The slowest part is Node.js + oh-my-openagent initialization; deferring
 		-- this to VeryLazy instead of waiting for <leader>oo makes the toggle instant.
+		-- Only pre-warm when 1Password is unlocked: varlock reads OPENCODE_API_KEY from
+		-- it, and a locked vault would kill the process and leave a dead terminal behind.
 		vim.api.nvim_create_autocmd("User", {
 			pattern = "VeryLazy",
 			callback = function()
+				local vault_unlocked = vim.fn.system("op whoami >/dev/null 2>&1 && echo ok || echo fail") == "ok\n"
+				if not vault_unlocked then
+					return
+				end
 				local term = require("snacks.terminal").toggle(opencode_cmd, snacks_terminal_opts)
 				if term then
 					vim.defer_fn(function()
