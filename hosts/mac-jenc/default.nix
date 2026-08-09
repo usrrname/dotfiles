@@ -102,8 +102,8 @@ in {
   # defined below are nix-darwin specific (home-manager systemd services handle Linux).
   # Self-bootstrap: if headroom.nix activation hasn't run yet, the proxy wrapper
   # installs the CLI on first start.
-  home-manager.users.${username}.headroom.enable = true;
-  home-manager.users.${username}.headroom.enableService = false; # launchd services defined below instead
+  # Note: headroom.enable and headroom.enableService are set in flake.nix
+  # home-manager.users.jenc config to avoid duplicate attribute definitions.
   launchd.user.agents = let
     headroomVersion = "0.34.0";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
