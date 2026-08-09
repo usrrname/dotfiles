@@ -1,4 +1,4 @@
-# Pi NAS — Service Catalog
+# Pi NAS — Services
 
 ## Convention
 
@@ -37,9 +37,10 @@
 **Depends on**: `mnt-nas.mount` (waits for BTRFS partition)  
 **One-time**: `systemctl --user enable --now syncthing.service`  
 **Folders**:
-  - personal → `/mnt/nas/syncthing/vaults/personal` (receive-only)
-  - rangle → `/mnt/nas/syncthing/vaults/rangle` (receive-only)
-  - health → `/mnt/nas/syncthing/vaults/health` (receive-only)
+
+- personal → `/mnt/nas/syncthing/vaults/personal` (receive-only)
+- rangle → `/mnt/nas/syncthing/vaults/rangle` (receive-only)
+- health → `/mnt/nas/syncthing/vaults/health` (receive-only)
 
 ### fail2ban
 
