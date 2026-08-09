@@ -75,8 +75,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ### OpenCode Integration
 
 - `modules/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
-- **Provider:** `headroom` provider routes to `http://127.0.0.1:8787/v1`
-- **DeepSeek provider:** `headroom-deepseek` routes to `http://127.0.0.1:8788/v1` (via OpenCode Zen gateway)
+- **Provider:** `headroom` provider routes to `http://127.0.0.1:8788/v1` (via OpenCode Zen gateway). Anthropic/Claude models are not used through opencode.
 - Requires same Headroom proxy running as Claude Code
 
 ### Troubleshooting
@@ -101,7 +100,7 @@ curl http://127.0.0.1:8787/health
 4. Check proxy logs for incoming requests
 
 **OpenCode not routing through Headroom:**
-- Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8787/v1` (with `/v1`)
+- Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8788/v1` (with `/v1`) and the provider is named `headroom`
 
 **Token savings not accumulating:**
 ```bash

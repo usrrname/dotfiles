@@ -130,19 +130,20 @@ in {
     };
   in {
     # Default (Anthropic) backend — shared by claude, opencode, sandboxes
-    # routed at 127.0.0.1.
+    # routed at 127.0.0.1. Budget: $200/month (tracks usage, stops at limit).
     headroom-proxy = proxyAgent {
       name = "anthropic";
-      args = "--port 8787";
+      args = "--port 8787 --budget 200";
     };
     # DeepSeek via OpenCode Go — the proxy relays to opencode's Zen gateway
     # (https://opencode.ai/zen/v1), so the DeepSeek models in opencode's
-    # "headroom-deepseek" provider resolve through the OpenCode Go
-    # subscription. The client's bearer token is forwarded to the Zen API, so
-    # no key lives in the launchd env.
+    # "headroom" provider resolve through the OpenCode Go subscription. The
+    # client's bearer token is forwarded to the Zen API, so no key lives in
+    # the launchd env. --mode token compresses frozen/prefix-cached messages
+    # for ~25-35% more session length.
     headroom-proxy-deepseek = proxyAgent {
       name = "deepseek";
-      args = "--port 8788 --openai-api-url https://opencode.ai/zen/v1 --provider-name OpenCode";
+      args = "--port 8788 --mode token --openai-api-url https://opencode.ai/zen/v1 --provider-name OpenCode";
     };
   };
 

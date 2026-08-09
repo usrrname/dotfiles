@@ -72,6 +72,18 @@ in {
   headroom.enableService = true;
   # Fedora runs standalone Home Manager, so proxies are user-scoped systemd services
   # Logs: journalctl --user -u headroom-proxy-anthropic -f
+  # deepseek (8788) relays to opencode's Zen gateway with --mode token for
+  # ~25-35% more session length; anthropic (8787) stays in default cache mode.
+  headroom.proxies = {
+    anthropic = {
+      port = 8787;
+      args = "--port 8787";
+    };
+    deepseek = {
+      port = 8788;
+      args = "--port 8788 --mode token --openai-api-url https://opencode.ai/zen/v1 --provider-name OpenCode";
+    };
+  };
 
   programs.home-manager.enable = true;
 }
