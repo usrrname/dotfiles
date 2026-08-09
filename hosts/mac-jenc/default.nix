@@ -98,9 +98,12 @@ in {
 
   # Headroom context-compression proxy instances, one per upstream. Declarative
   # replacement for `headroom install apply --preset persistent-service`. The
-  # CLI is installed (version-pinned) by modules/headroom.nix; these agents
-  # self-bootstrap in case that activation hasn't run yet.
+  # CLI is installed (version-pinned) by modules/headroom.nix; launchd services
+  # defined below are nix-darwin specific (home-manager systemd services handle Linux).
+  # Self-bootstrap: if headroom.nix activation hasn't run yet, the proxy wrapper
+  # installs the CLI on first start.
   home-manager.users.${username}.headroom.enable = true;
+  home-manager.users.${username}.headroom.enableService = false; # launchd services defined below instead
   launchd.user.agents = let
     headroomVersion = "0.34.0";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then

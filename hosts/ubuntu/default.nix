@@ -52,5 +52,11 @@ in {
     _1password-cli
   ];
 
+  # headroom CLI + agent MCP config + systemd proxy service
+  headroom.enable = true;
+  headroom.enableService = true;
+  # Ubuntu runs standalone Home Manager, so proxies are user-scoped systemd services
+  # Logs: journalctl --user -u headroom-proxy-anthropic -f
+
   programs.home-manager.enable = true;
 }

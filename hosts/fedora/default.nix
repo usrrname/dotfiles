@@ -67,8 +67,11 @@ in {
     DOCKER_HOST = "unix://$XDG_RUNTIME_DIR/podman/podman.sock";
   };
 
-  # headroom CLI + agent MCP config come from modules/headroom.nix.
+  # headroom CLI + agent MCP config + systemd proxy service
   headroom.enable = true;
+  headroom.enableService = true;
+  # Fedora runs standalone Home Manager, so proxies are user-scoped systemd services
+  # Logs: journalctl --user -u headroom-proxy-anthropic -f
 
   programs.home-manager.enable = true;
 }

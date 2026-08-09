@@ -69,6 +69,48 @@
             "context": 200000,
             "output": 128000
           }
+        },
+        "big-pickle": {
+          "name": "Big Pickle",
+          "limit": {
+            "context": 200000,
+            "output": 128000
+          }
+        },
+        "mimo-v2.5-free": {
+          "name": "MiMo-V2.5 Free",
+          "limit": {
+            "context": 200000,
+            "output": 128000
+          }
+        },
+        "laguna-s-2.1-free": {
+          "name": "Laguna S 2.1 Free",
+          "limit": {
+            "context": 200000,
+            "output": 128000
+          }
+        },
+        "ling-3.0-tiny-free": {
+          "name": "Ling-3.0-tiny Free",
+          "limit": {
+            "context": 200000,
+            "output": 128000
+          }
+        },
+        "longcat-2.0-free": {
+          "name": "LongCat-2.0 Free",
+          "limit": {
+            "context": 200000,
+            "output": 128000
+          }
+        },
+        "nemotron-3-ultra-free": {
+          "name": "Nemotron 3 Ultra Free",
+          "limit": {
+            "context": 200000,
+            "output": 128000
+          }
         }
       }
     }

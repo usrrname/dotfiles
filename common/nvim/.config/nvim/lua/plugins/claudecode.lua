@@ -22,6 +22,9 @@ return {
 	},
 	-- Keep the claude terminal in insert mode while it's focused.
 	init = function()
+		-- Route Claude API calls through Headroom Doctor proxy for token caching
+		vim.env.ANTHROPIC_BASE_URL = "http://127.0.0.1:8787"
+
 		vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
 			pattern = "term://*claude*",
 			callback = function(ev)
