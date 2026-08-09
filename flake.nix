@@ -119,7 +119,6 @@
             # Workaround: Force compliant package resolution to pass the nushell assertion check
             programs.fzf.package = pkgs.fzf;
 
-            # Headroom: disable systemd services (launchd defined in mac-jenc instead)
             headroom.enable = true;
             headroom.enableService = false;
           };
