@@ -20,10 +20,12 @@
 in {
   programs.zsh = {
     enable = true;
+    autocd = true;
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-
+    dircolors.enable = true;
+    
     oh-my-zsh = {
       enable = true;
       plugins = [
@@ -34,6 +36,8 @@ in {
       ];
       theme = "robbyrussell";
     };
+
+    direnv.enable = true;
 
     shellAliases = baseAliases // zshAliases;
 
