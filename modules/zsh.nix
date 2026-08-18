@@ -24,20 +24,16 @@ in {
     enableCompletion = true;
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
-    dircolors.enable = true;
-    
+
     oh-my-zsh = {
       enable = true;
       plugins = [
         # autosuggestions are provided by programs.zsh.autosuggestion.enable above
         "git"
-        "direnv"
         "gh"
       ];
       theme = "robbyrussell";
     };
-
-    direnv.enable = true;
 
     shellAliases = baseAliases // zshAliases;
 
@@ -58,4 +54,10 @@ in {
       }
     '';
   };
+
+  # dircolors and direnv are top-level HM modules, not zsh sub-options.
+  # enableZshIntegration defaults to true when programs.zsh.enable is true,
+  # so the direnv hook is added to zshrc automatically (no oh-my-zsh plugin needed).
+  programs.dircolors.enable = true;
+  programs.direnv.enable = true;
 }

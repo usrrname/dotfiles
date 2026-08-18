@@ -143,12 +143,16 @@
       }
     ]
   },
+  "worktree": {
+    "baseRef": "fresh"
+  },
+  "workflowKeywordTriggerEnabled": false,
   "statusLine": {
     "type": "command",
     "command": "sh /Users/jenc/.claude/statusline-command.sh"
   },
   "enabledPlugins": {
-    "vercel@claude-plugins-official": true,
+    "vercel@claude-plugins-official": false,
     "lua-lsp@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
@@ -160,6 +164,7 @@
     }
   },
   "effortLevel": "high",
+  "advisorModel": "sonnet",
   "promptSuggestionEnabled": false,
   "autoUpdatesChannel": "stable",
   "tui": "default",
@@ -171,6 +176,7 @@
   "theme": "dark",
   "editorMode": "vim",
   "preferredNotifChannel": "notifications_disabled",
+  "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,
