@@ -104,10 +104,10 @@ in {
   # Self-bootstrap: if headroom.nix activation hasn't run yet, the proxy wrapper
   # installs the CLI on first start.
   launchd.user.agents = let
-    headroomVersion = "0.34.0";
+    headroomVersion = "0.35.0";
     # Compute anthropic proxy args with conditional code-aware flag
     enableCodeAware = config.headroom.enableCodeAware or false;
-    anthropicProxyArgs = "--port 8787 --mode token --budget 200 --budget-period monthly"
+    anthropicProxyArgs = "--port 8787 --mode token --budget 500 --budget-period monthly"
       + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.
@@ -133,7 +133,7 @@ in {
     };
   in {
     # Default (Anthropic) backend — shared by claude, opencode, sandboxes
-    # routed at 127.0.0.1. Budget: $200/month (tracks usage, stops at limit).
+    # routed at 127.0.0.1. Budget: $500/month (tracks usage, stops at limit).
     # Code-aware flag toggled via headroom.enableCodeAware option.
     headroom-proxy-anthropic = proxyAgent {
       name = "anthropic";

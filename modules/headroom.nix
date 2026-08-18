@@ -7,7 +7,7 @@
   # headroom is PyPI-only (not in nixpkgs). Pin the exact version so every
   # host (and any sandbox built from this flake) reproduces the same proxy +
   # MCP behavior; `headroom update` can't silently diverge them.
-  headroomVersion = "0.34.0";
+  headroomVersion = "0.35.0";
 
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
