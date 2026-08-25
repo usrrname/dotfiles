@@ -2,7 +2,7 @@
   "permissions": {
     "allow": [],
     "deny": [],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "model": "haiku",
   "hooks": {
