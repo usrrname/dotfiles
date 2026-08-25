@@ -79,6 +79,13 @@ in {
       # under hosts/mac-jenc/default.nix.
       rustc # >= 1.94.1 for sdist builds that need a modern toolchain (e.g. litellm)
       cargo
+
+      # On-demand control for headroom proxy launchd services. Lazily-started
+      # proxies (the Gemini ones) don't run at login; start them when needed.
+      # Script body lives in ./scripts/headroomctl.sh (plain bash, no Nix
+      # interpolation) so it can be linted/shellchecked directly.
+      (pkgs.writeShellScriptBin "headroomctl"
+        (builtins.readFile ./scripts/headroomctl.sh))
     ];
 
   xdg.configFile."act/actrc".text = ''

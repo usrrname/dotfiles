@@ -111,24 +111,44 @@ in {
       + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.
-    headroomProxy = name: args: pkgs.writeShellScript "headroom-proxy-${name}" ''
+    # envVars: optional attrset mapping varlock env names → runtime env names
+    #          (e.g. { GEMINI_API_KEY_1 = "GEMINI_API_KEY"; } means "read
+    #          GEMINI_API_KEY_1 from varlock, export it as GEMINI_API_KEY").
+    headroomProxy = name: args: envVars: pkgs.writeShellScript "headroom-proxy-${name}" ''
       export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
       if ! command -v headroom >/dev/null 2>&1; then
         uv tool install --force --python 3.13 "headroom-ai[proxy]==${headroomVersion}"
       fi
+      # Source varlock-managed env if available
+      if command -v varlock >/dev/null 2>&1; then
+        eval "$(varlock load --format shell 2>/dev/null)" || true
+      fi
+      # Remap varlock keys → runtime env vars (e.g. GEMINI_API_KEY_1 → GEMINI_API_KEY)
+      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (src: dst: ''
+        if [ -n "''${${src}:-}" ]; then
+          export ${dst}="''${${src}}"
+        fi
+      '') envVars)}
       exec headroom proxy ${args}
     '';
     proxyAgent = {
       name,
       args,
+      env ? {},
+      envVars ? {},
+      lazy ? false,
     }: {
       serviceConfig = {
-        ProgramArguments = ["${headroomProxy name args}"];
-        RunAtLoad = true;
+        ProgramArguments = ["${headroomProxy name args envVars}"];
+        # lazy = true: don't start at login; start on demand via `launchctl
+        # kickstart gui/$(id -u)/org.nixos.headroom-proxy-<name>`. KeepAlive
+        # stays on so a lazily-started proxy still restarts if it crashes.
+        RunAtLoad = !lazy;
         KeepAlive = true;
         ProcessType = "Background";
         StandardOutPath = "/Users/jenc/.headroom/proxy-${name}.log";
         StandardErrorPath = "/Users/jenc/.headroom/proxy-${name}.err.log";
+        EnvironmentVariables = env;
       };
     };
   in {
@@ -155,6 +175,28 @@ in {
     headroom-proxy-go = proxyAgent {
       name = "go";
       args = "--port 8789 --mode token --openai-api-url https://opencode.ai/zen/go/v1 --provider-name OpenCodeGo";
+    };
+    # Gemini (Google AI Studio) — 3 proxies, each with its own API key.
+    # Keys are read from varlock: GEMINI_API_KEY_1, GEMINI_API_KEY_2, GEMINI_API_KEY_3.
+    # Each proxy remaps its numbered key → GEMINI_API_KEY for headroom's handler.
+    # lazy = true: these don't run until you start them (headroomctl start gemini-N).
+    headroom-proxy-gemini-1 = proxyAgent {
+      name = "gemini-1";
+      args = "--port 8790 --mode token";
+      envVars = { GEMINI_API_KEY_1 = "GEMINI_API_KEY"; };
+      lazy = true;
+    };
+    headroom-proxy-gemini-2 = proxyAgent {
+      name = "gemini-2";
+      args = "--port 8791 --mode token";
+      envVars = { GEMINI_API_KEY_2 = "GEMINI_API_KEY"; };
+      lazy = true;
+    };
+    headroom-proxy-gemini-3 = proxyAgent {
+      name = "gemini-3";
+      args = "--port 8792 --mode token";
+      envVars = { GEMINI_API_KEY_3 = "GEMINI_API_KEY"; };
+      lazy = true;
     };
   };
 

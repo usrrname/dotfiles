@@ -9,6 +9,7 @@
     "test": "bats test/setup.bats"
   },
   "devDependencies": {
+    "@varlock/1password-plugin": "^2.0.4",
     "bats": "^1.13.0",
     "bats-assert": "^2.2.4",
     "bats-support": "^0.3.0"

@@ -24,7 +24,9 @@
     fi
   '';
 
-  # Shared bootstrap script for proxy startup (works on Darwin + Linux)
+  # Shared bootstrap script for proxy startup (works on Darwin + Linux).
+  # macOS overrides this with a varlock-aware wrapper in hosts/mac-jenc; this
+  # stays the simple cross-platform default for Linux systemd services.
   headroomProxy = name: args:
     pkgs.writeShellScript "headroom-proxy-${name}" ''
       export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
