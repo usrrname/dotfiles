@@ -32,7 +32,7 @@
 [alias]
 	g = git
 	gco = checkout
-	gst = status
+	gst = status --short
 	gcb = checkout -b
 	gcm = commit -m
 	noedit = commit --amend --no-edit
