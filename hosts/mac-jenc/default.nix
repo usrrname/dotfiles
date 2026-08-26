@@ -105,9 +105,12 @@ in {
   # installs the CLI on first start.
   launchd.user.agents = let
     headroomVersion = "0.35.0";
-    # Compute anthropic proxy args with conditional code-aware flag
+    # Compute anthropic proxy args with conditional code-aware flag.
+    # --no-http2: shared HTTP/2 connections can corrupt TLS state when many
+    # concurrent streams are cancelled (SSLV3_ALERT_BAD_RECORD_MAC), producing
+    # dead streams ("0 stream events") and garbled non-streaming retries.
     enableCodeAware = config.headroom.enableCodeAware or false;
-    anthropicProxyArgs = "--port 8787 --mode token --budget 500 --budget-period monthly"
+    anthropicProxyArgs = "--port 8787 --mode token --no-http2 --budget 500 --budget-period monthly"
       + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.

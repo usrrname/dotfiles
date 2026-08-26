@@ -50,7 +50,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 - **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` via `home.activation` hook in `modules/claude.nix`
 - **LazyVim plugin** (`common/nvim/.config/nvim/lua/plugins/claudecode.lua`):
   - Routes Claude API calls through Headroom proxy: `ANTHROPIC_BASE_URL=http://127.0.0.1:8787`
-  - Terminal stays in insert mode for better UX
+  - Terminal stays in insert mode
   - Requires Headroom proxy running on port 8787
 
 ### Headroom Proxy (Token Caching + Compression)
@@ -58,13 +58,18 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 **Purpose:** Token caching (reuses context) and compression (~40% cost savings) for all downstream clients.
 
 **Installation & Service:**
-- `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.34.0` (version pinned)
+- `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.35.0` (version pinned)
 - **macOS:** `hosts/mac-jenc/default.nix` creates `launchd.user.agents` services:
-  - `org.nixos.headroom-proxy` (port 8787, Anthropic backend)
+  - `org.nixos.headroom-proxy-anthropic` (port 8787, Anthropic backend, runs with `--no-http2` — see troubleshooting)
   - `org.nixos.headroom-proxy-deepseek` (port 8788, OpenCode Zen gateway — free + pay-as-you-go models)
   - `org.nixos.headroom-proxy-go` (port 8789, OpenCode Go subscription gateway — draws from monthly Go quota, not Zen credits)
-  - Logs: `~/.headroom/proxy-anthropic.log`, `proxy-deepseek.log`, `proxy-go.log`
-  - Check: `launchctl list | grep headroom` or `lsof -i :8787`
+  - `org.nixos.headroom-proxy-gemini-{1,2,3}` (ports 8790/8791/8792, Google AI Studio)
+  - Gemini proxies are lazy-start (`RunAtLoad = false`) — not running at login
+  - Each gemini wrapper sources varlock and remaps `GEMINI_API_KEY_{1,2,3}` → `GEMINI_API_KEY` for headroom's handler
+  - Manage with `headroomctl start|stop|restart|status [name ...]` (body: `home/scripts/headroomctl.sh`)
+  - Bare `stop` deliberately errors — pass explicit targets so always-on backends can't be torn down by accident
+  - Logs: `~/.headroom/proxy-<name>.log` / `.err.log`
+  - Check: `headroomctl status`, `launchctl list | grep headroom`, or `lsof -i :8787`
 
 - **Linux:** `modules/headroom.nix` creates `systemd.user.services` from `headroom.proxies`:
   - Fedora (`hosts/fedora/default.nix`): `headroom-proxy-anthropic` (8787), `headroom-proxy-deepseek` (8788), `headroom-proxy-go` (8789)
@@ -77,8 +82,14 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ### OpenCode Integration
 
 - `modules/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
-- **Providers:** `headroom-zen` routes to `http://127.0.0.1:8788/v1` (Zen gateway: free + pay-as-you-go models). `headroom-go` routes to `http://127.0.0.1:8789/v1` (Go subscription endpoint `https://opencode.ai/zen/go/v1`: the free `*-free` models are not served there). The `headroom-go` model list mirrors `https://opencode.ai/zen/go/v1/models` with limits from models.dev. Anthropic/Claude models are not used through opencode.
-- Requires same Headroom proxy running as Claude Code
+- **Providers:**
+  - `headroom-zen` → `http://127.0.0.1:8788/v1` (Zen gateway: free + pay-as-you-go models)
+  - `headroom-go` → `http://127.0.0.1:8789/v1` (Go subscription endpoint `https://opencode.ai/zen/go/v1`; free `*-free` models are NOT served here)
+  - `headroom-gemini-{1,2,3}` → `http://127.0.0.1:{8790,8791,8792}/v1` (Google AI Studio via the gemini proxies)
+- **Gemini models:** gemini-3.7-flash, gemini-3.6-flash, gemini-2.5-pro/flash, gemini-3.1-flash-image
+- **Gemini prerequisite:** start the matching proxy first — `headroomctl start gemini-<N>`
+- `headroom-go` model list mirrors `https://opencode.ai/zen/go/v1/models` (limits from models.dev)
+- Each provider requires its own port's proxy running; Anthropic/Claude models are not used through opencode
 
 ### Troubleshooting
 
