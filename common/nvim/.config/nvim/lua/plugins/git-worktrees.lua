@@ -8,5 +8,6 @@ return {
 	keys = {
 		{ "<leader>gw", "<cmd>Telescope git_worktree git_worktrees<cr>", desc = "Switch Worktree" },
 		{ "<leader>gwa", "<cmd>Telescope git_worktree create_git_worktree<cr>", desc = "Create Worktree" },
+		{ "<leader>gwr", "<cmd>Telescope git_worktree remove_git_worktree<c-d>", desc = "Remove worktree" },
 	},
 }
