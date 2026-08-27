@@ -32,5 +32,11 @@
   headroom.enable = true;
   headroom.enableService = true;
 
+  # nix-daemon.sh's PATH setup isn't reliably reaching new shells here;
+  # export directly rather than depend on it.
+  programs.bash.initExtra = ''
+    export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+  '';
+
   programs.home-manager.enable = true;
 }
