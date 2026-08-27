@@ -85,6 +85,18 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
 	end,
 })
 
+-- Fast reload when file changed on disk (opencode/claude) — complements autosave above
+vim.o.autoread = true
+vim.o.updatetime = 200
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+	group = vim.api.nvim_create_augroup("collab_checktime", { clear = true }),
+	callback = function()
+		if vim.fn.getcmdwintype() == "" then
+			vim.cmd("checktime")
+		end
+	end,
+})
+
 -- disable markdownlint noise --
 vim.g.render_markdown = {
 	lint = {
