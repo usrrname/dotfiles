@@ -2,6 +2,7 @@ return {
 	"folke/which-key.nvim",
 	opts = {
 		spec = {
+			{ "<leader>tm", group = "tmux" },
 			-- Open Code --
 			{ "<leader>o", group = "opencode" },
 			{ "<leader>oa", desc = "Ask opencode", mode = { "n", "x" } },

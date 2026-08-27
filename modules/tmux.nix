@@ -1,6 +1,12 @@
 {
+  pkgs,
+  ...
+}: {
   programs.tmux = {
     enable = true;
+    terminal = "tmux-256color";
+    escapeTime = 0;
+    plugins = with pkgs.tmuxPlugins; [ vim-tmux-navigator ];
     extraConfig = ''
       # Enable extended keys for CSI-u support
       set -g extended-keys on
@@ -12,10 +18,15 @@
       set -g set-clipboard on
       # Enable mouse support
       set -g mouse on
-      # Start window numbering at 1
+      # Focus events for nvim autoread/checktime
+      set -g focus-events on
+      # Start window/pane numbering at 1
       set -g base-index 1
-      # Split pane horizontally with |
-      bind | split-window -h
+      set -g pane-base-index 1
+      set -g renumber-windows on
+      # Split pane horizontally with |, keep cwd
+      bind | split-window -h -c "#{pane_current_path}"
+      bind - split-window -v -c "#{pane_current_path}"
     '';
   };
 }
