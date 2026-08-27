@@ -4,7 +4,7 @@
     "deny": [],
     "defaultMode": "auto"
   },
-  "model": "haiku",
+  "model": "sonnet[1m]",
   "hooks": {
     "WorktreeCreate": [
       {
