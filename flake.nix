@@ -89,11 +89,10 @@
       # Apply on Ubuntu host: home-manager switch --flake .#ubuntu
       ubuntu = mkStandaloneLinuxHome "x86_64-linux" ./hosts/ubuntu;
 
-      # Isolated Lima sandbox (aarch64-linux guest on Apple Silicon) — reuses
-      # the Ubuntu host module since the guest is Debian and there's no
-      # dedicated sandbox host config yet.
+      # Isolated Lima sandbox (aarch64-linux guest on Apple Silicon) — minimal
+      # footprint, no credential tooling, no baked-in language runtimes.
       # Apply inside the sandbox: home-manager switch --flake .#sandbox
-      sandbox = mkStandaloneLinuxHome "aarch64-linux" ./hosts/ubuntu;
+      sandbox = mkStandaloneLinuxHome "aarch64-linux" ./hosts/sandbox;
 
       # Raspberry Pi 4B NAS (standalone Home Manager on Debian)
       # Apply on Pi: home-manager switch --flake .#pi-nas
