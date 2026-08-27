@@ -86,8 +86,11 @@ in {
       $DRY_RUN_CMD headroom mcp install --force
       # Skip gracefully where claude isn't installed, mirroring `mcp install`'s
       # own "not detected on this system, skipped" behavior.
+      # `init claude` also does `claude marketplace add` over SSH git clone —
+      # non-fatal so activation still completes on hosts/sandboxes without an
+      # SSH key (e.g. the credential-less agent sandbox).
       if command -v claude >/dev/null 2>&1; then
-        $DRY_RUN_CMD headroom init claude
+        $DRY_RUN_CMD headroom init claude || echo "⚠️  headroom init claude failed (no SSH access?) — continuing"
       fi
     '';
 
