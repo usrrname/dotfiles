@@ -110,30 +110,33 @@ in {
     # concurrent streams are cancelled (SSLV3_ALERT_BAD_RECORD_MAC), producing
     # dead streams ("0 stream events") and garbled non-streaming retries.
     enableCodeAware = config.headroom.enableCodeAware or false;
-    anthropicProxyArgs = "--port 8787 --mode token --no-http2 --budget 500 --budget-period monthly"
+    anthropicProxyArgs =
+      "--port 8787 --mode token --no-http2 --budget 500 --budget-period monthly"
       + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.
     # envVars: optional attrset mapping varlock env names → runtime env names
     #          (e.g. { GEMINI_API_KEY_1 = "GEMINI_API_KEY"; } means "read
     #          GEMINI_API_KEY_1 from varlock, export it as GEMINI_API_KEY").
-    headroomProxy = name: args: envVars: pkgs.writeShellScript "headroom-proxy-${name}" ''
-      export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
-      if ! command -v headroom >/dev/null 2>&1; then
-        uv tool install --force --python 3.13 "headroom-ai[proxy]==${headroomVersion}"
-      fi
-      # Source varlock-managed env if available
-      if command -v varlock >/dev/null 2>&1; then
-        eval "$(varlock load --format shell 2>/dev/null)" || true
-      fi
-      # Remap varlock keys → runtime env vars (e.g. GEMINI_API_KEY_1 → GEMINI_API_KEY)
-      ${lib.concatStringsSep "\n" (lib.mapAttrsToList (src: dst: ''
-        if [ -n "''${${src}:-}" ]; then
-          export ${dst}="''${${src}}"
+    headroomProxy = name: args: envVars:
+      pkgs.writeShellScript "headroom-proxy-${name}" ''
+        export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
+        if ! command -v headroom >/dev/null 2>&1; then
+          uv tool install --force --python 3.13 "headroom-ai[proxy]==${headroomVersion}"
         fi
-      '') envVars)}
-      exec headroom proxy ${args}
-    '';
+        # Source varlock-managed env if available
+        if command -v varlock >/dev/null 2>&1; then
+          eval "$(varlock load --format shell 2>/dev/null)" || true
+        fi
+        # Remap varlock keys → runtime env vars (e.g. GEMINI_API_KEY_1 → GEMINI_API_KEY)
+        ${lib.concatStringsSep "\n" (lib.mapAttrsToList (src: dst: ''
+            if [ -n "''${${src}:-}" ]; then
+              export ${dst}="''${${src}}"
+            fi
+          '')
+          envVars)}
+        exec headroom proxy ${args}
+      '';
     proxyAgent = {
       name,
       args,
@@ -186,19 +189,19 @@ in {
     headroom-proxy-gemini-1 = proxyAgent {
       name = "gemini-1";
       args = "--port 8790 --mode token";
-      envVars = { GEMINI_API_KEY_1 = "GEMINI_API_KEY"; };
+      envVars = {GEMINI_API_KEY_1 = "GEMINI_API_KEY";};
       lazy = true;
     };
     headroom-proxy-gemini-2 = proxyAgent {
       name = "gemini-2";
       args = "--port 8791 --mode token";
-      envVars = { GEMINI_API_KEY_2 = "GEMINI_API_KEY"; };
+      envVars = {GEMINI_API_KEY_2 = "GEMINI_API_KEY";};
       lazy = true;
     };
     headroom-proxy-gemini-3 = proxyAgent {
       name = "gemini-3";
       args = "--port 8792 --mode token";
-      envVars = { GEMINI_API_KEY_3 = "GEMINI_API_KEY"; };
+      envVars = {GEMINI_API_KEY_3 = "GEMINI_API_KEY";};
       lazy = true;
     };
   };

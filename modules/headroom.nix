@@ -7,7 +7,7 @@
   # headroom is PyPI-only (not in nixpkgs). Pin the exact version so every
   # host (and any sandbox built from this flake) reproduces the same proxy +
   # MCP behavior; `headroom update` can't silently diverge them.
-  headroomVersion = "0.35.0";
+  headroomVersion = "0.36.5";
 
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
@@ -95,28 +95,30 @@ in {
 
     # Linux: systemd user services for proxy instances
     systemd.user.services = lib.mkIf (isLinux && config.headroom.enableService) (
-      lib.mapAttrs' (name: proxy:
-        lib.nameValuePair "headroom-proxy-${name}" {
-          Unit = {
-            Description = "Headroom context-compression proxy (${name})";
-            After = ["network-online.target"];
-          };
-          Service = {
-            Type = "simple";
-            ExecStart = "${headroomProxy name proxy.args}";
-            Restart = "on-failure";
-            RestartSec = 10;
-            StandardOutput = "journal";
-            StandardError = "journal";
-            SyslogIdentifier = "headroom-proxy-${name}";
-            # Run in background without tying to session
-            KillMode = "mixed";
-          };
-          Install = {
-            WantedBy = ["default.target"];
-          };
-        }
-      ) config.headroom.proxies
+      lib.mapAttrs' (
+        name: proxy:
+          lib.nameValuePair "headroom-proxy-${name}" {
+            Unit = {
+              Description = "Headroom context-compression proxy (${name})";
+              After = ["network-online.target"];
+            };
+            Service = {
+              Type = "simple";
+              ExecStart = "${headroomProxy name proxy.args}";
+              Restart = "on-failure";
+              RestartSec = 10;
+              StandardOutput = "journal";
+              StandardError = "journal";
+              SyslogIdentifier = "headroom-proxy-${name}";
+              # Run in background without tying to session
+              KillMode = "mixed";
+            };
+            Install = {
+              WantedBy = ["default.target"];
+            };
+          }
+      )
+      config.headroom.proxies
     );
   };
 }
