@@ -76,7 +76,7 @@ in {
     ]
     ++ lib.optionals isLinux [
       lsb-release
-      opencode # AI coding agent (Mac uses anomalyco/tap/opencode via brew)
+      opencode # (Mac uses anomalyco/tap/opencode via brew)
     ]
     ++ lib.optionals isDarwin [
       # Mac-only nixpkgs additions go here; GUI apps live in homebrew.casks

@@ -66,19 +66,28 @@ return require("lazy").setup({
 			end,
 		},
 	},
+	-- Default plugin loading behavior
 	defaults = {
+		-- Don't lazy-load by default (load at startup)
 		lazy = false,
+		-- Use latest version for all plugins
 		version = "*",
+		-- LuaRocks integration for plugins needing Lua deps
 		rocks = {
 			enabled = true,
 			hererocks = true,
 			lua = "5.1",
 		},
 	},
+	-- Theme to install if missing on first run
 	install = { colorscheme = { "catppuccin-macchiato" } },
-	checker = { enabled = false },
+	-- Automatically check for plugin updates
+	checker = { enabled = true },
+	-- Performance optimizations
 	performance = {
+		-- Runtime path settings
 		rtp = {
+			-- Disable unused built-in vim plugins for faster startup
 			disabled_plugins = {
 				"gzip",
 				-- "matchit",
