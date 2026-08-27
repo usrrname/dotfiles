@@ -12,8 +12,12 @@
     if user == ""
     then "jenc"
     else user;
-  homeDir =
-    if isDarwin
+  homeDir = let
+    home = builtins.getEnv "HOME";
+  in
+    if home != ""
+    then home
+    else if isDarwin
     then "/Users/${username}"
     else "/home/${username}";
 in {

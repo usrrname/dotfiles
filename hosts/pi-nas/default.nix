@@ -5,15 +5,7 @@
   pkgs,
   lib,
   ...
-}: let
-  username = let
-    user = builtins.getEnv "USER";
-  in
-    if user == ""
-    then "jenc"
-    else user;
-  homeDir = "/home/${username}";
-in {
+}: {
   imports = [
     ../../home
     ../../home/linux.nix
@@ -22,8 +14,6 @@ in {
   # Allow unfree packages (required for 1password-cli, etc.)
   nixpkgs.config.allowUnfree = true;
 
-  home.username = username;
-  home.homeDirectory = homeDir;
   home.stateVersion = "24.11";
 
   # Pi-specific packages (NAS setup)

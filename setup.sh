@@ -111,12 +111,39 @@ Linux*)
       FLAKE="" # unknown distro — skip system bootstrap, still try HM
     fi
 
-    if [ -n "$FLAKE" ]; then
+    HM_INSTALLED=false
+    command -v home-manager >/dev/null 2>&1 && HM_INSTALLED=true
+
+    if [ -z "$FLAKE" ] && [ "$HM_INSTALLED" = false ]; then
+      echo "❌ Error: home-manager not found and no flake host configured for this distro."
+      exit 1
+    fi
+
+    # --impure: home/default.nix reads $USER/$HOME via builtins.getEnv to
+    # compute home.username/homeDirectory portably across machines/accounts;
+    # pure evaluation silently blocks that (getEnv returns ""), so every
+    # invocation below needs it, not just first-time bootstrap.
+    if [ "$HM_INSTALLED" = false ]; then
+      # First-time bootstrap: Home Manager refuses to manage dotfiles that
+      # already exist unmanaged (e.g. stock .bashrc/.zshrc/.profile on a
+      # fresh account). Clear them before the very first activation only —
+      # once `home-manager` is on PATH, a generation already exists. Safe
+      # here: the guard clause above already ensured $FLAKE is non-empty.
+      echo "🧹 First-time setup — clearing stock dotfiles Home Manager will manage..."
+      rm -f "$HOME/.profile" "$HOME/.zshrc" "$HOME/.bashrc"
+
+      # `home-manager` isn't on PATH yet on a brand-new Nix install — the
+      # command only appears after the first activation. Bootstrap directly
+      # from the flake's own activation package instead.
+      HM_TARGET="${FLAKE#\#}"
+      echo "🐧 First-time bootstrap - activating via nix run (home-manager not yet on PATH)..."
+      nix run --impure ".#homeConfigurations.${HM_TARGET}.activationPackage"
+    elif [ -n "$FLAKE" ]; then
       echo "🐧 Detected Linux - running home-manager switch --flake $FLAKE..."
-      home-manager switch --flake "$FLAKE"
+      home-manager switch --impure --flake "$FLAKE"
     else
       echo "🐧 Detected Linux - running home-manager switch..."
-      home-manager switch
+      home-manager switch --impure
     fi
   fi
   ;;

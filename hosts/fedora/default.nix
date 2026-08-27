@@ -5,15 +5,7 @@
   pkgs,
   lib,
   ...
-}: let
-  username = let
-    user = builtins.getEnv "USER";
-  in
-    if user == ""
-    then "jenc"
-    else user;
-  homeDir = "/home/${username}";
-in {
+}: {
   imports = [
     ../../home
     ../../home/linux.nix
@@ -21,8 +13,6 @@ in {
     ../../modules/sandbox-repo.nix
   ];
 
-  home.username = username;
-  home.homeDirectory = homeDir;
   home.stateVersion = "24.11";
 
   # Additional packages specific to Fedora host
