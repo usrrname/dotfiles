@@ -1,8 +1,6 @@
-# Isolated agent sandbox (Lima Debian guest) — minimal footprint.
-# No credential tooling (gh, _1password-cli, gnupg, act) since this host
-# never holds credentials. No baked-in language runtimes — bring those
-# per-project via direnv + the project's own flake.nix/shell.nix instead
-# of duplicating multiple toolchains in the base image.
+# Isolated agent sandbox (Lima Debian guest) — minimal footprint, no
+# credential tooling. Other language toolchains come per-project via
+# direnv + the project's own flake.nix/shell.nix.
 {
   config,
   pkgs,
@@ -24,6 +22,7 @@
     fzf
     tmux
     vim
+    nodejs
     direnv
     cacert
     lsb-release
