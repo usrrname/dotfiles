@@ -60,6 +60,31 @@ vim.api.nvim_create_autocmd("BufAdd", {
 	end,
 })
 
+-- Autosave when navigating away from buffer — helps collaboration with opencode/claude
+-- Saves the buffer you leave if it has a filename and unsaved changes
+vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost" }, {
+	callback = function(args)
+		local buf = args.buf
+		-- Only normal file buffers with a name, not modified terminals/prompts
+		if vim.bo[buf].buftype ~= "" then
+			return
+		end
+		if vim.fn.bufname(buf) == "" then
+			return
+		end
+		if not vim.bo[buf].modified then
+			return
+		end
+		-- Don't autosave if buffer is readonly
+		if not vim.bo[buf].modifiable or vim.bo[buf].readonly then
+			return
+		end
+		vim.api.nvim_buf_call(buf, function()
+			vim.cmd("silent! update")
+		end)
+	end,
+})
+
 -- disable markdownlint noise --
 vim.g.render_markdown = {
 	lint = {
