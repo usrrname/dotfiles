@@ -85,7 +85,7 @@ in {
     casks = [
       "brave-browser"
       "firefox"
-      "wezterm"
+      "ghostty"
       "slack"
       "spotify"
       "tailscale-app"
