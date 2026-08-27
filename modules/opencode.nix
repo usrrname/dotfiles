@@ -17,6 +17,9 @@ in {
       $VERBOSE_ECHO "Seeding opencode config to ${opencodeDir}..."
       $DRY_RUN_CMD mkdir -p "${opencodeDir}"
       $DRY_RUN_CMD cp -r ${./../common/opencode/.config/opencode}/. "${opencodeDir}/"
+      # cp -r preserves the Nix store's read-only dir permissions; later
+      # activation steps (e.g. syncOpencodePeonPingConfig) need to write here.
+      $DRY_RUN_CMD chmod -R u+w "${opencodeDir}"
     fi
   '';
 
