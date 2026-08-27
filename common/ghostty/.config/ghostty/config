@@ -1,33 +1,16 @@
-# Ghostty config - migrated from wezterm.lua (2026-08-27)
-# Syntax: key = value, # comments on own line, see https://ghostty.org/docs/config
+# Ghostty config
+# https://ghostty.org/docs/config
 
-# Font - using Ghostty's built-in default (JetBrains Mono + Nerd Fonts embedded)
-# No font-family set -> Ghostty uses its default; size kept at 12pt from wezterm
 font-size = 12
-
-# Theme - matches wezterm: Catppuccin Mocha
 theme = catppuccin-mocha
-
-# Window opacity and blur - matches wezterm: opacity 0.85, blur 30
 background-opacity = 0.85
 background-blur = 30
-
-# Disable tab bar if single tab (wezterm: enable_tab_bar = false)
-# Ghostty shows tabs only when needed by default; hide single-tab bar
 gtk-tabs-location = hidden
-
-# Keybinds - migrated from wezterm ALT+ bindings
-# ALT maps to alt on macOS (ghostty may need macos-option-as-alt = true)
 macos-option-as-alt = true
-# Paste from clipboard (wezterm: ALT+v -> PasteFrom Clipboard)
+
 keybind = alt+v=paste_from_clipboard
-# Copy to clipboard (wezterm: ALT+c -> CopyTo ClipboardAndPrimarySelection)
 keybind = alt+c=copy_to_clipboard
-# New tab (wezterm: ALT+t -> SpawnTab)
 keybind = alt+t=new_tab
-# Close tab (wezterm: ALT+w -> CloseCurrentTab confirm)
 keybind = alt+w=close_surface
-# Next tab (wezterm: ALT+n -> ActivateTabRelative 1)
 keybind = alt+n=next_tab
-# Previous tab (wezterm: ALT+N -> ActivateTabRelative -1)
 keybind = alt+shift+n=previous_tab
