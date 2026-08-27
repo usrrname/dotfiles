@@ -1,8 +1,8 @@
 # Ghostty config - migrated from wezterm.lua (2026-08-27)
 # Syntax: key = value, # comments on own line, see https://ghostty.org/docs/config
 
-# Font - matches wezterm: JetBrains Mono 12pt
-font-family = JetBrains Mono
+# Font - using Ghostty's built-in default (JetBrains Mono + Nerd Fonts embedded)
+# No font-family set -> Ghostty uses its default; size kept at 12pt from wezterm
 font-size = 12
 
 # Theme - matches wezterm: Catppuccin Mocha
