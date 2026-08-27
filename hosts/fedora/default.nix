@@ -10,7 +10,7 @@
     ../../home
     ../../home/linux.nix
     ../../modules/input-remapper.nix
-    ../../modules/sandbox-repo.nix
+    ../../modules/sandbox-repo/sandbox-repo.nix
   ];
 
   home.stateVersion = "24.11";

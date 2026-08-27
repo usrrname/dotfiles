@@ -22,17 +22,17 @@
     else "/home/${username}";
 in {
   imports = [
-    ../modules/tmux.nix
+    ../modules/tmux/tmux.nix
     ../modules/gh.nix
     ../modules/direnv.nix
     ../modules/nvim.nix
     ../modules/opencode.nix
-    ../modules/bash.nix
+    ../modules/bash/bash.nix
     ../modules/claude.nix
     ../modules/starship.nix
     ../modules/git.nix
     ../modules/headroom.nix
-    ../modules/zsh.nix
+    ../modules/zsh/zsh.nix
     ../modules/ghostty.nix
   ];
 
