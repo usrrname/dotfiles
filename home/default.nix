@@ -33,6 +33,7 @@ in {
     ../modules/git.nix
     ../modules/headroom.nix
     ../modules/zsh.nix
+    ../modules/ghostty.nix
   ];
 
   home.username = username;
