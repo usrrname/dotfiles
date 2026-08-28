@@ -99,6 +99,10 @@
       pi-nas = mkStandaloneLinuxHome "aarch64-linux" ./hosts/pi-nas;
     };
 
+    checks = {
+      aarch64-linux.sandbox = self.homeConfigurations.sandbox.activationPackage;
+    };
+
     # Apple Silicon Mac. After installing Nix on the Mac:
     #   nix run github:LnL7/nix-darwin -- switch --flake .#mac-jenc
     darwinConfigurations.mac-jenc = nix-darwin.lib.darwinSystem {
