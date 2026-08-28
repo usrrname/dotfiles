@@ -12,6 +12,8 @@
     ../../home/linux.nix
   ];
 
+  home.username = builtins.getEnv "USER";
+  home.homeDirectory = "/home/${builtins.getEnv "USER"}";
   home.stateVersion = "24.11";
 
   # mkForce replaces home.packages entirely rather than merging, so
