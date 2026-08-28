@@ -29,5 +29,8 @@ jobs:
         with:
           use-flakehub: false
 
+      - name: Check flake
+        run: nix flake check --all-systems
+
       - name: Build test home configuration
         run: nix build .#homeConfigurations.test-${{ matrix.system }}.activationPackage
