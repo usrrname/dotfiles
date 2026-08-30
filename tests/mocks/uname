@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Mock uname for headroomctl tests. MOCK_OS controls the reported kernel so
+# the script's OS branch is selectable; unset, it passes through to the real
+# uname so the mock is transparent outside tests.
+if [ -n "${MOCK_OS:-}" ]; then
+  echo "$MOCK_OS"
+else
+  /usr/bin/uname "$@"
+fi

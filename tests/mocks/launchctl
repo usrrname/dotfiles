@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# Mock launchctl for headroomctl tests. Service state (active/stopped) lives
+# in $MOCK_LAUNCHD_DIR as one file per service label; `list` prints the labels
+# of active services, mimicking `launchctl list`.
+set -euo pipefail
+
+dir="${MOCK_LAUNCHD_DIR:?set MOCK_LAUNCHD_DIR to a writable directory}"
+mkdir -p "$dir"
+
+case "${1:-}" in
+  list)
+    for f in "$dir"/*; do
+      [ -f "$f" ] || continue
+      [ "$(cat "$f")" = "active" ] && basename "$f"
+    done
+    ;;
+  bootstrap)
+    # bootstrap <domain> <plist-path>
+    svc="$(basename "${3:-}" .plist)"
+    [ -n "$svc" ] || { echo "mock launchctl: bootstrap needs a plist path" >&2; exit 1; }
+    echo "active" > "$dir/$svc"
+    ;;
+  kickstart)
+    # kickstart [-k] <target>
+    shift
+    [ "${1:-}" = "-k" ] && shift
+    svc="${1##*/}"
+    echo "active" > "$dir/$svc"
+    ;;
+  bootout)
+    # bootout <target>
+    svc="${2##*/}"
+    rm -f "$dir/$svc"
+    ;;
+  *) echo "mock launchctl: unknown command: $*" >&2; exit 1 ;;
+esac

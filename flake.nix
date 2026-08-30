@@ -101,6 +101,25 @@
 
     checks = {
       aarch64-linux.sandbox = self.homeConfigurations.sandbox.activationPackage;
+
+      # Bats suite for home/scripts/headroomctl.sh (mocked launchctl/systemctl).
+      x86_64-linux.headroomctl-tests = let
+        pkgs = import nixpkgs {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+        };
+      in
+        pkgs.runCommand "headroomctl-tests" {
+          nativeBuildInputs = [pkgs.bats];
+        } ''
+          mkdir -p home/scripts
+          cp ${./home/scripts/headroomctl.sh} home/scripts/headroomctl.sh
+          cp -r ${./tests} tests
+          chmod -R u+w tests
+          chmod +x tests/mocks/*
+          HEADROOMCTL_SCRIPT="$PWD/home/scripts/headroomctl.sh" bats tests/headroomctl.bats
+          touch $out
+        '';
     };
 
     # Apple Silicon Mac. After installing Nix on the Mac:

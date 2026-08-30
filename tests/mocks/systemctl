@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Mock `systemctl --user` for headroomctl tests. Per-service state
+# (active/stopped) lives in $MOCK_SYSTEMD_DIR as one file per service name,
+# mirroring the real command's exit code for is-active (0 active, 3 inactive).
+set -euo pipefail
+
+dir="${MOCK_SYSTEMD_DIR:?set MOCK_SYSTEMD_DIR to a writable directory}"
+mkdir -p "$dir"
+
+[ "$1" = "--user" ] && shift
+cmd="$1"
+svc="${2:-}"
+file="$dir/$svc"
+[ -f "$file" ] || echo "stopped" > "$file"
+
+case "$cmd" in
+  is-active)
+    if [ "$(cat "$file")" = "active" ]; then
+      echo "active"
+      exit 0
+    fi
+    echo "inactive"
+    exit 3
+    ;;
+  start)   echo "active" > "$file" ;;
+  stop)    echo "stopped" > "$file" ;;
+  restart) echo "active" > "$file" ;;
+  *) echo "mock systemctl: unknown command: $cmd $svc" >&2; exit 1 ;;
+esac
