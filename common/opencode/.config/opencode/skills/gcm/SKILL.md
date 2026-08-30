@@ -7,4 +7,4 @@ permission:
   bash: ask
 ---
 
-Generate a conventional commit message from staged changes (or unstaged if nothing is staged). Type/scope/description on subject (72 char max, lowercase, imperative). Reference issues with #. Prefix with ! or io/specification. Keep commits scoped to relevant changes.
+Create a 1-sentence conventional commit message from staged changes (or unstaged if nothing is staged). Type/scope/description on subject (72 char max, lowercase, imperative). Reference issues with #. Prefix with ! or io/specification. Keep commits scoped to relevant changes.
