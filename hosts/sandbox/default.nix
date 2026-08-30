@@ -6,14 +6,21 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  # builtins.getEnv returns "" for unset vars — the `or` fallback only works
+  # on attribute access, not arbitrary expressions, so default explicitly.
+  sandboxUser =
+    if builtins.getEnv "USER" == ""
+    then "user"
+    else builtins.getEnv "USER";
+in {
   imports = [
     ../../home
     ../../home/linux.nix
   ];
 
-  home.username = lib.mkForce (builtins.getEnv "USER" or "user");
-  home.homeDirectory = lib.mkForce ("/home/" + (builtins.getEnv "USER" or "user"));
+  home.username = lib.mkForce sandboxUser;
+  home.homeDirectory = lib.mkForce ("/home/" + sandboxUser);
   home.stateVersion = "24.11";
 
   # mkForce replaces home.packages entirely rather than merging, so
