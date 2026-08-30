@@ -76,6 +76,7 @@ hosts/*/hardware-configuration.nix
 !.gitignore
 !.gitmodules
 !.envrc
+!.pre-commit-config.yaml
 .sisyphus/**
 !.claudeignore
 !.cursorignore

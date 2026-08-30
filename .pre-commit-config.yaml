@@ -1,0 +1,17 @@
+# Pre-commit hooks — https://pre-commit.com
+#
+# Install (once, per clone):
+#   pre-commit install
+#
+# Runs alejandra only on the .nix files staged in this commit. If it
+# reformats anything, pre-commit blocks the commit — re-add the files
+# and commit again.
+repos:
+  - repo: local
+    hooks:
+      - id: alejandra
+        name: alejandra (nix fmt)
+        description: Format staged Nix files with alejandra.
+        entry: alejandra
+        language: system
+        types: [nix]
