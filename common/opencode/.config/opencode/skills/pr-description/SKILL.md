@@ -5,7 +5,7 @@ description: Generate structured PR description from branch commits. Use when cr
 
 # PR Description Generator
 
-Generate a comprehensive, visual description following the format below. Reviewer understands entire PR in under 60 seconds by scanning diagrams and bold titles.
+Generate a comprehensive, visual description following the format below. Reviewer understands the entire PR in under 60 seconds by scanning diagrams and bold titles.
 
 ## Process
 
@@ -14,7 +14,7 @@ Generate a comprehensive, visual description following the format below. Reviewe
 3. **Read the full diff** against base: `git diff <base>...HEAD --stat` for an overview
 4. **Read the actual code changes** for key files: `git diff <base>...HEAD -- <file>` to understand the logic
 5. **Categorize changes** into: Features, Bug Fixes, Performance, UI/UX, Refactoring, Testing, Documentation
-6. **Create Mermaid diagrams if applicable** (see Diagram Guidelines below)
+6. **Create Mermaid diagrams if applicable** — see `references/diagrams.md` for diagram types, color conventions, and GitHub-compatible syntax
 7. **Write the description in English** regardless of the conversation language
 
 ## PR Description Template
@@ -31,7 +31,7 @@ Only required for architectural or system changes.
 ### [Diagram title - e.g., "Data Flow", "Bug -> Fix", "Architecture Change"]
 
 ```mermaid
-[Appropriate diagram type - see Diagram Guidelines]
+[Appropriate diagram type - see references/diagrams.md]
 ```
 
 ### [Additional diagram if needed - e.g., "Code Changes", "State Machine"]
@@ -99,7 +99,7 @@ flowchart LR
 
 ## Evidence Contract
 
-Evidence MUST be a real embedded image `![](url)` derived from genuine run of real system. Fabricated/illustrated/mocked output = defect. Upload PNG as draft-release asset named `pr-{N}-evidence.png` on persistent `pr-evidence` draft release, then embed.
+Evidence MUST be a real embedded image `![](url)` derived from a genuine run of the real system. Fabricated/illustrated/mocked output = defect. Upload PNG as draft-release asset named `pr-{N}-evidence.png` on the persistent `pr-evidence` draft release, then embed.
 
 **Capture tools**: use Playwright (drive real UI, screenshot rendered page) or `agent-browser` (agent-driven browser capture). For CLI/scripts: run real command, capture stdout to file, render to PNG. For backend: capture real HTTP responses/logs, render verbatim to PNG.
 
@@ -111,103 +111,13 @@ Post the image as a PR comment and/or include it in the description:
 gh pr comment {N} --repo {owner}/{repo} --body "![evidence](${URL})"
 ```
 
-## Diagram Guidelines
-
-### For Bug Fixes -> Sequence Diagram (Before/After)
-
-Show the broken flow AND the fixed flow side by side:
-
-```mermaid
-sequenceDiagram
-    participant User
-    participant Component
-    participant Service
-    participant Backend
-
-    Note over User: Context of the scenario
-
-    User->>Component: Action
-    Component->>Component: X Old broken logic
-    Component->>Backend: Wrong call
-    Backend-->>Component: X Error
-```
-
-Then a second diagram showing the fix with checkmark markers.
-
-### For Features -> Flowchart or Sequence Diagram
-
-Show the new data flow or user journey:
-
-```mermaid
-flowchart TD
-    A[User action] --> B{Decision}
-    B -->|Yes| C[New feature path]
-    B -->|No| D[Existing path]
-    style C fill:#22c55e,color:#fff
-```
-
-### For Refactoring -> Flowchart with Before/After subgraphs
-
-```mermaid
-flowchart LR
-    subgraph Before
-        A[Old approach]
-    end
-    subgraph After
-        B[New approach]
-    end
-    A -.-> B
-```
-
-### For Performance -> Sequence Diagram with timing
-
-```mermaid
-sequenceDiagram
-    Note over Client,Server: Before: ~800ms (sequential)
-    Client->>Server: Call 1
-    Server-->>Client: Response 1
-    Client->>Server: Call 2
-    Server-->>Client: Response 2
-
-    Note over Client,Server: After: ~400ms (parallel)
-    par
-        Client->>Server: Call 1
-    and
-        Client->>Server: Call 2
-    end
-    Server-->>Client: Both responses
-```
-
-### For Code Changes -> Flowchart with strikethrough
-
-Show the key code changes visually:
-
-```mermaid
-flowchart LR
-    subgraph "filename.ts"
-        A["line X:<br/><s>oldCode()</s>"] --> B["newCode()"]
-    end
-    style A fill:#ef4444,color:#fff
-    style B fill:#22c55e,color:#fff
-```
-
-## Color Conventions for Diagrams
-
-Use consistent colors across all diagrams:
-
-- `#22c55e` (green) -> Correct/Fixed/New/Success
-- `#ef4444` (red) -> Broken/Removed/Error
-- `#f59e0b` (amber) -> Warning/Fallback/Changed
-- `#3b82f6` (blue) -> Info/Alternative path
-- `#6366f1` (indigo) -> Default/Neutral state
-
 ## Rules
 
 1. **Language**: Always write in English regardless of conversation language
-2. **Diagrams are optional**: Include for architectural or system changes (see Diagram Guidelines)
+2. **Diagrams are optional**: Include for architectural or system changes (see `references/diagrams.md`)
 3. **Be specific**: Don't say "various improvements" - list each change
 4. **Group logically**: Group related changes under clear category headers
-5. **Lead with impact**: Start each bullet with **bold title** describing the user/developer impact
+5. **Lead with impact**: Start each bullet with a **bold title** describing the user/developer impact
 6. **Keep it scannable**: Reviewers should understand the PR in 30 seconds by reading bold titles and diagrams only
 7. **Test plan with checkboxes**: Always include a test plan with `[x]` for automated and `[ ]` for manual tests
 8. **Include test counts**: If tests exist, show counts (e.g., "115/115 tests pass")
@@ -215,27 +125,7 @@ Use consistent colors across all diagrams:
 10. **Check the PR type boxes**: Mark the appropriate checkboxes
 11. **Remove template boilerplate**: Delete any default PR template instructions
 12. **Link Linear issues**: If there are associated Linear issues, link them at the bottom
-13. **Evidence is always a real-run embedded image**: Evidence MUST be real embedded image `![](url)` derived from genuine captured output (see Evidence Contract). Fabricated/illustrated/mocked = defect. Only fallback: explicit author-screenshot placeholder that resolves to embedded image once filled with REAL screenshot.
-
-## Mermaid Syntax — GitHub Compatibility
-
-GitHub's Mermaid renderer is strict. Follow these rules to avoid parse errors:
-
-1. **Subgraph IDs must not start with or be bare numbers.** Use `subgraph MyId["Label 012"]` instead of `subgraph Label 012`
-2. **Node IDs must be alphanumeric identifiers** (no spaces, no leading digits). Put display text in `["..."]`
-3. **Avoid special characters in bare labels**: parentheses, colons, pipes, ampersands, and quotes must be inside `["..."]`
-4. **Link labels** use `-->|"label text"| B` — quote the label if it contains spaces or special chars
-5. **Keep diagrams simple**: max ~15 nodes per diagram. Split into multiple diagrams if needed
-6. **Always test mentally**: if an ID or label contains numbers, spaces, or symbols, wrap it in `["..."]`
-
-### Common mistakes → fixes
-
-| Broken | Fixed |
-|--------|-------|
-| `subgraph Migration 012` | `subgraph Mig012["Migration 012"]` |
-| `A -->\|schema\| Migration 012` | `A -.->\|schema\| Mig012` |
-| `Node (optional)` | `Node["Node (optional)"]` |
-| `DB: PostgreSQL` | `DB["DB: PostgreSQL"]` |
+13. **Evidence is a real-run embedded image**: Evidence MUST be a real embedded image `![](url)` derived from genuine captured output; fabricated/illustrated/mocked = defect (see Evidence Contract).
 
 ## Anti-patterns
 
