@@ -1,0 +1,11 @@
+# Starship prompt configuration
+# https://starship.rs/config/
+
+[gcloud]
+disabled = true
+
+[memory_usage]
+disabled = false
+threshold = 0
+format = "RAM: [$ram_pct]($style) | SWAP: [$swap_pct]($style) "
+style = "bold yellow"

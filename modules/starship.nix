@@ -1,16 +1,12 @@
 {
-  # Configuration written to ~/.config/starship.toml
+  # Config is authored as raw TOML in ../common/starship/.config/starship.toml
+  # and deployed verbatim below (same pattern as ghostty/wezterm). `settings`
+  # is left empty so Home Manager doesn't generate its own config file, which
+  # would collide with the xdg.configFile definition.
   programs.starship = {
     enable = true;
     enableZshIntegration = true;
-    settings = {
-      gcloud.disabled = true;
-      memory_usage = {
-        disabled = false;
-        threshold = 0;
-        format = "RAM: [$ram_pct]($style) | SWAP: [$swap_pct]($style) ";
-        style = "bold yellow";
-      };
-    };
   };
+
+  xdg.configFile."starship.toml".source = ../common/starship/.config/starship.toml;
 }
