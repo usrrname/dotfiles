@@ -59,6 +59,8 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 
 **Installation & Service:**
 - `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.35.0` (version pinned)
+- Manage on either platform with `headroomctl start|stop|restart|status [name ...]` (body: `home/scripts/headroomctl.sh`; launchd on macOS, systemd user services on Linux)
+- Bare `stop` deliberately errors — pass explicit targets so always-on backends can't be torn down by accident
 - **macOS:** `hosts/mac-jenc/default.nix` creates `launchd.user.agents` services:
   - `org.nixos.headroom-proxy-anthropic` (port 8787, Anthropic backend, runs with `--no-http2` — see troubleshooting)
   - `org.nixos.headroom-proxy-deepseek` (port 8788, OpenCode Zen gateway — free + pay-as-you-go models)
@@ -66,8 +68,6 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
   - `org.nixos.headroom-proxy-gemini-{1,2,3}` (ports 8790/8791/8792, Google AI Studio)
   - Gemini proxies are lazy-start (`RunAtLoad = false`) — not running at login
   - Each gemini wrapper sources varlock and remaps `GEMINI_API_KEY_{1,2,3}` → `GEMINI_API_KEY` for headroom's handler
-  - Manage with `headroomctl start|stop|restart|status [name ...]` (body: `home/scripts/headroomctl.sh`)
-  - Bare `stop` deliberately errors — pass explicit targets so always-on backends can't be torn down by accident
   - Logs: `~/.headroom/proxy-<name>.log` / `.err.log`
   - Check: `headroomctl status`, `launchctl list | grep headroom`, or `lsof -i :8787`
 
@@ -75,7 +75,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
   - Fedora (`hosts/fedora/default.nix`): `headroom-proxy-anthropic` (8787), `headroom-proxy-deepseek` (8788), `headroom-proxy-go` (8789)
   - Ubuntu: `headroom-proxy-anthropic` (8787) only (module default)
   - Logs: `journalctl --user -u headroom-proxy-<name> -f`
-  - Check: `systemctl --user status headroom-proxy-<name>` or `lsof -i :<port>`
+  - Check: `systemctl --user status headroom-proxy-<name>`, `headroomctl status`, or `lsof -i :<port>`
 
 **Self-bootstrap:** If Nix activation hasn't run, the proxy wrapper automatically installs the CLI on first start.
 
