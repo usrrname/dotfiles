@@ -71,6 +71,8 @@ in {
   # };
 
   # Automatic garbage collection
+  nix.settings.sandbox = false;
+
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";
 
