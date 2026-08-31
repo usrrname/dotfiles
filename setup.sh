@@ -35,7 +35,7 @@ Darwin*)
 Linux*)
   if [ "$IS_NIXOS" = "true" ]; then
     echo "❄️  Detected NixOS - running nixos-rebuild..."
-    sudo nixos-rebuild switch --flake .#nixos-box --option sandbox false
+    sudo nixos-rebuild switch --flake .#nixos-box --option sandbox false --cores 1 --max-jobs 1
   else
     # Debian/Raspbian-specific bootstrap (system packages, services, sudo)
     if grep -qi debian /etc/os-release 2>/dev/null || grep -qi raspbian /etc/os-release 2>/dev/null; then
