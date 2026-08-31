@@ -47,6 +47,7 @@ in {
       curl
       wget
       tree
+      htop
       ripgrep
       fzf
       tmux

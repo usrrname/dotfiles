@@ -6,12 +6,26 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-command -v nix >/dev/null 2>&1 || {
-  echo "❌ Nix is not installed."
-  echo "Installing determinate.systems/nix..."
-  curl -fsSL https://install.determinate.systems/nix | sh -s -- install
-  exit 0
-}
+# Detect NixOS early to skip Nix installation (NixOS has Nix built-in)
+IS_NIXOS=false
+if [ -f /etc/os-release ]; then
+  . /etc/os-release
+  if [ "$ID" = "nixos" ]; then
+    IS_NIXOS=true
+  fi
+elif [ -d /etc/nixos ]; then
+  IS_NIXOS=true
+fi
+
+# Only try to install Nix if not on NixOS (which has Nix built-in)
+if [ "$IS_NIXOS" != "true" ]; then
+  command -v nix >/dev/null 2>&1 || {
+    echo "❌ Nix is not installed."
+    echo "Installing determinate.systems/nix..."
+    curl -fsSL https://install.determinate.systems/nix | sh -s -- install
+    exit 0
+  }
+fi
 
 case "$(uname -s)" in
 Darwin*)
@@ -19,17 +33,6 @@ Darwin*)
   sudo darwin-rebuild switch --flake .#mac-jenc
   ;;
 Linux*)
-  # Detect NixOS
-  IS_NIXOS=false
-  if [ -f /etc/os-release ]; then
-    . /etc/os-release
-    if [ "$ID" = "nixos" ]; then
-      IS_NIXOS=true
-    fi
-  elif [ -d /etc/nixos ]; then
-    IS_NIXOS=true
-  fi
-
   if [ "$IS_NIXOS" = "true" ]; then
     echo "❄️  Detected NixOS - running nixos-rebuild..."
     sudo nixos-rebuild switch --flake .#nixos-box
