@@ -8,6 +8,16 @@ Nix flakes (primary).
 ./setup.sh        # Auto-detects platform and runs the right rebuild
 ```
 
+### First-time macOS bootstrap
+
+On a brand-new Mac (Nix installed but nix-darwin never activated), `./setup.sh` fails with `sudo: darwin-rebuild: command not found` — it assumes `darwin-rebuild` already exists. Bootstrap it once first:
+
+```bash
+sudo nix run nix-darwin -- switch --flake .#mac-jenc
+```
+
+`sudo` is required for the activation step even though the build itself doesn't need it. After this succeeds, `darwin-rebuild` is on PATH and `./setup.sh` works on every later run.
+
 ### Nix Targets
 
 | Host | Command |
@@ -158,6 +168,8 @@ curl http://127.0.0.1:8787/stats       # Detailed proxy stats
 **"Existing file would be clobbered"** — old symlinks block activation. `rm ~/.config/nvim` (or whatever path), then re-run.
 
 **64B Homebrew cask stub** — `brew bundle` can write metadata before binary finishes downloading. `brew list --cask <name>` says installed but `/Applications/<Name>.app` is a 64-byte skeleton. Fix: `brew reinstall --cask <name>`.
+
+**"sudo: darwin-rebuild: command not found"** — nix-darwin has never been activated on this machine. See [First-time macOS bootstrap](#first-time-macos-bootstrap) above.
 
 **Rollback:** `sudo darwin-rebuild switch --rollback`.
 **Dry run:** `nix build .#darwinConfigurations.mac-jenc.system --dry-run`.

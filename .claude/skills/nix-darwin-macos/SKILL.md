@@ -17,12 +17,14 @@ Manage the dotfiles flake on macOS. Repo root is `~/.dotfiles`.
 
 2. Open a new shell or `source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh`
 3. Verify: `nix --version`
-4. Bootstrap nix-darwin:
+4. Bootstrap nix-darwin (needs `sudo` — activation refuses to run as a normal user even though the build step doesn't):
 
    ```
    cd ~/.dotfiles
-   nix run nix-darwin -- switch --flake .#mac-jenc
+   sudo nix run nix-darwin -- switch --flake .#mac-jenc
    ```
+
+   Do this before `./setup.sh` on a brand-new Mac: `setup.sh` assumes `darwin-rebuild` already exists and just calls `sudo darwin-rebuild switch`, which fails with `sudo: darwin-rebuild: command not found` when nix-darwin has never been activated. Once this bootstrap succeeds, `darwin-rebuild` is on PATH and `./setup.sh` works directly on every later run.
 
 ## Key Files
 
@@ -98,6 +100,7 @@ darwin-rebuild --rollback
 ## Troubleshooting
 
 - **"nix: command not found"** — Nix not installed or shell not sourced. Run bootstrap step 1, then open new shell.
+- **"sudo: darwin-rebuild: command not found"** — nix-darwin has never been activated on this machine (`darwin-rebuild` doesn't exist yet, for root or the user). Run bootstrap step 4 (`sudo nix run nix-darwin -- switch --flake .#mac-jenc`) once, then `./setup.sh` / `sudo darwin-rebuild switch` work from then on.
 - **Empty `/nix` directory** — Broken install. Remove `/nix` and reinstall.
 - **Protocol "http" disabled** — Transient DNS. Retry or use `sh <(curl -L https://nixos.org/nix/install) --daemon`
 - **Home Manager vs nix-darwin conflict** — nix-darwin owns system-level (`/etc/`, `/Applications`), Home Manager owns `~/`. Don't declare the same path in both.
