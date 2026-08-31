@@ -139,7 +139,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 
 ## Neovim (LazyVim)
 
-`~/.config/nvim` is an out-of-store symlink to `common/nvim/.config/nvim`, so edits take effect on reload without a rebuild. Rebuild plugins:
+`~/.config/nvim` is an out-of-store symlink to `modules/nvim/.config/nvim`, so edits take effect on reload without a rebuild. Rebuild plugins:
 
 ```bash
 nvim --headless -c "Lazy sync" -c "qa"

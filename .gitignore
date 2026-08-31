@@ -1,7 +1,7 @@
 **/.DS_Store
 \.DS_Store
 node_modules/**
-common/opencode/.config/opencode/node_modules/
+modules/opencode/.config/opencode/node_modules/
 Makefile
 *.pem
 *.key

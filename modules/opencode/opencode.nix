@@ -16,7 +16,7 @@ in {
     if [ ! -d "${opencodeDir}" ]; then
       $VERBOSE_ECHO "Seeding opencode config to ${opencodeDir}..."
       $DRY_RUN_CMD mkdir -p "${opencodeDir}"
-      $DRY_RUN_CMD cp -r ${./../common/opencode/.config/opencode}/. "${opencodeDir}/"
+      $DRY_RUN_CMD cp -r ${./.config/opencode}/. "${opencodeDir}/"
       # cp -r preserves the Nix store's read-only dir permissions; later
       # activation steps (e.g. syncOpencodePeonPingConfig) need to write here.
       $DRY_RUN_CMD chmod -R u+w "${opencodeDir}"
@@ -28,11 +28,11 @@ in {
   # version is the source of truth on every rebuild.
   home.activation.syncOpencodePeonPingConfig = lib.hm.dag.entryAfter ["seedOpencodeConfig"] ''
     peonPingDir="$HOME/.config/opencode/peon-ping"
-    if [ -d "$peonPingDir" ] || [ -d "${../common/opencode/.config/opencode/peon-ping}" ]; then
+    if [ -d "$peonPingDir" ] || [ -d "${./.config/opencode/peon-ping}" ]; then
       $VERBOSE_ECHO "Syncing peon-ping config from dotfiles..."
       $DRY_RUN_CMD mkdir -p "$peonPingDir"
-      $DRY_RUN_CMD cp -f ${../common/opencode/.config/opencode/peon-ping/config.json} "$peonPingDir/config.json"
-      $DRY_RUN_CMD cp -f ${../common/opencode/.config/opencode/peon-ping/peon-icon.png} "$peonPingDir/peon-icon.png"
+      $DRY_RUN_CMD cp -f ${./.config/opencode/peon-ping/config.json} "$peonPingDir/config.json"
+      $DRY_RUN_CMD cp -f ${./.config/opencode/peon-ping/peon-icon.png} "$peonPingDir/peon-icon.png"
     fi
   '';
 

@@ -3,9 +3,7 @@
   lib,
   pkgs,
   ...
-}: let
-  claudeDir = ../common/claude/.claude;
-in {
+}: {
   # Claude Code configuration
   #
   # Hybrid layout:
@@ -13,15 +11,20 @@ in {
   #     Claude Code can write it (plugins, permissions, marketplaces do atomic
   #     temp+rename, which fails on a read-only /nix/store symlink). Claude's edits
   #     land in ~/.dotfiles and show up as git diffs there — commit or discard.
+  #   - settings.local.json is also an out-of-store symlink for the same reason
+  #     (permission decisions are written to the local settings file).
   #   - statusline-command.sh stays store-managed (Claude only reads/executes it)
   #   - ~/.claude/skills is symlinked to ~/.agents/skills via the activation hook
   #     below so skill edits don't require a rebuild
-  #   - agents/, rules/, hooks/ are not managed here (add back if needed)
+  #   - agents/, rules/, hooks/ are not deployed here (add back if needed);
+  #     hooks/worktree/worktree.sh is tracked as a reference for project hooks
   home.file = {
     ".claude/settings.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/common/claude/.claude/settings.json";
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/modules/claude/settings.json";
+    ".claude/settings.local.json".source =
+      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.dotfiles/modules/claude/settings.local.json";
     ".claude/statusline-command.sh" = {
-      source = "${claudeDir}/statusline-command.sh";
+      source = ./statusline-command.sh;
       executable = true;
     };
   };

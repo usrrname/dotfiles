@@ -1,0 +1,19 @@
+# mac-only git config — deployed to ~/.config/git/config on darwin.
+# ssh signing via 1Password + gh credential helpers. Not valid on Linux
+# hosts (no op-ssh-sign / /opt/homebrew), so kept separate from .gitconfig.
+[gpg]
+  format = ssh
+
+[gpg "ssh"]
+	program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+
+[commit]
+  gpgsign = true
+
+[credential "https://github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential
+
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/opt/homebrew/bin/gh auth git-credential

@@ -24,7 +24,7 @@ in {
   home.stateVersion = "24.11";
 
   # mkForce replaces home.packages entirely rather than merging, so
-  # modules/nvim.nix's `home.packages = [pkgs.neovim]` would otherwise be
+  # modules/nvim/nvim.nix's `home.packages = [pkgs.neovim]` would otherwise be
   # silently discarded even though its LazyVim config symlink still runs.
   home.packages = lib.mkForce (with pkgs; [
     git

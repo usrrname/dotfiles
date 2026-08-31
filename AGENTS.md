@@ -11,14 +11,16 @@ Nix flakes (primary).
 ### Nix Targets
 
 | Host | Command |
-|------|---------|
+| ------ | --------- |
 | macOS (Apple Silicon) | `sudo darwin-rebuild switch --flake .#mac-jenc` |
-| NixOS                 | `sudo nixos-rebuild switch --flake .#nixos-box` |
+| NixOS | `sudo nixos-rebuild switch --flake .#nixos-box` |
 | Fedora (standalone HM) | `home-manager switch --flake .#fedora` |
 | Ubuntu (standalone HM) | `home-manager switch --flake .#ubuntu` |
 | Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |
 
 ### Validation (no real host)
+
+Test the configuration that your host OS is on.
 
 ```bash
 nix build .#homeConfigurations.test-x86_64-linux.activationPackage
@@ -39,16 +41,16 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 - `home.stateVersion = "24.11"` (all hosts).
 - macOS: Determinate manages Nix itself → `nix.enable = false` in `hosts/mac-jenc/default.nix` to avoid conflicts.
 - Homebrew managed declaratively via nix-darwin (`hosts/mac-jenc/default.nix`). `cleanup = "none"` means stale cask metadata lingers.
-- `opencode` comes from nixpkgs on Linux, from `anomalyco/tap` brew tap on Mac. The `modules/opencode.nix` seeds config on first run (copy, not symlink) and runs `npm install` for plugins.
+- `opencode` comes from nixpkgs on Linux, from `anomalyco/tap` brew tap on Mac. The `modules/opencode/opencode.nix` seeds config on first run (copy, not symlink) and runs `npm install` for plugins.
 - `claude-code` is a Homebrew cask on Mac (not nixpkgs), declared in `hosts/mac-jenc/default.nix`.
 
 ## Claude Code + Headroom Integration
 
 ### Claude Code Setup (Hybrid Pattern)
 
-- **Nix-managed** (rebuild needed): `~/.claude/settings.json`, `~/.claude/statusline-command.sh` — sourced from `common/claude/.claude/`
-- **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` via `home.activation` hook in `modules/claude.nix`
-- **LazyVim plugin** (`common/nvim/.config/nvim/lua/plugins/claudecode.lua`):
+- **Nix-managed** (rebuild needed): `~/.claude/settings.json`, `~/.claude/settings.local.json`, `~/.claude/statusline-command.sh` — sourced from `modules/claude/`
+- **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` via `home.activation` hook in `modules/claude/claude.nix`
+- **LazyVim plugin** (`modules/nvim/.config/nvim/lua/plugins/claudecode.lua`):
   - Routes Claude API calls through Headroom proxy: `ANTHROPIC_BASE_URL=http://127.0.0.1:8787`
   - Terminal stays in insert mode
   - Requires Headroom proxy running on port 8787
@@ -58,6 +60,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 **Purpose:** Token caching (reuses context) and compression (~40% cost savings) for all downstream clients.
 
 **Installation & Service:**
+
 - `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.35.0` (version pinned)
 - Manage on either platform with `headroomctl start|stop|restart|status [name ...]` (body: `home/scripts/headroomctl.sh`; launchd on macOS, systemd user services on Linux)
 - Bare `stop` deliberately errors — pass explicit targets so always-on backends can't be torn down by accident
@@ -81,7 +84,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 
 ### OpenCode Integration
 
-- `modules/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
+- `modules/opencode/opencode.nix`: Seeds `~/.opencode/opencode.jsonc` (or `~/.config/opencode/` on Linux)
 - **Providers:**
   - `headroom-zen` → `http://127.0.0.1:8788/v1` (Zen gateway: free + pay-as-you-go models)
   - `headroom-go` → `http://127.0.0.1:8789/v1` (Go subscription endpoint `https://opencode.ai/zen/go/v1`; free `*-free` models are NOT served here)
@@ -94,6 +97,7 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ### Troubleshooting
 
 **Proxy not running:**
+
 ```bash
 # macOS
 launchctl list | grep headroom           # Check if loaded
@@ -107,6 +111,7 @@ curl http://127.0.0.1:8787/health
 ```
 
 **Claude Code can't reach proxy:**
+
 1. Verify proxy is listening: `lsof -i :8787`
 2. Check `ANTHROPIC_BASE_URL` is set (visible in `headroom doctor`)
 3. Rebuild to ensure launchd/systemd service is registered
@@ -115,20 +120,23 @@ curl http://127.0.0.1:8787/health
 **"'claude' not found in PATH" during activation:** — HM activation scripts don't inherit the Homebrew prefix, and a non-zero exit aborts the remaining activation steps. `modules/headroom.nix` exports `/opt/homebrew/bin` on Darwin and guards `headroom init claude` on the CLI being present; use the same pattern for any activation script calling brew-installed CLIs.
 
 **OpenCode not routing through Headroom:**
+
 - Verify `baseURL` in `opencode.jsonc` is `http://127.0.0.1:8788/v1` (with `/v1`) and the provider is named `headroom-zen`
 
 **Token savings not accumulating:**
+
 ```bash
 headroom stats                          # Compression history
 curl http://127.0.0.1:8787/stats       # Detailed proxy stats
 ```
 
 ### Project-local config
+
 - `~/.dotfiles/.claude/settings.local.json` — for .dotfiles-specific overrides
 
 ## Neovim
 
-- `~/.config/nvim` is an out-of-store symlink to `common/nvim/.config/nvim` via `home.activation` (not `mkOutOfStoreSymlink`, which Home Manager 26.11-pre+ rejects) — see `modules/nvim.nix` for the pattern.
+- `~/.config/nvim` is an out-of-store symlink to `modules/nvim/.config/nvim` via `home.activation` (not `mkOutOfStoreSymlink`, which Home Manager 26.11-pre+ rejects) — see `modules/nvim/nvim.nix` for the pattern.
 - LazyVim needs write access (lazy-lock.json), which fails with read-only Nix store symlinks.
 - Rebuild plugins: `nvim --headless -c "Lazy sync" -c "qa"`.
 
@@ -145,7 +153,7 @@ curl http://127.0.0.1:8787/stats       # Detailed proxy stats
 
 ## Troubleshooting
 
-**"Error installing file outside $HOME"** — HM 26.11-pre+ rejects `mkOutOfStoreSymlink`. Use `home.activation` scripts instead (see `modules/nvim.nix`).
+**"Error installing file outside $HOME"** — HM 26.11-pre+ rejects `mkOutOfStoreSymlink`. Use `home.activation` scripts instead (see `modules/nvim/nvim.nix`).
 
 **"Existing file would be clobbered"** — old symlinks block activation. `rm ~/.config/nvim` (or whatever path), then re-run.
 

@@ -1,7 +1,7 @@
 {...}: {
   # Aliases that work identically in bash and zsh.
   # Shell-specific aliases (reload, package-manager wrappers, etc.)
-  # stay in modules/bash.nix and modules/zsh.nix.
+  # stay in modules/bash/.bash_aliases and modules/zsh/zsh.nix.
   base = {
     ll = "ls -alF";
     la = "ls -A";

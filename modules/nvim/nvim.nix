@@ -27,7 +27,7 @@
   # build sandbox with "Error installing file outside $HOME".
   home.activation.linkNvimConfig = lib.hm.dag.entryAfter ["writeBoundary"] ''
     target="${config.xdg.configHome}/nvim"
-    source="${config.home.homeDirectory}/.dotfiles/common/nvim/.config/nvim"
+    source="${config.home.homeDirectory}/.dotfiles/modules/nvim/.config/nvim"
 
     if [ -L "$target" ]; then
       rm "$target"
