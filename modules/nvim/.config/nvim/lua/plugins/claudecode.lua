@@ -34,8 +34,13 @@ return {
 	},
 	-- Initialize plugin: set up env and autocmds
 	init = function()
-		-- Route Claude API calls through Headroom proxy for token caching/compression
-		vim.env.ANTHROPIC_BASE_URL = "http://127.0.0.1:8787"
+		-- Route Claude API calls through Headroom proxy for token caching/compression.
+		-- Respect an already-exported ANTHROPIC_BASE_URL (e.g. nixos's
+		-- home.sessionVariables pointing at host.orb.internal) and only
+		-- fall back to the local proxy default otherwise.
+		if vim.env.ANTHROPIC_BASE_URL == nil then
+			vim.env.ANTHROPIC_BASE_URL = "http://127.0.0.1:8787"
+		end
 
 		-- Auto-enter insert mode and scroll when focusing Claude terminal
 		vim.api.nvim_create_autocmd("BufEnter", {
