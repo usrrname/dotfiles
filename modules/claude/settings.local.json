@@ -24,11 +24,6 @@
             "type": "command",
             "command": "op signin --account my.1password.ca 2>/dev/null || true",
             "timeout": 15
-          },
-          {
-            "type": "command",
-            "command": "if [ -f /.dockerenv ] || grep -q orbstack /etc/hostname 2>/dev/null; then export ANTHROPIC_BASE_URL='http://192.168.139.1:8787'; fi",
-            "timeout": 5
           }
         ]
       },
