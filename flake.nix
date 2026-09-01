@@ -100,7 +100,7 @@
 
       # NixOS box (standalone Home Manager for pre-booted NixOS systems)
       # Apply on NixOS VM: home-manager switch --flake .#nixos-box
-      nixos-box = mkStandaloneLinuxHome "x86_64-linux" ./hosts/nixos-box/home.nix;
+      nixos = mkStandaloneLinuxHome "x86_64-linux" ./hosts/nixos/home.nix;
     };
 
     checks = {
@@ -204,10 +204,10 @@
 
     # NixOS box. Apply on the NixOS host:
     #   nixos-rebuild switch --flake .#nixos-box
-    nixosConfigurations.nixos-box = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./hosts/nixos-box
+        ./hosts/nixos
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;

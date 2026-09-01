@@ -8,10 +8,10 @@
 }: let
   # Username for this host - change if deploying to a different user
   username = "jenc";
-in {
+  in {
   imports = [
     # Include hardware configuration (must exist on the actual host)
-    ./hardware-configuration.nix
+    #./hardware-configuration.nix
     (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
     # VSCode server support (uncomment when deploying to actual host)
     # (fetchTarball {
@@ -25,7 +25,7 @@ in {
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Hostname
-  networking.hostName = "nixos-box";
+  networking.hostName = "nixos";
 
   # Networking
   networking.networkmanager.enable = true;
@@ -42,6 +42,8 @@ in {
     extraGroups = ["networkmanager" "wheel"];
   };
 
+  home-manager.users.jenc.home.username = lib.mkForce "jenc";
+
   # X11 keymap
   services.xserver.xkb = {
     layout = "us";
@@ -51,6 +53,18 @@ in {
   # Auto-login
   services.getty.autologinUser = username;
 
+  services.postgresql = {
+      enable = true;
+      authentication = ''
+        local all all trust
+        host  all all 127.0.0.1/32 trust
+      '';
+      initialScript = pkgs.writeText "backend-initScript" ''
+        CREATE ROLE ${username} WITH LOGIN PASSWORD '${username}' CREATEDB;
+        CREATE DATABASE ${username};
+        GRANT ALL PRIVILEGES ON DATABASE ${username} TO ${username};
+      '';
+    };
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
