@@ -103,6 +103,11 @@
   ];
   # Automatic garbage collection
   nix.settings.sandbox = false;
+  # Without this, restricted settings (sandbox, min-free/max-free,
+  # auto-optimise-store, and — critically — extra substituters declared by
+  # project flakes like device-sw) are silently ignored for this user,
+  # falling back to fetching straight from crates.io/etc. and hitting 403s.
+  nix.settings.trusted-users = ["root" username];
 
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";
