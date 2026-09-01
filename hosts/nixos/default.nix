@@ -12,12 +12,10 @@
   imports = [
     # Include hardware configuration (must exist on the actual host)
     #./hardware-configuration.nix
-    (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
-    # VSCode server support (uncomment when deploying to actual host)
-    # (fetchTarball {
-    #   url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
-    #   sha256 = "0000000000000000000000000000000000000000000000000000"; # Update with actual hash
-    # })
+    (fetchTarball {
+      url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
+      sha256 = "179gqv45mby7wxdmrjmk8qqfgxh9316x2l9dkcvmmqrp9i4w5qfs";
+    })
   ];
   
   # Bootloader

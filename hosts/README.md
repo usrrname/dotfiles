@@ -9,7 +9,7 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 | Host | Type | Status | Apply command |
 |------|------|--------|---------------|
 | `mac-jenc/` | nix-darwin | ✅ Done | `sudo darwin-rebuild switch --flake .#mac-jenc` |
-| `nixos-box/` | NixOS | ✅ Done | `nixos-rebuild switch --flake .#nixos-box` |
+| `nixos/` | NixOS | ✅ Done | `nixos-rebuild switch --flake .#nixos` |
 | `fedora/` | standalone HM | ✅ Done | `home-manager switch --flake .#fedora` |
 | `ubuntu/` | standalone HM | ✅ Done | `home-manager switch --flake .#ubuntu` |
 | `pi-nas/` | standalone HM | ✅ Done | `home-manager switch --flake .#pi-nas` |
@@ -21,7 +21,7 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 - Homebrew managed declaratively for casks (OrbStack, 1Password, etc.)
 - Home Manager for user packages and dotfiles
 
-### nixos-box (NixOS x86_64)
+### nixos (NixOS x86_64)
 - Full NixOS system config
 - Requires `hardware-configuration.nix` (gitignored, copied from `/etc/nixos/`)
 - Home Manager for user packages and dotfiles

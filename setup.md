@@ -18,7 +18,7 @@ longer exist. The scripts that remain are nix wrappers.
 
 ```sh
 on macOS    → sudo darwin-rebuild switch --flake .#mac-jenc
-on NixOS    → sudo nixos-rebuild switch --flake .#nixos-box
+on NixOS    → sudo nixos-rebuild switch --flake .#nixos
 on Linux    → home-manager switch --flake .#fedora
               (also detects Fedora and runs dnf + service bootstrap)
 ```

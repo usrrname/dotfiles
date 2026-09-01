@@ -19,8 +19,8 @@ sudo darwin-rebuild switch --flake .#mac-jenc
 ```bash
 git clone https://github.com/usrrname/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-sudo cp /etc/nixos/hardware-configuration.nix hosts/nixos-box/
-sudo nixos-rebuild switch --flake .#nixos-box
+sudo cp /etc/nixos/hardware-configuration.nix hosts/nixos/
+sudo nixos-rebuild switch --flake .#nixos
 ```
 
 ### Fedora/Ubuntu/Debian (standalone Home Manager)
@@ -71,7 +71,7 @@ sandbox-repo ./new-thing make test  # create + run command
 ├── flake.nix              # Nix flake entry point
 ├── hosts/
 │   ├── mac-jenc/          # macOS system config (nix-darwin)
-│   ├── nixos-box/         # NixOS system config
+│   ├── nixos/             # NixOS system config
 │   ├── fedora/            # Fedora (standalone HM)
 │   ├── ubuntu/            # Ubuntu (standalone HM)
 │   └── pi-nas/            # Raspberry Pi 4B NAS (standalone HM)

@@ -23,7 +23,7 @@ sudo nix run nix-darwin -- switch --flake .#mac-jenc
 | Host | Command |
 | ------ | --------- |
 | macOS (Apple Silicon) | `sudo darwin-rebuild switch --flake .#mac-jenc` |
-| NixOS | `sudo nixos-rebuild switch --flake .#nixos-box` |
+| NixOS | `sudo nixos-rebuild switch --flake .#nixos` |
 | Fedora (standalone HM) | `home-manager switch --flake .#fedora` |
 | Ubuntu (standalone HM) | `home-manager switch --flake .#ubuntu` |
 | Raspberry Pi (standalone HM) | `home-manager switch --flake .#pi-nas` |

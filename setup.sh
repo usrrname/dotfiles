@@ -35,7 +35,7 @@ Darwin*)
 Linux*)
   if [ "$IS_NIXOS" = "true" ]; then
     echo "❄️  Detected NixOS - applying home-manager configuration..."
-    nix-shell -p home-manager --run "home-manager switch -b backup --impure --flake .#nixos-box"
+    nix-shell -p home-manager --run "home-manager switch -b backup --impure --flake .#nixos"
   else
     # Debian/Raspbian-specific bootstrap (system packages, services, sudo)
     if grep -qi debian /etc/os-release 2>/dev/null || grep -qi raspbian /etc/os-release 2>/dev/null; then

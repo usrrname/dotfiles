@@ -99,7 +99,7 @@
       pi-nas = mkStandaloneLinuxHome "aarch64-linux" ./hosts/pi-nas;
 
       # NixOS box (standalone Home Manager for pre-booted NixOS systems)
-      # Apply on NixOS VM: home-manager switch --flake .#nixos-box
+      # Apply on NixOS VM: home-manager switch --flake .#nixos
       nixos = mkStandaloneLinuxHome "x86_64-linux" ./hosts/nixos/home.nix;
     };
 
@@ -203,7 +203,7 @@
       };
 
     # NixOS box. Apply on the NixOS host:
-    #   nixos-rebuild switch --flake .#nixos-box
+    #   nixos-rebuild switch --flake .#nixos
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
