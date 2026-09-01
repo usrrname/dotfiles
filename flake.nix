@@ -97,6 +97,10 @@
       # Raspberry Pi 4B NAS (standalone Home Manager on Debian)
       # Apply on Pi: home-manager switch --flake .#pi-nas
       pi-nas = mkStandaloneLinuxHome "aarch64-linux" ./hosts/pi-nas;
+
+      # NixOS box (standalone Home Manager for pre-booted NixOS systems)
+      # Apply on NixOS VM: home-manager switch --flake .#nixos-box
+      nixos-box = mkStandaloneLinuxHome "x86_64-linux" ./hosts/nixos-box/home.nix;
     };
 
     checks = {
