@@ -33,6 +33,10 @@
   networking.networkmanager.enable = true;
   networking.firewall.enable = false;
 
+  # No wireless hardware in this container; wpa_supplicant's sandboxing
+  # fails trying to bind the (nonexistent) /dev/rfkill device.
+  systemd.services.wpa_supplicant.enable = false;
+
   # Timezone and locale
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
