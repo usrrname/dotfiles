@@ -3,6 +3,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: let
   # Username for this host - change if deploying to a different user
@@ -82,6 +83,7 @@ in {
   ];
   # Automatic garbage collection
   nix.settings.sandbox = false;
+  nix.settings.use-sandbox = false;
 
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";

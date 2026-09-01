@@ -14,3 +14,4 @@ keybind = alt+t=new_tab
 keybind = alt+w=close_surface
 keybind = alt+n=next_tab
 keybind = alt+shift+n=previous_tab
+term = xterm-256color
