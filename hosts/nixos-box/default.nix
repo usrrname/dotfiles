@@ -11,13 +11,14 @@ in {
   imports = [
     # Include hardware configuration (must exist on the actual host)
     ./hardware-configuration.nix
+    (fetchTarball "https://github.com/nix-community/nixos-vscode-server/tarball/master")
     # VSCode server support (uncomment when deploying to actual host)
     # (fetchTarball {
     #   url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
     #   sha256 = "0000000000000000000000000000000000000000000000000000"; # Update with actual hash
     # })
   ];
-
+  
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -59,17 +60,26 @@ in {
     nixfmt-rfc-style
     vimPlugins.nvim-cmp
     vimPlugins.LazyVim
+    claude-code
+    ghostty.terminfo
   ];
-
+  programs.direnv.enable = true;
   # Enable OpenSSH
   services.openssh.enable = true;
 
   # VSCode server (uncomment when deploying to actual host)
-  # services.vscode-server = {
-  #   enable = true;
-  #   installPath = "/home/jenc/.cursor-server";
-  # };
+  services.vscode-server = {
+    enable = true;
+    installPath = "/home/jenc/.cursor-server";
+  };
 
+  # prevent fail from guest kernel doesn't allow (re)mounting debugfs at /sys/kernel/debug
+  systemd.mounts = [
+    {
+      where = "/sys/kernel/debug";
+      enable = lib.mkForce false;
+    }
+  ];
   # Automatic garbage collection
   nix.settings.sandbox = false;
 
