@@ -215,8 +215,7 @@
           home-manager.backupFileExtension = "backup";
           home-manager.users.jenc = {
             imports = [
-              ./home
-              ./home/linux.nix
+              ./hosts/nixos/home.nix
             ];
           };
         }
