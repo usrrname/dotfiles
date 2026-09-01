@@ -4,23 +4,27 @@
   config,
   pkgs,
   lib,
+  modulesPath,
   ...
 }: let
   # Username for this host - change if deploying to a different user
   username = "jenc";
   in {
   imports = [
-    # Include hardware configuration (must exist on the actual host)
-    #./hardware-configuration.nix
+    # This is an OrbStack LXC/incus container, not a VM with its own root
+    # filesystem -- lxc-container.nix sets boot.isContainer, which is what
+    # satisfies the "fileSystems must specify root" assertion (see
+    # /etc/nixos/configuration.nix on the box, which imports the same
+    # module alongside OrbStack's own incus.nix/orbstack.nix).
+    "${modulesPath}/virtualisation/lxc-container.nix"
     (fetchTarball {
       url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
       sha256 = "179gqv45mby7wxdmrjmk8qqfgxh9316x2l9dkcvmmqrp9i4w5qfs";
     })
   ];
   
-  # Bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
+  # No bootloader config: this is an LXC/incus container (lxc-container.nix
+  # installs its own init via installBootLoader), not a VM with EFI/GRUB.
 
   # Hostname
   networking.hostName = "nixos";
@@ -95,7 +99,6 @@
   ];
   # Automatic garbage collection
   nix.settings.sandbox = false;
-  nix.settings.use-sandbox = false;
 
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";
