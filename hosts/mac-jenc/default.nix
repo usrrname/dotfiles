@@ -111,7 +111,7 @@ in {
     # dead streams ("0 stream events") and garbled non-streaming retries.
     enableCodeAware = config.headroom.enableCodeAware or false;
     anthropicProxyArgs =
-      "--port 8787 --mode token --no-http2 --budget 500 --budget-period monthly"
+      "--host 0.0.0.0 --port 8787 --mode token --no-http2 --budget 500 --budget-period monthly"
       + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.
