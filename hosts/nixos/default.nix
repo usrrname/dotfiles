@@ -73,6 +73,15 @@ in
   # Shell
   programs.zsh.enable = true;
 
+  # Passwordless sudo
+  security.sudo.extraRules = [{
+    users = ["${username}"];
+    commands = [{
+      command = "ALL";
+      options = ["NOPASSWD"];
+    }];
+  }];
+
   # Auto-login
   services.getty.autologinUser = username;
 
