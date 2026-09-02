@@ -6,6 +6,10 @@
     ];
     home.packages = with pkgs; [
       claude-code
+    prettier # JavaScript/TypeScript/Vue formatter
+    eslint # JavaScript/TypeScript linter
+    rustfmt # Rust formatter
+    clippy # Rust linter
     ];
 
     # This VM has no local headroom proxy (removed in favor of the macOS

@@ -61,12 +61,6 @@ in {
       act # run GitHub Actions locally
       _1password-cli
 
-      # Formatters & linters
-      prettier # JavaScript/TypeScript/Vue formatter
-      eslint # JavaScript/TypeScript linter
-      rustfmt # Rust formatter
-      clippy # Rust linter
-
       # Build tools
       gnumake
       openssl
