@@ -3,12 +3,13 @@
     sopsFile = ./secrets/secrets.yaml;
   };
 
-  environment.etc."netrc" = {
-    text = ''
+  sops.templates.netrc = {
+    content = ''
       machine hydra.vital.company
           login readonly
-          password ${builtins.readFile config.sops.secrets.hydra_password.path}
+          password ${config.sops.placeholder.hydra_password}
     '';
+    path = "/etc/netrc";
     mode = "0600";
   };
 }

@@ -6,14 +6,14 @@
   lib,
   modulesPath,
   ...
-}: let
+}:
+let
   # Username for this host - change if deploying to a different user
   username = "jenc";
-  in {
+in
+{
   imports = [
-    # This is an OrbStack LXC/incus container, not a VM with its own root
-    # filesystem -- lxc-container.nix sets boot.isContainer, which is what
-    # satisfies the "fileSystems must specify root" assertion (see
+    # This is an OrbStack LXC/incus container, not a VM with # its own root filesystem -- lxc-container.nix sets boot.isContainer, which is what satisfies the "fileSystems must specify root" assertion (see
     # /etc/nixos/configuration.nix on the box, which imports the same
     # module alongside OrbStack's own incus.nix/orbstack.nix).
     "${modulesPath}/virtualisation/lxc-container.nix"
@@ -23,7 +23,7 @@
     })
     ./hydra.nix
   ];
-  
+
   # No bootloader config: this is an LXC/incus container (lxc-container.nix
   # installs its own init via installBootLoader), not a VM with EFI/GRUB.
 
@@ -51,12 +51,14 @@
   # nix-ld for VS Code Remote-SSH compatibility (device-sw dev-env-setup)
   programs.nix-ld.enable = true;
 
-
   # User account
   users.users.${username} = {
     isNormalUser = true;
     description = username;
-    extraGroups = ["networkmanager" "wheel"];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   home-manager.users.jenc.home.username = lib.mkForce "jenc";
@@ -71,17 +73,17 @@
   services.getty.autologinUser = username;
 
   services.postgresql = {
-      enable = true;
-      authentication = ''
-        local all all trust
-        host  all all 127.0.0.1/32 trust
-      '';
-      initialScript = pkgs.writeText "backend-initScript" ''
-        CREATE ROLE ${username} WITH LOGIN PASSWORD '${username}' CREATEDB;
-        CREATE DATABASE ${username};
-        GRANT ALL PRIVILEGES ON DATABASE ${username} TO ${username};
-      '';
-    };
+    enable = true;
+    authentication = ''
+      local all all trust
+      host  all all 127.0.0.1/32 trust
+    '';
+    initialScript = pkgs.writeText "backend-initScript" ''
+      CREATE ROLE ${username} WITH LOGIN PASSWORD '${username}' CREATEDB;
+      CREATE DATABASE ${username};
+      GRANT ALL PRIVILEGES ON DATABASE ${username} TO ${username};
+    '';
+  };
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -118,7 +120,10 @@
   # auto-optimise-store, and — critically — extra substituters declared by
   # project flakes like device-sw) are silently ignored for this user,
   # falling back to fetching straight from crates.io/etc. and hitting 403s.
-  nix.settings.trusted-users = ["root" username];
+  nix.settings.trusted-users = [
+    "root"
+    username
+  ];
 
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";

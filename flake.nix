@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     determinate.url = "github:DeterminateSystems/determinate";
   };
 
@@ -23,6 +28,7 @@
     nixpkgs,
     home-manager,
     nix-darwin,
+    sops-nix,
     ...
   }: let
     # allowUnfree must be set on the pkgs import here: standalone Home
@@ -207,6 +213,7 @@
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "aarch64-linux";
       modules = [
+        sops-nix.nixosModules.sops
         ./hosts/nixos
         home-manager.nixosModules.home-manager
         {

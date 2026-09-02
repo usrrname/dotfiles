@@ -95,3 +95,4 @@ hosts/*/hardware-configuration.nix
 
 # Always ignore node_modules (even in tracked directories)
 **/node_modules/
+CLAUDE.local.md
