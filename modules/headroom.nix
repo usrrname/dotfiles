@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  hm,
   ...
 }: let
   # headroom is PyPI-only (not in nixpkgs). Pin the exact version so every
@@ -77,7 +78,7 @@ in {
     # config; both commands are idempotent (--force only overwrites on
     # fingerprint mismatch). Sandboxes reproduce the same recipe with their
     # own $HOME and a local proxy on the same port.
-    home.activation.headroom = lib.hm.dag.entryAfter ["writeBoundary"] ''
+    home.activation.headroom = hm.dag.entryAfter ["writeBoundary"] ''
       ${ensureHeadroom}
       ${lib.optionalString isDarwin ''
         # claude-code is a Homebrew cask; activation PATH lacks the brew prefix.
