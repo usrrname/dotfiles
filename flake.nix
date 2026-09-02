@@ -159,6 +159,7 @@
 
             headroom.enable = true;
             headroom.enableService = false;
+            cursor.enable = true;
           };
         }
       ];

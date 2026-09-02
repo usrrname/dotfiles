@@ -11,6 +11,11 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # PATH additions
 export PATH="$HOME/.local/bin:$PATH"
 
+# Fallback to simple prompt when Cursor runs — Powerlevel10k incompatible with remote rendering
+if [[ -n "$CURSOR_AGENT" ]]; then
+  PS1='\u@\h \W \$ '
+fi
+
 # Functions
 mkcd() {
   mkdir -p "$1" && cd "$1" || return

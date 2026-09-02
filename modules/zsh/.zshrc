@@ -1,5 +1,10 @@
 export PATH="$HOME/.npm-global/bin:$PATH"
 
+# Fallback to simple prompt when Cursor runs — Powerlevel10k incompatible with remote rendering
+if [[ -n "$CURSOR_AGENT" ]]; then
+  PS1='%n@%m %1~ %# '
+fi
+
 # Update opencode CLI + all plugins pinned in the opencode config dir's package.json.
 update-opencode() {
   local dir="$HOME/.opencode"

@@ -29,6 +29,7 @@ in {
     ../modules/opencode/opencode.nix
     ../modules/bash/bash.nix
     ../modules/claude/claude.nix
+    ../modules/cursor/default.nix
     ../modules/starship/starship.nix
     ../modules/git/git.nix
     ../modules/headroom.nix
@@ -92,6 +93,11 @@ in {
       # interpolation) so it can be linted/shellchecked directly.
       (pkgs.writeShellScriptBin "headroomctl"
         (builtins.readFile ./scripts/headroomctl.sh))
+
+      # Cursor IDE proxy configuration helper — detects OrbStack and outputs
+      # the appropriate headroom proxy URL for Cursor settings.
+      (pkgs.writeShellScriptBin "cursor-proxy-config"
+        (builtins.readFile ./scripts/cursor-proxy-config.sh))
     ];
 
   xdg.configFile."act/actrc".text = ''

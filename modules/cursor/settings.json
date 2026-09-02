@@ -1,0 +1,29 @@
+{
+  "hooks": {
+    "sessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f /.dockerenv ] || grep -q orbstack /etc/hostname 2>/dev/null; then export OPENAI_BASE_URL='http://192.168.139.1:8787/v1'; fi",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/jenc/.claude/hooks/peon-ping/peon.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ]
+  }
+}
