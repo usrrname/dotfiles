@@ -74,13 +74,17 @@ in
   programs.zsh.enable = true;
 
   # Passwordless sudo
-  security.sudo.extraRules = [{
-    users = ["${username}"];
-    commands = [{
-      command = "ALL";
-      options = ["NOPASSWD"];
-    }];
-  }];
+  security.sudo.extraRules = [
+    {
+      users = [ "${username}" ];
+      commands = [
+        {
+          command = "ALL";
+          options = [ "NOPASSWD" ];
+        }
+      ];
+    }
+  ];
 
   # Auto-login
   services.getty.autologinUser = username;
@@ -129,10 +133,7 @@ in
   ];
   # Automatic garbage collection
   nix.settings.sandbox = false;
-  # Without this, restricted settings (sandbox, min-free/max-free,
-  # auto-optimise-store, and — critically — extra substituters declared by
-  # project flakes like device-sw) are silently ignored for this user,
-  # falling back to fetching straight from crates.io/etc. and hitting 403s.
+
   nix.settings.trusted-users = [
     "root"
     username
