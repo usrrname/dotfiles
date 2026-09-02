@@ -108,7 +108,7 @@ in
   environment.systemPackages = with pkgs; [
     wget
     gitFull
-    nixfmt-rfc-style
+    nixfmt
     vimPlugins.nvim-cmp
     vimPlugins.LazyVim
     claude-code
