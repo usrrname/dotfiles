@@ -21,6 +21,7 @@
       url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
       sha256 = "179gqv45mby7wxdmrjmk8qqfgxh9316x2l9dkcvmmqrp9i4w5qfs";
     })
+    ./hydra.nix
   ];
   
   # No bootloader config: this is an LXC/incus container (lxc-container.nix
@@ -43,6 +44,13 @@
   # Timezone and locale
   time.timeZone = "America/Toronto";
   i18n.defaultLocale = "en_CA.UTF-8";
+
+  # SSH agent for cargo private key access (device-sw dev-env-setup)
+  programs.ssh.startAgent = true;
+
+  # nix-ld for VS Code Remote-SSH compatibility (device-sw dev-env-setup)
+  programs.nix-ld.enable = true;
+
 
   # User account
   users.users.${username} = {
