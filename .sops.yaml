@@ -1,5 +1,5 @@
 keys:
-  - &nixos_vm age1snqafz82z38np76elyz6qlkc4pwcn7lz9rpsm6e84cqtt3rsdg4sxkqr0z
+  - &nixos_vm age1lv7eu6p6zd284g73xdh430zu542m2gw05dt2plm8x3g8mr3aeqkqkg5xhy
 creation_rules:
   - path_regex: hosts/nixos/secrets/.*
     key_groups:
