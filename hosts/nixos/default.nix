@@ -31,6 +31,9 @@
 
   # Networking
   networking.networkmanager.enable = true;
+  # dhcpcd, not NetworkManager, is what actually gets eth0 an IPv4 lease
+  # on boot in this container.
+  networking.useDHCP = lib.mkForce true;
   networking.firewall.enable = false;
 
   # No wireless hardware in this container; wpa_supplicant's sandboxing
