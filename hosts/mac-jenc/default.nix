@@ -104,7 +104,7 @@ in {
   # Self-bootstrap: if headroom.nix activation hasn't run yet, the proxy wrapper
   # installs the CLI on first start.
   launchd.user.agents = let
-    headroomVersion = "0.35.0";
+    headroomVersion = "0.37.0";
     # Compute anthropic proxy args with conditional code-aware flag.
     # --no-http2: shared HTTP/2 connections can corrupt TLS state when many
     # concurrent streams are cancelled (SSLV3_ALERT_BAD_RECORD_MAC), producing
