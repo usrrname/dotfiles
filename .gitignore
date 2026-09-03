@@ -4,6 +4,7 @@ node_modules/**
 modules/opencode/.config/opencode/node_modules/
 Makefile
 *.pem
+!hosts/nixos/certs/vital-internal-ca.pem
 *.key
 *.pub
 id_rsa*

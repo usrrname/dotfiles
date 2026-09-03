@@ -13,33 +13,33 @@ let
 in
 {
   imports = [
-    # This is an OrbStack LXC/incus container, not a VM with # its own root filesystem -- lxc-container.nix sets boot.isContainer, which is what satisfies the "fileSystems must specify root" assertion (see
-    # /etc/nixos/configuration.nix on the box, which imports the same
-    # module alongside OrbStack's own incus.nix/orbstack.nix).
     "${modulesPath}/virtualisation/lxc-container.nix"
+    ./incus.nix
+    ./orbstack.nix
+    ./hydra.nix
     (fetchTarball {
       url = "https://github.com/nix-community/nixos-vscode-server/tarball/master";
       sha256 = "179gqv45mby7wxdmrjmk8qqfgxh9316x2l9dkcvmmqrp9i4w5qfs";
     })
-    ./hydra.nix
   ];
 
-  # No bootloader config: this is an LXC/incus container (lxc-container.nix
-  # installs its own init via installBootLoader), not a VM with EFI/GRUB.
+  networking = {
+    dhcpcd.enable = false;
+    useDHCP = false;
+    useHostResolvConf = false;
+  };
 
-  # Hostname
-  networking.hostName = "nixos";
-
-  # Networking
-  networking.networkmanager.enable = true;
-  # dhcpcd, not NetworkManager, is what actually gets eth0 an IPv4 lease
-  # on boot in this container.
-  networking.useDHCP = lib.mkForce true;
-  networking.firewall.enable = false;
-
-  # No wireless hardware in this container; wpa_supplicant's sandboxing
-  # fails trying to bind the (nonexistent) /dev/rfkill device.
-  systemd.services.wpa_supplicant.enable = false;
+  systemd.network = {
+    enable = true;
+    networks."50-eth0" = {
+      matchConfig.Name = "eth0";
+      networkConfig = {
+        DHCP = "ipv4";
+        IPv6AcceptRA = true;
+      };
+      linkConfig.RequiredForOnline = "routable";
+    };
+  };
 
   # Timezone and locale
   time.timeZone = "America/Toronto";
@@ -51,24 +51,23 @@ in
   # nix-ld for VS Code Remote-SSH compatibility (device-sw dev-env-setup)
   programs.nix-ld.enable = true;
 
-  # User account
-  users.users.${username} = {
-    isNormalUser = true;
-    description = username;
-    shell = pkgs.zsh;
+  users.users.jenc = {
+    uid = 501;
     extraGroups = [
-      "networkmanager"
       "wheel"
+      "orbstack"
+      "audio"
     ];
+    isSystemUser = true;
+    group = "users";
+    createHome = true;
+    home = "/home/jenc";
+    homeMode = "700";
+    useDefaultShell = true;
   };
 
-  home-manager.users.jenc.home.username = lib.mkForce "jenc";
-
-  # X11 keymap
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
+  security.sudo.wheelNeedsPassword = false;
+  users.mutableUsers = false;
 
   # Shell
   programs.zsh.enable = true;
@@ -109,14 +108,20 @@ in
     wget
     gitFull
     nixfmt
+    nodejs
+    nodePackages.pnpm
     vimPlugins.nvim-cmp
     vimPlugins.LazyVim
     claude-code
     ghostty.terminfo
   ];
-  programs.direnv.enable = true;
-  # Enable OpenSSH
-  services.openssh.enable = true;
+  programs.direnv = {
+    enable = true;
+    nix-direnv.enable = true;
+  };
+
+  # Enable OpenSSH (required by sops for key management)
+  services.openssh.enable = lib.mkForce true;
 
   # VSCode server (uncomment when deploying to actual host)
   services.vscode-server = {
@@ -132,12 +137,24 @@ in
     }
   ];
   # Automatic garbage collection
-  nix.settings.sandbox = false;
-
   nix.settings.trusted-users = [
     "root"
     username
   ];
+
+  nix.settings.substituters = [
+    "https://cache.nixos.org/"
+    "https://hydra.vital.company"
+  ];
+  nix.settings.trusted-public-keys = [
+    "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    "hydra.vital.company-1:olecgNoiYwSyPA3/vfE7bbkq0yfp5NGbV1xdc/LZpIQ="
+  ];
+  nix.settings.netrc-file = "/etc/netrc";
+
+  # Trust Vital's internal CA so HTTPS to hydra.vital.company (and other
+  # internal hosts) verifies correctly.
+  security.pki.certificateFiles = [ ./certs/vital-internal-ca.pem ];
 
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";
