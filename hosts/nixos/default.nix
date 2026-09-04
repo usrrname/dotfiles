@@ -109,7 +109,7 @@ in
     gitFull
     nixfmt
     nodejs
-    nodePackages.pnpm
+    pnpm
     vimPlugins.nvim-cmp
     vimPlugins.LazyVim
     claude-code
