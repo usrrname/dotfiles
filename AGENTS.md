@@ -1,6 +1,20 @@
 # Dotfiles
 
-Nix flakes (primary).
+Nix flakes architecture with Home Manager, nix-darwin (macOS), and NixOS. This guide is the primary reference for architecture, setup, common workflows, and troubleshooting.
+
+## Build & Test
+
+| Task | Command |
+|------|---------|
+| **Format Nix files** | `nix fmt` |
+| **Run all checks & tests** | `nix flake check` (includes headroomctl bats suite) |
+| **Build & apply active host** | `sudo nixos-rebuild switch --flake .` (macOS: `darwin-rebuild`) |
+| **Build specific host** | `sudo nixos-rebuild switch --flake .#<host>` — hosts: `mac-jenc`, `nixos`, `fedora`, `ubuntu`, `pi-nas` |
+| **Test config (dry-run)** | `nix build .#homeConfigurations.test-aarch64-linux.activationPackage` |
+| **Preview changes** | Add `--dry-run` to any build/rebuild command |
+| **Update nvim plugins** | `nvim --headless -c "Lazy sync" -c "qa"` |
+
+**Important:** Nix flakes only see git-tracked files. Stage new files with `git add` before building.
 
 ## Setup
 
@@ -37,6 +51,45 @@ nix build .#homeConfigurations.test-x86_64-linux.activationPackage
 nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 ```
 
+## Repository Architecture
+
+**Layout:** Flake-based Nix dotfiles using Home Manager (user config) + nix-darwin (macOS) + NixOS modules.
+
+```
+flake.nix                 # Outputs for all hosts; mkFormatter, mkLinuxHome, mkStandaloneLinuxHome helpers
+├── home/default.nix      # Shared home-manager modules imported by all hosts
+├── modules/              # Reusable home-manager modules
+│   ├── bash/
+│   ├── git/
+│   ├── nvim/             # LazyVim (out-of-store symlink for live editing)
+│   ├── tmux/
+│   ├── direnv/
+│   ├── claude/           # Claude Code settings + skills symlink
+│   ├── headroom/         # Headroom proxy services (launchd on macOS, systemd on Linux)
+│   ├── opencode/         # OpenCode integration
+│   ├── starship/
+│   ├── zsh/
+│   └── ...
+├── hosts/
+│   ├── mac-jenc/         # macOS (nix-darwin) — primary development machine
+│   │   └── default.nix   # Homebrew casks, launchd services, system packages
+│   ├── nixos/            # NixOS — system config for Linux VMs
+│   │   └── default.nix   # System-level NixOS config
+│   ├── fedora/           # Fedora — standalone Home Manager
+│   ├── ubuntu/           # Ubuntu — standalone Home Manager
+│   ├── pi-nas/           # Raspberry Pi — Tailscale, Syncthing, Nginx
+│   └── sandbox/          # Lima sandbox — minimal, ephemeral
+├── tests/                # Bats test suite (headroomctl.sh mocked tests)
+├── .claude/              # Claude Code project settings
+│   ├── settings.json     # Nix-managed Claude Code config
+│   └── skills/           # Symlinked from ~/.agents/skills (live-editable)
+└── docs/plans/           # Migration plans + open issues
+```
+
+**Config flow:** `flake.nix` defines all outputs; each host imports `home/default.nix` (shared modules) then overlays `hosts/<host>/default.nix` (host-specific packages, services, etc.).
+
+**State version:** `"24.11"` across all hosts — manual upgrade required with AGENTS.md review.
+
 ### Fedora host (`hosts/fedora/`)
 
 - **dnf/Nix split**: `bubblewrap` and `podman-docker` via dnf (system namespace APIs). Everything else from Nix.
@@ -45,24 +98,49 @@ nix build .#homeConfigurations.test-aarch64-linux.activationPackage
 - **Bootstrap**: `./setup.sh` handles the full Fedora bootstrap (dnf pkgs, systemd services, passwordless sudo, zsh). Running `home-manager switch --flake .#fedora` alone only applies Nix user config.
 - **input-remapper preset** at `common/input-remapper/.config/input-remapper-2/presets/Keychron Keychron Q11/mac-mode.json`, deployed by `modules/input-remapper.nix`.
 
-## Architecture
+## Architecture Details
 
-- `flake.nix` defines all outputs; `home/default.nix` imports shared modules (`modules/`); per-host overrides in `hosts/<host>/default.nix`.
-- `home.stateVersion = "24.11"` (all hosts).
+### System & Package Management
+
 - macOS: Determinate manages Nix itself → `nix.enable = false` in `hosts/mac-jenc/default.nix` to avoid conflicts.
 - Homebrew managed declaratively via nix-darwin (`hosts/mac-jenc/default.nix`). `cleanup = "none"` means stale cask metadata lingers.
 - `opencode` comes from nixpkgs on Linux, from `anomalyco/tap` brew tap on Mac. The `modules/opencode/opencode.nix` seeds config on first run (copy, not symlink) and runs `npm install` for plugins.
 - `claude-code` is a Homebrew cask on Mac (not nixpkgs), declared in `hosts/mac-jenc/default.nix`.
 
+## Development Patterns
+
+### Neovim (LazyVim)
+
+- `~/.config/nvim` is an out-of-store symlink (via `home.activation`, not `mkOutOfStoreSymlink`) to enable live edits without rebuild
+- Changes to `modules/nvim/.config/nvim/` take effect on editor reload
+- Rebuild plugins: `nvim --headless -c "Lazy sync" -c "qa"`
+- LazyVim needs write access to `lazy-lock.json`, which fails if the dir is read-only Nix store
+
+### Testing Flake Changes Safely
+
+Before a full rebuild, validate on a test config:
+```bash
+nix build .#homeConfigurations.test-aarch64-linux.activationPackage
+nix build .#homeConfigurations.test-x86_64-linux.activationPackage
+```
+
+After major `flake.nix` changes, test on a secondary host config first (e.g., `fedora` or `ubuntu`) to catch issues before applying to the primary host.
+
+### OpenCode Integration
+
+- Seeded at `~/.opencode/opencode.jsonc` (macOS) or `~/.config/opencode/` (Linux)
+- Routes through Headroom proxy backends: `headroom-zen` (8788, free + pay-as-you-go) and `headroom-go` (8789, subscription)
+- First run auto-installs npm plugins
+
 ## Claude Code + Headroom Integration
 
 ### Claude Code Setup (Hybrid Pattern)
 
-- **Nix-managed** (rebuild needed): `~/.claude/settings.json`, `~/.claude/settings.local.json`, `~/.claude/statusline-command.sh` — sourced from `modules/claude/`
+- **Nix-managed** (rebuild needed): `~/.claude/settings.json`, `~/.claude/statusline-command.sh` — sourced from `modules/claude/`
+- **Project-local** (live-editable): `~/.claude/settings.local.json` (gitignored — per-project overrides)
 - **Symlinked at activation** (live-editable): `~/.claude/skills → ~/.agents/skills` via `home.activation` hook in `modules/claude/claude.nix`
 - **LazyVim plugin** (`modules/nvim/.config/nvim/lua/plugins/claudecode.lua`):
   - Routes Claude API calls through Headroom proxy: `ANTHROPIC_BASE_URL=http://127.0.0.1:8787`
-  - Terminal stays in insert mode
   - Requires Headroom proxy running on port 8787
 
 ### Headroom Proxy (Token Caching + Compression)
@@ -140,15 +218,6 @@ headroom stats                          # Compression history
 curl http://127.0.0.1:8787/stats       # Detailed proxy stats
 ```
 
-### Project-local config
-
-- `~/.dotfiles/.claude/settings.local.json` — for .dotfiles-specific overrides
-
-## Neovim
-
-- `~/.config/nvim` is an out-of-store symlink to `modules/nvim/.config/nvim` via `home.activation` (not `mkOutOfStoreSymlink`, which Home Manager 26.11-pre+ rejects) — see `modules/nvim/nvim.nix` for the pattern.
-- LazyVim needs write access (lazy-lock.json), which fails with read-only Nix store symlinks.
-- Rebuild plugins: `nvim --headless -c "Lazy sync" -c "qa"`.
 
 ## Shell
 
@@ -163,13 +232,24 @@ curl http://127.0.0.1:8787/stats       # Detailed proxy stats
 
 ## Troubleshooting
 
-**"Error installing file outside $HOME"** — HM 26.11-pre+ rejects `mkOutOfStoreSymlink`. Use `home.activation` scripts instead (see `modules/nvim/nvim.nix`).
+### Common Issues & Solutions
 
-**"Existing file would be clobbered"** — old symlinks block activation. `rm ~/.config/nvim` (or whatever path), then re-run.
+| Issue | Solution |
+|-------|----------|
+| "Existing file would be clobbered" | `rm ~/.config/nvim` (or other path); re-run |
+| "nix flakes only see git-tracked files" | `git add path/to/file` before building |
+| "nvim still shows old version after rebuild" | `hash -r` (clear shell cache) or start new shell session |
+| Rebuild takes 5+ minutes | Expected on macOS (2–3 min typical); check progress with `ps aux \| grep nix` |
+| Proxy not responding | Verify service: `systemctl --user status headroom-proxy-anthropic`; check logs; restart with `headroomctl restart anthropic` |
+| Home Manager activation fails | Check git status — untracked files block flake evaluation; stage or add to `.gitignore` |
+| "Error installing file outside $HOME" | HM 26.11-pre+ rejects `mkOutOfStoreSymlink`. Use `home.activation` scripts (see `modules/nvim/nvim.nix`) |
+| 64B Homebrew cask stub | `brew bundle` can write metadata before binary finishes downloading. `brew list --cask <name>` says installed but `/Applications/<Name>.app` is 64-byte skeleton. Fix: `brew reinstall --cask <name>` |
+| "sudo: darwin-rebuild: command not found" | nix-darwin never activated on this machine. See [First-time macOS bootstrap](#first-time-macos-bootstrap) |
 
-**64B Homebrew cask stub** — `brew bundle` can write metadata before binary finishes downloading. `brew list --cask <name>` says installed but `/Applications/<Name>.app` is a 64-byte skeleton. Fix: `brew reinstall --cask <name>`.
+### Advanced Troubleshooting
 
-**"sudo: darwin-rebuild: command not found"** — nix-darwin has never been activated on this machine. See [First-time macOS bootstrap](#first-time-macos-bootstrap) above.
+**Rollback:** `sudo darwin-rebuild switch --rollback` (macOS) or `sudo nixos-rebuild switch --rollback` (NixOS).
 
-**Rollback:** `sudo darwin-rebuild switch --rollback`.
-**Dry run:** `nix build .#darwinConfigurations.mac-jenc.system --dry-run`.
+**Dry run:** `nix build .#darwinConfigurations.mac-jenc.system --dry-run` (preview without applying).
+
+**Profile mismatch after rebuild:** New generation built but shell still uses old packages. Run `hash -r` to clear shell command cache, or start a fresh terminal session to source updated PATH.
