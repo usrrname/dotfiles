@@ -75,19 +75,6 @@
           }
         ]
       }
-    ],
-    "SubagentStart": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "[ -x $HOME/.claude/hooks/peon-ping/peon.sh ] && $HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10,
-            "async": true
-          }
-        ]
-      }
     ]
   },
   "worktree": {
@@ -110,6 +97,15 @@
   "effortLevel": "high",
   "advisorModel": "sonnet",
   "promptSuggestionEnabled": false,
+  "disableBundledSkills": true,
+  "skillOverrides": {
+    "atlassian:capture-tasks-from-meeting-notes": "off",
+    "atlassian:generate-status-report": "off",
+    "atlassian:jira-sprint-dashboard": "off",
+    "atlassian:search-company-knowledge": "off",
+    "atlassian:spec-to-backlog": "off",
+    "atlassian:triage-issue": "off"
+  },
   "autoUpdatesChannel": "stable",
   "tui": "default",
   "voice": {
