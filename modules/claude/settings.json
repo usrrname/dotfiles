@@ -4,7 +4,7 @@
     "deny": [],
     "defaultMode": "auto"
   },
-  "model": "haiku",
+  "model": "sonnet",
   "hooks": {
     "WorktreeCreate": [
       {
@@ -31,7 +31,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "command": "[ -x $HOME/.claude/hooks/peon-ping/peon.sh ] && $HOME/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10,
             "async": true
           }
@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "command": "[ -x $HOME/.claude/hooks/peon-ping/peon.sh ] && $HOME/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10,
             "async": true
           }
@@ -57,17 +57,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/tmux-session-summary.sh",
-            "timeout": 300
-          }
-        ]
-      },
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "command": "[ -x $HOME/.claude/hooks/peon-ping/peon.sh ] && $HOME/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10,
             "async": true
           }
@@ -80,7 +70,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "command": "[ -x $HOME/.claude/hooks/peon-ping/peon.sh ] && $HOME/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10
           }
         ]
@@ -92,59 +82,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10,
-            "async": true
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10,
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10,
-            "async": true
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
-            "timeout": 10,
-            "async": true
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$HOME/.claude/hooks/peon-ping/peon.sh",
+            "command": "[ -x $HOME/.claude/hooks/peon-ping/peon.sh ] && $HOME/.claude/hooks/peon-ping/peon.sh",
             "timeout": 10,
             "async": true
           }
@@ -160,10 +98,7 @@
     "type": "command",
     "command": "sh $HOME/.claude/statusline-command.sh"
   },
-  "enabledPlugins": {
-    "lua-lsp@claude-plugins-official": true,
-    "pyright-lsp@claude-plugins-official": true
-  },
+  "enabledPlugins": {},
   "extraKnownMarketplaces": {
     "headroom-marketplace": {
       "source": {
