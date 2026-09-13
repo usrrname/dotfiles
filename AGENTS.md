@@ -149,7 +149,7 @@ After major `flake.nix` changes, test on a secondary host config first (e.g., `f
 
 **Installation & Service:**
 
-- `modules/headroom.nix`: Installs CLI via `uv tool install headroom-ai[proxy]==0.35.0` (version pinned)
+- `modules/headroom/`: Installs CLI via `uv tool install headroom-ai[proxy]==0.35.0` (version pinned)
 - Manage on either platform with `headroomctl start|stop|restart|status [name ...]` (body: `home/scripts/headroomctl.sh`; launchd on macOS, systemd user services on Linux)
 - Bare `stop` deliberately errors — pass explicit targets so always-on backends can't be torn down by accident
 - **macOS:** `hosts/mac-jenc/default.nix` creates `launchd.user.agents` services:
@@ -162,7 +162,7 @@ After major `flake.nix` changes, test on a secondary host config first (e.g., `f
   - Logs: `~/.headroom/proxy-<name>.log` / `.err.log`
   - Check: `headroomctl status`, `launchctl list | grep headroom`, or `lsof -i :8787`
 
-- **Linux:** `modules/headroom.nix` creates `systemd.user.services` from `headroom.proxies`:
+- **Linux:** `modules/headroom/` creates `systemd.user.services` from `headroom.proxies`:
   - Fedora (`hosts/fedora/default.nix`): `headroom-proxy-anthropic` (8787), `headroom-proxy-deepseek` (8788), `headroom-proxy-go` (8789)
   - Ubuntu: `headroom-proxy-anthropic` (8787) only (module default)
   - Logs: `journalctl --user -u headroom-proxy-<name> -f`
@@ -205,7 +205,7 @@ curl http://127.0.0.1:8787/health
 3. Rebuild to ensure launchd/systemd service is registered
 4. Check proxy logs for incoming requests
 
-**"'claude' not found in PATH" during activation:** — HM activation scripts don't inherit the Homebrew prefix, and a non-zero exit aborts the remaining activation steps. `modules/headroom.nix` exports `/opt/homebrew/bin` on Darwin and guards `headroom init claude` on the CLI being present; use the same pattern for any activation script calling brew-installed CLIs.
+**"'claude' not found in PATH" during activation:** — HM activation scripts don't inherit the Homebrew prefix, and a non-zero exit aborts the remaining activation steps. `modules/headroom/` exports `/opt/homebrew/bin` on Darwin and guards `headroom init claude` on the CLI being present; use the same pattern for any activation script calling brew-installed CLIs.
 
 **OpenCode not routing through Headroom:**
 

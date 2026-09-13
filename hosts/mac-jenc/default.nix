@@ -97,15 +97,14 @@ in {
     ];
   };
 
-  # Headroom context-compression proxy instances, one per upstream. Declarative
-  # replacement for `headroom install apply --preset persistent-service`. The
-  # CLI is installed (version-pinned) by modules/headroom.nix; launchd services
-  # defined below are nix-darwin specific (home-manager systemd services handle Linux).
-  # Self-bootstrap: if headroom.nix activation hasn't run yet, the proxy wrapper
-  # installs the CLI on first start.
+  # Headroom context-compression proxy instances, one per upstream — the
+  # declarative equivalent of `headroom install apply --preset
+  # persistent-service`. modules/headroom installs the version-pinned CLI;
+  # these launchd services are nix-darwin specific (home-manager's systemd
+  # services cover Linux). Self-bootstrap: the proxy wrapper installs the CLI
+  # itself if modules/headroom's activation hasn't run yet.
   launchd.user.agents = let
     headroomVersion = "0.37.0";
-    # Compute anthropic proxy args with conditional code-aware flag.
     # --no-http2: shared HTTP/2 connections can corrupt TLS state when many
     # concurrent streams are cancelled (SSLV3_ALERT_BAD_RECORD_MAC), producing
     # dead streams ("0 stream events") and garbled non-streaming retries.
@@ -115,18 +114,25 @@ in {
       + lib.optionalString enableCodeAware " --code-aware";
     # Shared bootstrap: make sure the pinned headroom CLI is installed, then
     # exec the proxy with the given args.
-    # envVars: optional attrset mapping varlock env names → runtime env names
-    #          (e.g. { GEMINI_API_KEY_1 = "GEMINI_API_KEY"; } means "read
-    #          GEMINI_API_KEY_1 from varlock, export it as GEMINI_API_KEY").
-    headroomProxy = name: args: envVars:
+    # envVars: attrset mapping varlock env names → runtime env names, e.g.
+    #          { GEMINI_API_KEY_1 = "GEMINI_API_KEY"; } reads GEMINI_API_KEY_1
+    #          from varlock and exports it as GEMINI_API_KEY.
+    headroomProxy = {
+      name,
+      args,
+      envVars,
+      writeVmToken,
+    }:
       pkgs.writeShellScript "headroom-proxy-${name}" ''
-        export PATH="$HOME/.local/bin:${pkgs.uv}/bin:$PATH"
-        if ! command -v headroom >/dev/null 2>&1; then
-          uv tool install --force --python 3.13 "headroom-ai[proxy]==${headroomVersion}"
-        fi
-        # Source varlock-managed env if available
+        export PATH="/opt/homebrew/bin:$PATH"
+        export HEADROOM_VERSION="${headroomVersion}"
+        export UV_BIN_DIR="${pkgs.uv}/bin"
+        ${builtins.readFile ../../modules/headroom/ensure-installed.sh}
+        # Source varlock-managed env if available. --path required: this
+        # process's cwd isn't the dotfiles checkout, so varlock can't find
+        # .env.schema by searching from cwd like an interactive shell would.
         if command -v varlock >/dev/null 2>&1; then
-          eval "$(varlock load --format shell 2>/dev/null)" || true
+          eval "$(varlock load --format shell --path "$HOME/.dotfiles" 2>/dev/null)" || true
         fi
         # Remap varlock keys → runtime env vars (e.g. GEMINI_API_KEY_1 → GEMINI_API_KEY)
         ${lib.concatStringsSep "\n" (lib.mapAttrsToList (src: dst: ''
@@ -135,6 +141,17 @@ in {
             fi
           '')
           envVars)}
+        ${lib.optionalString writeVmToken ''
+          # VM bridge: the OrbStack nixos VM only shares the mounted home
+          # dir, not this process's env, so hand it the token via a file.
+          # Written here (not home-manager activation) so it's refreshed
+          # every time this proxy actually (re)starts, matching when the
+          # running proxy's own token check last picked up a value.
+          if [ -n "''${HEADROOM_PROXY_TOKEN:-}" ]; then
+            mkdir -p "$HOME/.headroom"
+            sh -c 'umask 077; printf "%s" "$1" > "$2"' _ "$HEADROOM_PROXY_TOKEN" "$HOME/.headroom/vm-proxy-token"
+          fi
+        ''}
         exec headroom proxy ${args}
       '';
     proxyAgent = {
@@ -143,9 +160,10 @@ in {
       env ? {},
       envVars ? {},
       lazy ? false,
+      writeVmToken ? false,
     }: {
       serviceConfig = {
-        ProgramArguments = ["${headroomProxy name args envVars}"];
+        ProgramArguments = ["${headroomProxy {inherit name args envVars writeVmToken;}}"];
         # lazy = true: don't start at login; start on demand via `launchctl
         # kickstart gui/$(id -u)/org.nixos.headroom-proxy-<name>`. KeepAlive
         # stays on so a lazily-started proxy still restarts if it crashes.
@@ -164,6 +182,8 @@ in {
     headroom-proxy-anthropic = proxyAgent {
       name = "anthropic";
       args = anthropicProxyArgs;
+      envVars = {HEADROOM_PROXY_TOKEN = "HEADROOM_PROXY_TOKEN";};
+      writeVmToken = true;
     };
     # OpenCode Zen gateway — the free and pay-as-you-go models in opencode's
     # "headroom-zen" provider resolve here. The client's bearer token is
