@@ -45,7 +45,7 @@ in {
   headroom.enableService = true;
 
   # claude-code is npm-only here (no nixpkgs package, no Homebrew cask like
-  # mac-jenc). headroom.nix's activation only runs `headroom init claude`
+  # mac-jenc). modules/headroom's activation only runs `headroom init claude`
   # (installs the hooks that route Claude Code through the local proxy) when
   # `command -v claude` succeeds — so the CLI must exist *before* that block
   # runs. entryBefore ["headroom"] makes that ordering explicit instead of
