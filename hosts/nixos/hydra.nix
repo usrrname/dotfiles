@@ -1,4 +1,4 @@
-{ config, ... }: {
+{config, ...}: {
   sops.secrets.hydra_password = {
     sopsFile = ./secrets/secrets.yaml;
   };

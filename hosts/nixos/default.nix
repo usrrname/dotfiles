@@ -6,12 +6,10 @@
   lib,
   modulesPath,
   ...
-}:
-let
+}: let
   # Username for this host - change if deploying to a different user
   username = "jenc";
-in
-{
+in {
   imports = [
     "${modulesPath}/virtualisation/lxc-container.nix"
     ./incus.nix
@@ -75,11 +73,11 @@ in
   # Passwordless sudo
   security.sudo.extraRules = [
     {
-      users = [ "${username}" ];
+      users = ["${username}"];
       commands = [
         {
           command = "ALL";
-          options = [ "NOPASSWD" ];
+          options = ["NOPASSWD"];
         }
       ];
     }
@@ -110,8 +108,6 @@ in
     nixfmt
     nodejs
     pnpm
-    vimPlugins.nvim-cmp
-    vimPlugins.LazyVim
     claude-code
     ghostty.terminfo
   ];
@@ -154,7 +150,7 @@ in
 
   # Trust Vital's internal CA so HTTPS to hydra.vital.company (and other
   # internal hosts) verifies correctly.
-  security.pki.certificateFiles = [ ./certs/vital-internal-ca.pem ];
+  security.pki.certificateFiles = [./certs/vital-internal-ca.pem];
 
   nix.gc.automatic = true;
   nix.gc.dates = "03:15";

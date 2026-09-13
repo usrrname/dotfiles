@@ -3,8 +3,7 @@
   lib,
   pkgs,
   ...
-}:
-let
+}: let
   settingsFile = builtins.fromJSON (builtins.readFile ./settings.json);
 in {
   options.cursor.enable = lib.mkEnableOption "Cursor IDE configuration";
