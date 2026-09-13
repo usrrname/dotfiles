@@ -5,6 +5,15 @@
     "defaultMode": "auto"
   },
   "model": "sonnet",
+  "skillOverrides": {
+    "atlassian:capture-tasks-from-meeting-notes": "off",
+    "atlassian:generate-status-report": "off",
+    "atlassian:jira-sprint-dashboard": "off",
+    "atlassian:search-company-knowledge": "off",
+    "atlassian:spec-to-backlog": "off",
+    "atlassian:triage-issue": "off"
+  },
+  "disableBundledSkills": true,
   "hooks": {
     "WorktreeCreate": [
       {
@@ -85,7 +94,9 @@
     "type": "command",
     "command": "sh $HOME/.claude/statusline-command.sh"
   },
-  "enabledPlugins": {},
+  "enabledPlugins": {
+    "mattpocock-skills@claude-plugins-official": true
+  },
   "extraKnownMarketplaces": {
     "headroom-marketplace": {
       "source": {
@@ -97,15 +108,6 @@
   "effortLevel": "high",
   "advisorModel": "sonnet",
   "promptSuggestionEnabled": false,
-  "disableBundledSkills": true,
-  "skillOverrides": {
-    "atlassian:capture-tasks-from-meeting-notes": "off",
-    "atlassian:generate-status-report": "off",
-    "atlassian:jira-sprint-dashboard": "off",
-    "atlassian:search-company-knowledge": "off",
-    "atlassian:spec-to-backlog": "off",
-    "atlassian:triage-issue": "off"
-  },
   "autoUpdatesChannel": "stable",
   "tui": "default",
   "voice": {

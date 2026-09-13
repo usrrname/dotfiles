@@ -42,7 +42,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.local/bin/headroom init hook ensure --profile init-jenc-0a9ff3d3 --marker headroom-init-claude",
+            "command": "/Users/jenc/.local/bin/headroom init hook ensure --profile init-jenc-0a9ff3d3 --marker headroom-init-claude",
             "timeout": 15
           }
         ]
@@ -54,7 +54,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.local/bin/headroom init hook ensure --profile init-jenc-0a9ff3d3 --marker headroom-init-claude",
+            "command": "/Users/jenc/.local/bin/headroom init hook ensure --profile init-jenc-0a9ff3d3 --marker headroom-init-claude",
             "timeout": 15
           }
         ]
