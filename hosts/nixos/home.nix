@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   imports = [
     ../../home
     ../../home/linux.nix
@@ -31,6 +34,9 @@
     export HYDRA_AARCH64_BUILDER="hydra-aarch64"
     export HYDRA_SSH_IDENTITY="$HOME/.ssh/machine-key"
     export NIX_KEY="$HOME/nix-keys/jenc.private.pem"
+    # Read at shell startup, not sessionVariables: that would bake the
+    # token into the world-readable Nix store.
+    export ANTHROPIC_CUSTOM_HEADERS="X-Headroom-Proxy-Token: $(cat ~/.headroom/vm-proxy-token 2>/dev/null)"
   '';
 
   programs.zsh.initContent = ''
@@ -39,5 +45,8 @@
     export HYDRA_AARCH64_BUILDER="hydra-aarch64"
     export HYDRA_SSH_IDENTITY="$HOME/.ssh/machine-key"
     export NIX_KEY="$HOME/nix-keys/jenc.private.pem"
+    # Read at shell startup, not sessionVariables: that would bake the
+    # token into the world-readable Nix store.
+    export ANTHROPIC_CUSTOM_HEADERS="X-Headroom-Proxy-Token: $(cat ~/.headroom/vm-proxy-token 2>/dev/null)"
   '';
 }

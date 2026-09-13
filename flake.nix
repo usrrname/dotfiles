@@ -156,6 +156,9 @@
             ];
             # Workaround: Force compliant package resolution to pass the nushell assertion check
             programs.fzf.package = pkgs.fzf;
+            # varlock's `op read` calls (.env.schema) need `op`; not on the
+            # shared package list since other hosts don't use it.
+            home.packages = [pkgs._1password-cli];
 
             headroom.enable = true;
             headroom.enableService = false;
