@@ -4,8 +4,8 @@
   lib,
   ...
 }: let
-  isDarwin = pkgs.stdenv.isDarwin;
-  isLinux = pkgs.stdenv.isLinux;
+  isDarwin = pkgs.stdenv.hostPlatform.isDarwin;
+  isLinux = pkgs.stdenv.hostPlatform.isLinux;
   username = let
     user = builtins.getEnv "USER";
   in
@@ -32,7 +32,7 @@ in {
     ../modules/cursor/default.nix
     ../modules/starship/starship.nix
     ../modules/git/git.nix
-    ../modules/headroom.nix
+    ../modules/headroom
     ../modules/zsh/zsh.nix
     ../modules/ghostty/ghostty.nix
   ];
@@ -60,7 +60,6 @@ in {
       direnv
       gh
       act # run GitHub Actions locally
-      _1password-cli
 
       # Build tools
       gnumake

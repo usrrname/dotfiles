@@ -10,7 +10,7 @@
 
   # mac-only ssh signing + credential helpers. git reads ~/.config/git/config
   # before ~/.gitconfig; the key sets don't overlap, so precedence is moot.
-  home.file."config/git/config" = lib.mkIf pkgs.stdenv.isDarwin {
+  home.file."config/git/config" = lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
     source = ./.gitconfig-mac;
   };
 }

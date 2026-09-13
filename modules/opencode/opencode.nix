@@ -6,7 +6,7 @@
 }: let
   # Homebrew tap build reads ~/.opencode/; nixpkgs build honors XDG.
   opencodeDir =
-    if pkgs.stdenv.isDarwin
+    if pkgs.stdenv.hostPlatform.isDarwin
     then "${config.home.homeDirectory}/.opencode"
     else "${config.xdg.configHome}/opencode";
 in {
