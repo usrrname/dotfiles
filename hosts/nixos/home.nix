@@ -11,6 +11,8 @@
     claude-code
     prettier
     eslint
+    rustc
+    cargo
     rustfmt
     clippy
   ];
