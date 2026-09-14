@@ -61,7 +61,7 @@ in {
     createHome = true;
     home = "/home/jenc";
     homeMode = "700";
-    useDefaultShell = true;
+    shell = pkgs.zsh;
   };
 
   security.sudo.wheelNeedsPassword = false;
