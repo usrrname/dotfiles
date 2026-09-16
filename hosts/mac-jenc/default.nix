@@ -44,8 +44,7 @@ in {
       "com.apple.keyboard.fnState" = true; # F-keys as F-keys
     };
     dock = {
-      autohide = true;
-      orientation = "bottom";
+      autohide = false;
       showhidden = true;
     };
   };
@@ -75,8 +74,7 @@ in {
       "peonping/tap/peon-ping"
       "anomalyco/tap/opencode"
       # varlock loads .env.schema (resolves OPENCODE_API_KEY from 1Password) and is
-      # the single source — no npm varlock dep in package.json. Formula ≥ 1.15 for
-      # the plugin schema (0.6.x fails); bumped 0.6.4 → 1.16.1 via `brew upgrade`.
+      # the single source — no npm varlock dep in package.json.
       "dmno-dev/tap/varlock"
     ];
 
