@@ -6,14 +6,14 @@ Per-host entry points for the flake. Each subdirectory maps to a key in
 
 ## Current hosts
 
-| Host | Type | Status | Apply command |
-| ------ | ------ | -------- | --------------- |
-| `mac-jenc/` | nix-darwin | ✅ Done | `sudo darwin-rebuild switch --flake .#mac-jenc` |
-| `nixos/` | NixOS | ✅ Done | `nixos-rebuild switch --flake .#nixos` |
-| `fedora/` | standalone HM | ✅ Done | `home-manager switch --flake .#fedora` |
-| `ubuntu/` | standalone HM | ✅ Done | `home-manager switch --flake .#ubuntu` |
-| `pi-nas/` | standalone HM | ✅ Done | `home-manager switch --flake .#pi-nas` |
-| `sandbox/` | standalone HM | ✅ Done | `home-manager switch --flake .#sandbox` |
+| Host | Type | Apply command |
+| ------ | ------ | --------------- |
+| `mac-jenc/` | nix-darwin | `sudo darwin-rebuild switch --flake .#mac-jenc` |
+| `nixos/` | NixOS | `nixos-rebuild switch --flake .#nixos` |
+| `fedora/` | standalone HM | `home-manager switch --flake .#fedora` |
+| `ubuntu/` | standalone HM | `home-manager switch --flake .#ubuntu` |
+| `pi-nas/` | standalone HM | `home-manager switch --flake .#pi-nas` |
+| `sandbox/` | standalone HM | `home-manager switch --flake .#sandbox` |
 
 ## Host configuration
 
