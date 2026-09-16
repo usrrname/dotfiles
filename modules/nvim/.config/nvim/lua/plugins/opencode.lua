@@ -56,6 +56,7 @@ return {
 				col = -1,
 				border = "rounded",
 				enter = false,
+				backdrop = false,
 			},
 		}
 

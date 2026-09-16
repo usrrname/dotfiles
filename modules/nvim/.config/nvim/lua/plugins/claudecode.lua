@@ -21,6 +21,7 @@ return {
 				row = 1,
 				col = -1,
 				border = "rounded",
+				backdrop = false,
 			},
 		},
 	},

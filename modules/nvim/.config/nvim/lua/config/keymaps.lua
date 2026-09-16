@@ -74,18 +74,17 @@ vim.keymap.set("n", "<leader>bd", function()
 	Snacks.bufdelete()
 end, { desc = "Delete buffer (keep window)" })
 
--- Close any floating window with a plain Esc, instead of hunting for its
--- plugin-specific toggle keymap. Falls back to LazyVim's default Esc
--- behavior (clear hlsearch, stop snippet) when not in a float.
-vim.keymap.set("n", "<esc>", function()
+-- Close the current floating window (e.g. the Claude/opencode terminal
+-- float) with one key, instead of hunting for its plugin-specific toggle
+-- keymap (<leader>ac, <leader>oo, ...). Bound to Ctrl-q rather than Esc so
+-- it doesn't interfere with Esc reaching those terminals (Claude Code's
+-- terminal relies on a clean double-Esc to interrupt a running agent).
+vim.keymap.set({ "n", "t" }, "<C-q>", function()
 	local win = vim.api.nvim_get_current_win()
 	if vim.api.nvim_win_get_config(win).relative ~= "" then
 		vim.api.nvim_win_close(win, false)
-		return ""
 	end
-	vim.cmd("noh")
-	return "<esc>"
-end, { expr = true, desc = "Close float / Escape and clear hlsearch" })
+end, { desc = "Close floating window" })
 
 vim.keymap.set("n", "<leader>mp", "<Plug>(md-render-preview)", { desc = "Markdown preview (toggle)" })
 vim.keymap.set("n", "<leader>mt", "<Plug>(md-render-preview-tab)", { desc = "Markdown preview in tab (toggle)" })
