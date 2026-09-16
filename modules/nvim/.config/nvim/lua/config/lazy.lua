@@ -37,50 +37,14 @@ return require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.lang.json" },
 		-- import/override with custom plugins
 		{ import = "plugins" },
-
-		-- Treesitter configuration
-		{
-			"nvim-treesitter/nvim-treesitter",
-			opts = {
-				ensure_installed = {
-					"bash",
-					"html",
-					"javascript",
-					"typescript",
-					"json",
-					"lua",
-					"markdown",
-					"python",
-					"query",
-					"regex",
-					"tsx",
-					"vim",
-					"yaml",
-				},
-			},
-			config = function(_, opts)
-				vim.list_extend(opts.ensure_installed, {
-					"tsx",
-					"typescript",
-				})
-			end,
-		},
 	},
 	-- Default plugin loading behavior
 	defaults = {
-		-- Don't lazy-load by default (load at startup)
-		lazy = false,
 		-- Use latest version for all plugins
 		version = "*",
-		-- LuaRocks integration for plugins needing Lua deps
-		rocks = {
-			enabled = true,
-			hererocks = true,
-			lua = "5.1",
-		},
 	},
-	-- Theme to install if missing on first run
-	install = { colorscheme = { "catppuccin-macchiato" } },
+
+	install = { colorscheme = { "rose-pine-moon" } },
 	-- Automatically check for plugin updates
 	checker = { enabled = true },
 	-- Performance optimizations
