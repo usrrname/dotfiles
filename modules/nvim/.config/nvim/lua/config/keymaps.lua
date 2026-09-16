@@ -74,6 +74,19 @@ vim.keymap.set("n", "<leader>bd", function()
 	Snacks.bufdelete()
 end, { desc = "Delete buffer (keep window)" })
 
+-- Close any floating window with a plain Esc, instead of hunting for its
+-- plugin-specific toggle keymap. Falls back to LazyVim's default Esc
+-- behavior (clear hlsearch, stop snippet) when not in a float.
+vim.keymap.set("n", "<esc>", function()
+	local win = vim.api.nvim_get_current_win()
+	if vim.api.nvim_win_get_config(win).relative ~= "" then
+		vim.api.nvim_win_close(win, false)
+		return ""
+	end
+	vim.cmd("noh")
+	return "<esc>"
+end, { expr = true, desc = "Close float / Escape and clear hlsearch" })
+
 vim.keymap.set("n", "<leader>mp", "<Plug>(md-render-preview)", { desc = "Markdown preview (toggle)" })
 vim.keymap.set("n", "<leader>mt", "<Plug>(md-render-preview-tab)", { desc = "Markdown preview in tab (toggle)" })
 vim.keymap.set("n", "<leader>md", "<Plug>(md-render-demo)", { desc = "Markdown render demo" })
