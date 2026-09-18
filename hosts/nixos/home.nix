@@ -6,7 +6,16 @@
   imports = [
     ../../home
     ../../home/linux.nix
+    ./scripts/cargo-clean-worktrees.nix
   ];
+
+  # Nightly cargo clean across device-sw worktrees (2am America/Toronto,
+  # matching this host's system timezone)
+  modules.cargo-clean-worktrees = {
+    enable = true;
+    worktreesDir = "/home/jenc/device-sw/.claude/worktrees";
+  };
+
   home.packages = with pkgs; [
     claude-code
     prettier
